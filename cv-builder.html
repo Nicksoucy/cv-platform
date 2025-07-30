@@ -175,6 +175,13 @@
       color: white;
       border-color: #2563eb;
     }
+
+    .help-text {
+      color: #6b7280;
+      font-size: 14px;
+      margin-top: 5px;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -237,19 +244,21 @@
         <h2>Éducation</h2>
         
         <div class="quick-options">
-          <label style="display: block; margin-bottom: 10px;">Formations communes en sécurité:</label>
+          <label style="display: block; margin-bottom: 10px;">Formations communes:</label>
           <div class="option-buttons">
-            <button type="button" class="option-btn" onclick="addEducation('DEP en sécurité privée')">DEP Sécurité</button>
-            <button type="button" class="option-btn" onclick="addEducation('AEP en sécurité')">AEP Sécurité</button>
+            <button type="button" class="option-btn" onclick="addEducation('DEP')">DEP</button>
+            <button type="button" class="option-btn" onclick="addEducation('AEP')">AEP</button>
             <button type="button" class="option-btn" onclick="addEducation('DES (Diplôme d\'études secondaires)')">DES</button>
             <button type="button" class="option-btn" onclick="addEducation('Formation agent de sécurité')">Formation Agent</button>
-            <button type="button" class="option-btn" onclick="addEducation('Techniques policières')">Tech. Policières</button>
+            <button type="button" class="option-btn" onclick="addEducation('Études collégiales')">Études collégiales</button>
+            <button type="button" class="option-btn" onclick="addEducation('Études universitaires')">Études universitaires</button>
           </div>
         </div>
         
         <div class="form-group">
           <label for="education">Formation et diplômes</label>
           <textarea id="education" name="education" placeholder="Cliquez sur les boutons ci-dessus ou tapez votre formation"></textarea>
+          <p class="help-text">Incluez vos formations de votre pays d'origine ou autres domaines d'études</p>
         </div>
       </div>
 
@@ -258,22 +267,37 @@
         <h2>Expérience professionnelle</h2>
         
         <div class="quick-options">
-          <label style="display: block; margin-bottom: 10px;">Tâches communes en sécurité:</label>
+          <label style="display: block; margin-bottom: 10px;">Types d'expérience:</label>
           <div class="option-buttons">
-            <button type="button" class="option-btn" onclick="addTask('Surveillance des lieux et contrôle d\'accès')">Surveillance</button>
-            <button type="button" class="option-btn" onclick="addTask('Patrouilles régulières du site')">Patrouilles</button>
-            <button type="button" class="option-btn" onclick="addTask('Rédaction de rapports d\'incident')">Rapports</button>
-            <button type="button" class="option-btn" onclick="addTask('Intervention d\'urgence')">Intervention</button>
-            <button type="button" class="option-btn" onclick="addTask('Vérification des alarmes')">Alarmes</button>
-            <button type="button" class="option-btn" onclick="addTask('Service à la clientèle')">Service client</button>
-            <button type="button" class="option-btn" onclick="addTask('Prévention des vols')">Prévention vols</button>
-            <button type="button" class="option-btn" onclick="addTask('Gestion des visiteurs')">Gestion visiteurs</button>
+            <button type="button" class="option-btn" onclick="addExperienceType('Service à la clientèle')">Service client</button>
+            <button type="button" class="option-btn" onclick="addExperienceType('Entrepôt/Manutention')">Entrepôt</button>
+            <button type="button" class="option-btn" onclick="addExperienceType('Restauration')">Restauration</button>
+            <button type="button" class="option-btn" onclick="addExperienceType('Commerce de détail')">Commerce détail</button>
+            <button type="button" class="option-btn" onclick="addExperienceType('Transport/Livraison')">Transport</button>
+            <button type="button" class="option-btn" onclick="addExperienceType('Construction')">Construction</button>
+            <button type="button" class="option-btn" onclick="addExperienceType('Sécurité')">Sécurité</button>
+            <button type="button" class="option-btn" onclick="addExperienceType('Autre domaine')">Autre</button>
+          </div>
+        </div>
+
+        <div class="quick-options">
+          <label style="display: block; margin-bottom: 10px;">Compétences transférables (utiles en sécurité):</label>
+          <div class="option-buttons">
+            <button type="button" class="option-btn" onclick="addTask('Gestion de situations difficiles')">Situations difficiles</button>
+            <button type="button" class="option-btn" onclick="addTask('Travail d\'équipe')">Travail équipe</button>
+            <button type="button" class="option-btn" onclick="addTask('Communication avec le public')">Communication</button>
+            <button type="button" class="option-btn" onclick="addTask('Respect des procédures')">Procédures</button>
+            <button type="button" class="option-btn" onclick="addTask('Ponctualité et fiabilité')">Ponctualité</button>
+            <button type="button" class="option-btn" onclick="addTask('Observation et vigilance')">Observation</button>
+            <button type="button" class="option-btn" onclick="addTask('Résolution de problèmes')">Résolution problèmes</button>
+            <button type="button" class="option-btn" onclick="addTask('Gestion du stress')">Gestion stress</button>
           </div>
         </div>
         
         <div class="form-group">
           <label for="experience">Postes occupés et responsabilités</label>
-          <textarea id="experience" name="experience" placeholder="Ex: Agent de sécurité - Entreprise XYZ (2020-2024)&#10;Cliquez sur les boutons pour ajouter des tâches"></textarea>
+          <textarea id="experience" name="experience" placeholder="Ex: Commis - Restaurant ABC (2020-2024)&#10;Ou: Expérience dans mon pays d'origine&#10;Cliquez sur les boutons pour ajouter des compétences"></textarea>
+          <p class="help-text">Incluez toute expérience de travail, même si ce n'est pas en sécurité. Les compétences sont transférables!</p>
         </div>
       </div>
 
@@ -292,6 +316,7 @@
             <button type="button" class="option-btn" onclick="addCertification('Formation incendie')">Prévention incendie</button>
             <button type="button" class="option-btn" onclick="addCertification('Carte CPI (Crisis Prevention Institute)')">CPI</button>
             <button type="button" class="option-btn" onclick="addCertification('Formation désescalade')">Désescalade</button>
+            <button type="button" class="option-btn" onclick="addCertification('ASP Construction')">ASP</button>
           </div>
         </div>
         
@@ -306,16 +331,22 @@
         <h2>Compétences et langues</h2>
         
         <div class="quick-options">
-          <label style="display: block; margin-bottom: 10px;">Compétences communes:</label>
+          <label style="display: block; margin-bottom: 10px;">Compétences en sécurité:</label>
           <div class="option-buttons">
             <button type="button" class="option-btn" onclick="addCompetence('Surveillance')">Surveillance</button>
             <button type="button" class="option-btn" onclick="addCompetence('Contrôle d\'accès')">Contrôle d'accès</button>
             <button type="button" class="option-btn" onclick="addCompetence('Rédaction de rapports')">Rapports</button>
-            <button type="button" class="option-btn" onclick="addCompetence('Service à la clientèle')">Service client</button>
-            <button type="button" class="option-btn" onclick="addCompetence('Gestion de crise')">Gestion de crise</button>
-            <button type="button" class="option-btn" onclick="addCompetence('Patrouille')">Patrouille</button>
             <button type="button" class="option-btn" onclick="addCompetence('Intervention d\'urgence')">Intervention urgence</button>
-            <button type="button" class="option-btn" onclick="addCompetence('Détection de menaces')">Détection menaces</button>
+          </div>
+        </div>
+
+        <div class="quick-options">
+          <label style="display: block; margin-bottom: 10px;">Qualités d'un bon employé:</label>
+          <div class="option-buttons">
+            <button type="button" class="option-btn" onclick="addCompetence('Ponctualité')">Ponctualité</button>
+            <button type="button" class="option-btn" onclick="addCompetence('Travail d\'équipe')">Travail d'équipe</button>
+            <button type="button" class="option-btn" onclick="addCompetence('Service à la clientèle')">Service client</button>
+            <button type="button" class="option-btn" onclick="addCompetence('Professionnalisme')">Professionnalisme</button>
           </div>
         </div>
         
@@ -327,17 +358,21 @@
         <div class="quick-options">
           <label style="display: block; margin-bottom: 10px;">Langues:</label>
           <div class="option-buttons">
-            <button type="button" class="option-btn" onclick="setLangue('Français (natif), Anglais (intermédiaire)')">FR/EN Intermédiaire</button>
-            <button type="button" class="option-btn" onclick="setLangue('Français (natif), Anglais (avancé)')">FR/EN Avancé</button>
-            <button type="button" class="option-btn" onclick="setLangue('Français (natif)')">Français seulement</button>
-            <button type="button" class="option-btn" onclick="setLangue('Français (natif), Anglais (bilingue)')">Bilingue FR/EN</button>
-            <button type="button" class="option-btn" onclick="setLangue('Français (natif), Anglais (intermédiaire), Espagnol (base)')">FR/EN/ES</button>
+            <button type="button" class="option-btn" onclick="addLangue('Français')">Français</button>
+            <button type="button" class="option-btn" onclick="addLangue('Anglais')">Anglais</button>
+            <button type="button" class="option-btn" onclick="addLangue('Espagnol')">Espagnol</button>
+            <button type="button" class="option-btn" onclick="addLangue('Arabe')">Arabe</button>
+            <button type="button" class="option-btn" onclick="addLangue('Créole')">Créole</button>
+            <button type="button" class="option-btn" onclick="addLangue('Portugais')">Portugais</button>
+            <button type="button" class="option-btn" onclick="addLangue('Mandarin')">Mandarin</button>
+            <button type="button" class="option-btn" onclick="addLangue('Punjabi')">Punjabi</button>
           </div>
         </div>
         
         <div class="form-group">
           <label for="langues">Langues parlées</label>
-          <input type="text" id="langues" name="langues" placeholder="Cliquez sur les boutons ci-dessus ou tapez">
+          <input type="text" id="langues" name="langues" placeholder="Cliquez sur les boutons pour ajouter vos langues">
+          <p class="help-text">Vous pouvez ajouter le niveau après chaque langue (ex: Français - Natif, Anglais - Intermédiaire)</p>
         </div>
       </div>
 
@@ -415,18 +450,19 @@
       document.getElementById('resume').value = resumes[type] || '';
     }
 
-    // Fonction pour définir les langues
-    function setLangue(langues) {
-      document.getElementById('langues').value = langues;
+    // Fonction pour ajouter une langue
+    function addLangue(langue) {
+      const input = document.getElementById('langues');
+      const currentValue = input.value.trim();
       
-      // Marquer visuellement le bouton sélectionné
-      const buttons = document.querySelectorAll('.option-buttons button');
-      buttons.forEach(btn => {
-        if (btn.textContent.includes('FR') || btn.textContent.includes('Français')) {
-          btn.classList.remove('selected');
+      if (currentValue) {
+        // Vérifier si la langue n'est pas déjà présente
+        if (!currentValue.includes(langue)) {
+          input.value = currentValue + ', ' + langue;
         }
-      });
-      event.target.classList.add('selected');
+      } else {
+        input.value = langue;
+      }
     }
 
     // Fonction pour ajouter une formation
@@ -434,18 +470,56 @@
       const textarea = document.getElementById('education');
       const currentValue = textarea.value.trim();
       
-      // Demander l'école et l'année
-      const ecole = prompt('Nom de l\'école ou institution:', '');
-      const annee = prompt('Année d\'obtention:', new Date().getFullYear());
+      if (education === 'DEP' || education === 'AEP') {
+        // Pour DEP et AEP, demander le domaine
+        const domaine = prompt('Dans quel domaine?', '');
+        const ecole = prompt('Nom de l\'école ou institution:', '');
+        const annee = prompt('Année d\'obtention:', new Date().getFullYear());
+        
+        if (domaine && ecole && annee) {
+          const educationComplete = education + ' en ' + domaine + ' - ' + ecole + ' (' + annee + ')';
+          
+          if (currentValue) {
+            textarea.value = currentValue + '\n' + educationComplete;
+          } else {
+            textarea.value = educationComplete;
+          }
+        }
+      } else {
+        // Pour les autres formations
+        const ecole = prompt('Nom de l\'école ou institution:', '');
+        const annee = prompt('Année d\'obtention:', new Date().getFullYear());
+        
+        if (ecole && annee) {
+          const educationComplete = education + ' - ' + ecole + ' (' + annee + ')';
+          
+          if (currentValue) {
+            textarea.value = currentValue + '\n' + educationComplete;
+          } else {
+            textarea.value = educationComplete;
+          }
+        }
+      }
+    }
+
+    // Fonction pour ajouter un type d'expérience
+    function addExperienceType(type) {
+      const textarea = document.getElementById('experience');
+      const currentValue = textarea.value.trim();
       
-      if (ecole && annee) {
-        const educationComplete = education + ' - ' + ecole + ' (' + annee + ')';
+      const entreprise = prompt('Nom de l\'entreprise:', '');
+      const periode = prompt('Période (ex: 2020-2024):', '');
+      
+      if (entreprise && periode) {
+        const experienceLine = type + ' - ' + entreprise + ' (' + periode + ')';
         
         if (currentValue) {
-          textarea.value = currentValue + '\n' + educationComplete;
+          textarea.value = currentValue + '\n\n' + experienceLine;
         } else {
-          textarea.value = educationComplete;
+          textarea.value = experienceLine;
         }
+        
+        textarea.scrollTop = textarea.scrollHeight;
       }
     }
 
@@ -458,7 +532,7 @@
         // Ajouter la tâche avec une puce
         textarea.value = currentValue + '\n• ' + task;
       } else {
-        alert('Veuillez d\'abord entrer un poste (ex: Agent de sécurité - Entreprise XYZ (2020-2024))');
+        alert('Veuillez d\'abord entrer un poste ou cliquer sur un type d\'expérience');
       }
       
       textarea.scrollTop = textarea.scrollHeight;
