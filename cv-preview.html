@@ -10,13 +10,6 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-    .template-moderne,
-    .template-classique,
-    .template-minimal,
-    .template-securite {
-      min-height: 11in;
-      width: 100%;
-      box-sizing: border-box;
     }
 
     body {
@@ -67,33 +60,41 @@
       background: white;
       box-shadow: 0 2px 20px rgba(0,0,0,0.1);
       position: relative;
+      overflow: hidden; /* Empêche le débordement */
     }
 
-    /* Styles pour le template Moderne */
+    /* Styles pour tous les templates */
     .template-moderne,
     .template-classique,
     .template-minimal,
     .template-securite {
       min-height: 11in;
+      max-height: 11in;
       width: 100%;
       box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
     }
 
     /* Styles pour le template Moderne */
     .template-moderne {
       font-family: 'Helvetica Neue', Arial, sans-serif;
       padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 11in;
     }
 
     .template-moderne .header {
       background: #2563eb;
       color: white;
-      padding: 40px;
+      padding: 30px 40px;
       text-align: center;
+      flex-shrink: 0;
     }
 
     .template-moderne .header h1 {
-      font-size: 36px;
+      font-size: 32px;
       margin-bottom: 10px;
     }
 
@@ -103,12 +104,14 @@
     }
 
     .template-moderne .content {
-      padding: 40px;
+      padding: 30px 40px;
+      overflow-y: auto;
+      flex: 1;
     }
 
     .template-moderne .section {
-      margin-bottom: 30px;
-      padding-bottom: 20px;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
       border-bottom: 1px solid #e5e7eb;
     }
 
@@ -118,47 +121,50 @@
 
     .template-moderne h2 {
       color: #2563eb;
-      font-size: 24px;
-      margin: 0 0 15px;
+      font-size: 20px;
+      margin: 0 0 10px;
       display: flex;
       align-items: center;
     }
 
     .template-moderne h2:before {
       content: '▶';
-      margin-right: 10px;
-      font-size: 16px;
+      margin-right: 8px;
+      font-size: 14px;
     }
 
     .template-moderne p {
-      line-height: 1.6;
-      margin-bottom: 10px;
+      line-height: 1.5;
+      margin-bottom: 8px;
       color: #333;
+      font-size: 14px;
     }
 
     /* Styles pour le template Classique */
     .template-classique {
       font-family: Georgia, 'Times New Roman', serif;
       display: flex;
-      min-height: 11in;
+      height: 11in;
       position: relative;
+      overflow: hidden;
     }
 
     .template-classique .sidebar {
       background: #f3f4f6;
-      width: 280px;
-      padding: 40px 30px;
+      width: 250px;
+      padding: 30px 25px;
       border-right: 2px solid #ddd;
       position: absolute;
       left: 0;
       top: 0;
       bottom: 0;
       height: 100%;
+      overflow-y: auto;
     }
 
     .template-classique .sidebar h2 {
-      font-size: 18px;
-      margin: 25px 0 10px;
+      font-size: 16px;
+      margin: 20px 0 8px;
       color: #333;
       border-bottom: 1px solid #999;
       padding-bottom: 5px;
@@ -168,78 +174,88 @@
       margin-top: 0;
     }
 
+    .template-classique .sidebar p {
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 6px;
+    }
+
     .template-classique .main {
-      margin-left: 280px;
-      padding: 40px;
-      min-height: 100%;
+      margin-left: 250px;
+      padding: 30px;
+      height: 100%;
+      overflow-y: auto;
     }
 
     .template-classique .main h1 {
-      font-size: 32px;
+      font-size: 28px;
       color: #222;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       border-bottom: 3px double #000;
-      padding-bottom: 15px;
+      padding-bottom: 10px;
     }
 
     .template-classique .section {
       background: #fafafa;
-      padding: 20px;
-      margin-bottom: 20px;
+      padding: 15px;
+      margin-bottom: 15px;
       border: 1px solid #e5e7eb;
       border-radius: 4px;
     }
 
     .template-classique .section h2 {
-      font-size: 20px;
-      margin: 0 0 10px;
+      font-size: 18px;
+      margin: 0 0 8px;
       color: #333;
       font-style: italic;
     }
 
     .template-classique p {
-      line-height: 1.6;
-      margin-bottom: 8px;
+      line-height: 1.5;
+      margin-bottom: 6px;
       color: #444;
+      font-size: 14px;
     }
 
     /* Styles pour le template Minimal */
     .template-minimal {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      padding: 60px;
+      padding: 40px 50px;
       max-width: 800px;
       margin: 0 auto;
+      height: 11in;
+      overflow-y: auto;
     }
 
     .template-minimal h1 {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 300;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       text-align: center;
     }
 
     .template-minimal .contact-line {
       text-align: center;
       color: #666;
-      margin-bottom: 40px;
-      font-size: 14px;
-      padding-bottom: 20px;
+      margin-bottom: 30px;
+      font-size: 13px;
+      padding-bottom: 15px;
       border-bottom: 1px solid #e5e7eb;
     }
 
     .template-minimal .section {
-      margin-bottom: 35px;
+      margin-bottom: 25px;
     }
 
     .template-minimal h2 {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
-      margin: 0 0 10px;
+      margin: 0 0 8px;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: #333;
       position: relative;
-      padding-left: 15px;
+      padding-left: 12px;
     }
 
     .template-minimal h2:before {
@@ -248,43 +264,47 @@
       left: 0;
       top: 50%;
       transform: translateY(-50%);
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
       background: #333;
       border-radius: 50%;
     }
 
     .template-minimal p {
-      line-height: 1.8;
+      line-height: 1.6;
       color: #555;
-      margin-bottom: 10px;
-      padding-left: 15px;
+      margin-bottom: 8px;
+      padding-left: 12px;
+      font-size: 13px;
     }
 
     /* Styles pour le template Sécurité */
     .template-securite {
       font-family: Arial, sans-serif;
       display: flex;
-      min-height: 11in;
+      height: 11in;
       position: relative;
+      overflow: hidden;
     }
 
     .template-securite .sidebar {
       background: #1e3a8a;
       color: white;
-      width: 300px;
-      padding: 40px 30px;
+      width: 280px;
+      padding: 30px 25px;
       position: absolute;
       left: 0;
       top: 0;
       bottom: 0;
       height: 100%;
+      overflow-y: auto;
+      font-size: 13px;
     }
 
     .template-securite .agent-icon {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 20px;
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 15px;
       background: rgba(255,255,255,0.1);
       border-radius: 50%;
       display: flex;
@@ -293,30 +313,32 @@
     }
 
     .template-securite .sidebar h2 {
-      font-size: 16px;
-      margin: 25px 0 10px;
+      font-size: 14px;
+      margin: 20px 0 8px;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
       border-bottom: 1px solid rgba(255,255,255,0.3);
       padding-bottom: 5px;
     }
 
     .template-securite .sidebar p {
-      font-size: 14px;
-      line-height: 1.6;
+      font-size: 12px;
+      line-height: 1.5;
       opacity: 0.9;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
+      word-wrap: break-word;
     }
 
     .template-securite .main {
-      margin-left: 300px;
-      padding: 40px;
+      margin-left: 280px;
+      padding: 30px;
       background: white;
-      min-height: 100%;
+      height: 100%;
+      overflow-y: auto;
     }
 
     .template-securite .main h1 {
-      font-size: 36px;
+      font-size: 30px;
       color: #1e3a8a;
       margin-bottom: 5px;
       text-transform: uppercase;
@@ -325,45 +347,48 @@
 
     .template-securite .main .title {
       color: #666;
-      font-size: 18px;
-      margin-bottom: 40px;
+      font-size: 16px;
+      margin-bottom: 30px;
       font-style: italic;
     }
 
     .template-securite .section {
       background: #f8f9fa;
       border-left: 4px solid #1e3a8a;
-      padding: 20px;
-      margin-bottom: 25px;
-      border-radius: 0 8px 8px 0;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 0 6px 6px 0;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
 
     .template-securite .section h2 {
-      font-size: 20px;
+      font-size: 18px;
       color: #1e3a8a;
-      margin: 0 0 15px 0;
+      margin: 0 0 10px 0;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
     .template-securite .section p {
-      line-height: 1.8;
+      line-height: 1.6;
       color: #333;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
+      font-size: 14px;
     }
 
     .template-securite .section ul {
-      margin: 10px 0;
-      padding-left: 25px;
+      margin: 8px 0;
+      padding-left: 20px;
     }
 
     .template-securite .section li {
       color: #333;
-      margin-bottom: 8px;
-      line-height: 1.6;
+      margin-bottom: 6px;
+      line-height: 1.5;
+      font-size: 14px;
     }
 
+    /* Ajustements pour l'impression et PDF */
     @media print {
       body {
         background: white;
@@ -402,6 +427,21 @@
       .template-minimal,
       .template-securite {
         page-break-inside: avoid;
+        height: 11in !important;
+        max-height: 11in !important;
+      }
+
+      /* Réduire légèrement les tailles pour l'impression si nécessaire */
+      .template-securite .sidebar p,
+      .template-classique .sidebar p {
+        font-size: 11px;
+      }
+
+      .template-moderne p,
+      .template-classique .main p,
+      .template-minimal p,
+      .template-securite .main p {
+        font-size: 12px;
       }
     }
   </style>
@@ -511,7 +551,7 @@
             <div class="template-securite">
               <div class="sidebar">
                 <div class="agent-icon">
-                  <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                  <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                     <circle cx="12" cy="8" r="3"/>
                     <path d="M12 11c3.3 0 6 2.7 6 6v2H6v-2c0-3.3 2.7-6 6-6z"/>
                     <path d="M12 2l2 3.5L18 6l-1 4-5 1-5-1-1-4 4-0.5z"/>
