@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prévisualisation du CV</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    .template-moderne,
+    .template-classique,
+    .template-minimal,
+    .template-securite {
+      min-height: 11in;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f5f5f5;
+      padding: 20px;
+    }
+
+    .actions {
+      max-width: 900px;
+      margin: 0 auto 20px;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-secondary {
+      background: #6b7280;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #4b5563;
+    }
+
+    #cv-container {
+      max-width: 8.5in; /* Largeur du papier letter */
+      min-height: 11in; /* Hauteur du papier letter */
+      margin: 0 auto;
+      background: white;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    /* Styles pour le template Moderne */
+    .template-moderne,
+    .template-classique,
+    .template-minimal,
+    .template-securite {
+      min-height: 11in;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Styles pour le template Moderne */
+    .template-moderne {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      padding: 0;
+    }
+
+    .template-moderne .header {
+      background: #2563eb;
+      color: white;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .template-moderne .header h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .template-moderne .contact-info {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .template-moderne .content {
+      padding: 40px;
+    }
+
+    .template-moderne .section {
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .template-moderne .section:last-child {
+      border-bottom: none;
+    }
+
+    .template-moderne h2 {
+      color: #2563eb;
+      font-size: 24px;
+      margin: 0 0 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .template-moderne h2:before {
+      content: '▶';
+      margin-right: 10px;
+      font-size: 16px;
+    }
+
+    .template-moderne p {
+      line-height: 1.6;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    /* Styles pour le template Classique */
+    .template-classique {
+      font-family: Georgia, 'Times New Roman', serif;
+      display: flex;
+      min-height: 11in;
+      position: relative;
+    }
+
+    .template-classique .sidebar {
+      background: #f3f4f6;
+      width: 280px;
+      padding: 40px 30px;
+      border-right: 2px solid #ddd;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      height: 100%;
+    }
+
+    .template-classique .sidebar h2 {
+      font-size: 18px;
+      margin: 25px 0 10px;
+      color: #333;
+      border-bottom: 1px solid #999;
+      padding-bottom: 5px;
+    }
+
+    .template-classique .sidebar h2:first-child {
+      margin-top: 0;
+    }
+
+    .template-classique .main {
+      margin-left: 280px;
+      padding: 40px;
+      min-height: 100%;
+    }
+
+    .template-classique .main h1 {
+      font-size: 32px;
+      color: #222;
+      margin-bottom: 20px;
+      border-bottom: 3px double #000;
+      padding-bottom: 15px;
+    }
+
+    .template-classique .section {
+      background: #fafafa;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+    }
+
+    .template-classique .section h2 {
+      font-size: 20px;
+      margin: 0 0 10px;
+      color: #333;
+      font-style: italic;
+    }
+
+    .template-classique p {
+      line-height: 1.6;
+      margin-bottom: 8px;
+      color: #444;
+    }
+
+    /* Styles pour le template Minimal */
+    .template-minimal {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 60px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .template-minimal h1 {
+      font-size: 28px;
+      font-weight: 300;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .template-minimal .contact-line {
+      text-align: center;
+      color: #666;
+      margin-bottom: 40px;
+      font-size: 14px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .template-minimal .section {
+      margin-bottom: 35px;
+    }
+
+    .template-minimal h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #333;
+      position: relative;
+      padding-left: 15px;
+    }
+
+    .template-minimal h2:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      background: #333;
+      border-radius: 50%;
+    }
+
+    .template-minimal p {
+      line-height: 1.8;
+      color: #555;
+      margin-bottom: 10px;
+      padding-left: 15px;
+    }
+
+    /* Styles pour le template Sécurité */
+    .template-securite {
+      font-family: Arial, sans-serif;
+      display: flex;
+      min-height: 11in;
+      position: relative;
+    }
+
+    .template-securite .sidebar {
+      background: #1e3a8a;
+      color: white;
+      width: 300px;
+      padding: 40px 30px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      height: 100%;
+    }
+
+    .template-securite .agent-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .template-securite .sidebar h2 {
+      font-size: 16px;
+      margin: 25px 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+      padding-bottom: 5px;
+    }
+
+    .template-securite .sidebar p {
+      font-size: 14px;
+      line-height: 1.6;
+      opacity: 0.9;
+      margin-bottom: 8px;
+    }
+
+    .template-securite .main {
+      margin-left: 300px;
+      padding: 40px;
+      background: white;
+      min-height: 100%;
+    }
+
+    .template-securite .main h1 {
+      font-size: 36px;
+      color: #1e3a8a;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .template-securite .main .title {
+      color: #666;
+      font-size: 18px;
+      margin-bottom: 40px;
+      font-style: italic;
+    }
+
+    .template-securite .section {
+      background: #f8f9fa;
+      border-left: 4px solid #1e3a8a;
+      padding: 20px;
+      margin-bottom: 25px;
+      border-radius: 0 8px 8px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .template-securite .section h2 {
+      font-size: 20px;
+      color: #1e3a8a;
+      margin: 0 0 15px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .template-securite .section p {
+      line-height: 1.8;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .template-securite .section ul {
+      margin: 10px 0;
+      padding-left: 25px;
+    }
+
+    .template-securite .section li {
+      color: #333;
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .actions {
+        display: none;
+      }
+      
+      #cv-container {
+        box-shadow: none;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      
+      /* S'assurer que le contenu tient sur une page 8.5x11 */
+      @page {
+        size: letter portrait;
+        margin: 0.5in;
+      }
+      
+      /* Éviter les coupures de page */
+      h1, h2, h3 {
+        page-break-after: avoid;
+      }
+      
+      p {
+        page-break-inside: avoid;
+      }
+      
+      .template-moderne,
+      .template-classique,
+      .template-minimal,
+      .template-securite {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="actions">
+    <button class="btn btn-secondary" onclick="goBack()">← Retour</button>
+    <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button>
+    <button class="btn btn-primary" onclick="exportPDF()">📄 Télécharger en PDF</button>
+  </div>
+  
+  <div id="notification" style="display: none; position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 15px 25px; border-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 1000;">
+    ✓ PDF généré avec succès!
+  </div>
+
+  <div id="cv-container">
+    <!-- Le contenu du CV sera injecté ici -->
+  </div>
+
+  <script>
+    // Charger les données depuis localStorage
+    const cvData = JSON.parse(localStorage.getItem('cvData') || '{}');
+    const selectedTemplate = localStorage.getItem('selectedTemplate') || 'moderne';
+
+    // Vérifier si les données sont présentes
+    if (!cvData.nom) {
+      document.getElementById('cv-container').innerHTML = `
+        <div style="padding: 40px; text-align: center;">
+          <p style="color: #dc2626; font-size: 18px;">Erreur : Aucune donnée trouvée.</p>
+          <p style="margin-top: 10px;">Veuillez remplir le formulaire d'abord.</p>
+          <button class="btn btn-primary" onclick="goBack()" style="margin-top: 20px;">Retour au formulaire</button>
+        </div>
+      `;
+    } else {
+      // Générer le CV selon le template sélectionné
+      generateCV();
+    }
+
+    function generateCV() {
+      let cvHTML = '';
+      
+      switch(selectedTemplate) {
+        case 'moderne':
+          cvHTML = `
+            <div class="template-moderne">
+              <div class="header">
+                <h1>${cvData.nom}</h1>
+                <div class="contact-info">
+                  ${cvData.email} | ${cvData.telephone}
+                  ${cvData.adresse ? ' | ' + cvData.adresse : ''}
+                </div>
+              </div>
+              <div class="content">
+                ${cvData.resume ? `<div class="section"><h2>Résumé professionnel</h2><p>${cvData.resume}</p></div>` : ''}
+                ${cvData.education ? `<div class="section"><h2>Éducation</h2><p>${cvData.education.replace(/\n/g, '<br>')}</p></div>` : ''}
+                ${cvData.experience ? `<div class="section"><h2>Expérience professionnelle</h2><p>${cvData.experience.replace(/\n/g, '<br>')}</p></div>` : ''}
+                ${cvData.certifications ? `<div class="section"><h2>Certifications</h2><p>${cvData.certifications.replace(/\n/g, '<br>')}</p></div>` : ''}
+                ${cvData.competences ? `<div class="section"><h2>Compétences</h2><p>${cvData.competences}</p></div>` : ''}
+                ${cvData.langues ? `<div class="section"><h2>Langues</h2><p>${cvData.langues}</p></div>` : ''}
+              </div>
+            </div>
+          `;
+          break;
+          
+        case 'classique':
+          cvHTML = `
+            <div class="template-classique">
+              <div class="sidebar">
+                <h2>Coordonnées</h2>
+                <p><strong>Courriel :</strong><br>${cvData.email}</p>
+                <p><strong>Tél. :</strong><br>${cvData.telephone}</p>
+                ${cvData.adresse ? `<p><strong>Adresse :</strong><br>${cvData.adresse}</p>` : ''}
+                
+                ${cvData.langues ? `<h2>Langues</h2><p>${cvData.langues}</p>` : ''}
+                ${cvData.competences ? `<h2>Compétences</h2><p>${cvData.competences.replace(/,/g, '<br>')}</p>` : ''}
+              </div>
+              <div class="main">
+                <h1>${cvData.nom}</h1>
+                ${cvData.resume ? `<div class="section"><h2>Résumé professionnel</h2><p>${cvData.resume}</p></div>` : ''}
+                ${cvData.education ? `<div class="section"><h2>Éducation</h2><p>${cvData.education.replace(/\n/g, '<br>')}</p></div>` : ''}
+                ${cvData.experience ? `<div class="section"><h2>Expérience professionnelle</h2><p>${cvData.experience.replace(/\n/g, '<br>')}</p></div>` : ''}
+                ${cvData.certifications ? `<div class="section"><h2>Certifications</h2><p>${cvData.certifications.replace(/\n/g, '<br>')}</p></div>` : ''}
+              </div>
+            </div>
+          `;
+          break;
+          
+        case 'minimal':
+          cvHTML = `
+            <div class="template-minimal">
+              <h1>${cvData.nom}</h1>
+              <div class="contact-line">
+                ${cvData.email} • ${cvData.telephone}${cvData.adresse ? ' • ' + cvData.adresse : ''}
+              </div>
+              ${cvData.resume ? `<div class="section"><h2>Résumé</h2><p>${cvData.resume}</p></div>` : ''}
+              ${cvData.experience ? `<div class="section"><h2>Expérience</h2><p>${cvData.experience.replace(/\n/g, '<br>')}</p></div>` : ''}
+              ${cvData.education ? `<div class="section"><h2>Éducation</h2><p>${cvData.education.replace(/\n/g, '<br>')}</p></div>` : ''}
+              ${cvData.certifications ? `<div class="section"><h2>Certifications</h2><p>${cvData.certifications.replace(/\n/g, '<br>')}</p></div>` : ''}
+              ${cvData.competences ? `<div class="section"><h2>Compétences</h2><p>${cvData.competences}</p></div>` : ''}
+              ${cvData.langues ? `<div class="section"><h2>Langues</h2><p>${cvData.langues}</p></div>` : ''}
+            </div>
+          `;
+          break;
+          
+        case 'securite':
+          cvHTML = `
+            <div class="template-securite">
+              <div class="sidebar">
+                <div class="agent-icon">
+                  <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                    <circle cx="12" cy="8" r="3"/>
+                    <path d="M12 11c3.3 0 6 2.7 6 6v2H6v-2c0-3.3 2.7-6 6-6z"/>
+                    <path d="M12 2l2 3.5L18 6l-1 4-5 1-5-1-1-4 4-0.5z"/>
+                  </svg>
+                </div>
+                
+                <h2>Contact</h2>
+                <p>${cvData.email}</p>
+                <p>${cvData.telephone}</p>
+                ${cvData.adresse ? `<p>${cvData.adresse}</p>` : ''}
+                
+                ${cvData.certifications ? `<h2>Certifications</h2><p>${cvData.certifications.replace(/\n/g, '<br>')}</p>` : ''}
+                ${cvData.langues ? `<h2>Langues</h2><p>${cvData.langues}</p>` : ''}
+                ${cvData.competences ? `<h2>Compétences</h2><p>${cvData.competences.replace(/,/g, '<br>')}</p>` : ''}
+              </div>
+              <div class="main">
+                <h1>${cvData.nom}</h1>
+                <div class="title">Agent de Sécurité Professionnel</div>
+                
+                ${cvData.resume ? `<div class="section"><h2>Profil</h2><p>${cvData.resume}</p></div>` : ''}
+                ${cvData.experience ? `<div class="section"><h2>Expérience en Sécurité</h2><p>${cvData.experience.replace(/\n/g, '<br>')}</p></div>` : ''}
+                ${cvData.education ? `<div class="section"><h2>Formation</h2><p>${cvData.education.replace(/\n/g, '<br>')}</p></div>` : ''}
+              </div>
+            </div>
+          `;
+          break;
+      }
+      
+      document.getElementById('cv-container').innerHTML = cvHTML;
+    }
+
+    function goBack() {
+      window.location.href = 'cv-builder.html';
+    }
+
+    function exportPDF() {
+      const element = document.getElementById('cv-container');
+      const opt = {
+        margin: [0.5, 0.5, 0.5, 0.5], // Marges de 0.5 pouce (1.27 cm) tout autour
+        filename: `CV_${cvData.nom || 'document'}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+          scale: 2,
+          useCORS: true,
+          letterRendering: true
+        },
+        jsPDF: { 
+          unit: 'in', 
+          format: 'letter', // 8.5 x 11 pouces
+          orientation: 'portrait',
+          compress: true
+        },
+        pagebreak: { mode: 'avoid-all' } // Évite les coupures de page au milieu du contenu
+      };
+      
+      // Ajouter une indication visuelle pendant la génération
+      const btn = event.target;
+      const originalText = btn.textContent;
+      btn.textContent = 'Génération en cours...';
+      btn.disabled = true;
+      
+      html2pdf().set(opt).from(element).save().then(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        
+        // Afficher notification de succès
+        const notification = document.getElementById('notification');
+        notification.style.display = 'block';
+        setTimeout(() => {
+          notification.style.display = 'none';
+        }, 3000);
+      });
+    }
+  </script>
+</body>
+</html>

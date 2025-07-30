@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choisir un modèle de CV</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f5f5f5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 40px;
+      font-size: 2.5em;
+    }
+
+    .templates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .template-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .template-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+
+    .template-preview {
+      height: 350px;
+      background: #f9f9f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .template-content {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .template-content h3 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 1.5em;
+    }
+
+    .template-content p {
+      color: #666;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .select-btn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .select-btn:hover {
+      background: #1d4ed8;
+    }
+
+    /* Template preview styles */
+    .preview-moderne {
+      width: 80%;
+      height: 80%;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      font-size: 12px;
+    }
+
+    .preview-moderne .header {
+      background: #3b82f6;
+      color: white;
+      padding: 15px;
+      margin: -20px -20px 20px -20px;
+      text-align: center;
+    }
+
+    .preview-classique {
+      width: 80%;
+      height: 80%;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      font-size: 12px;
+    }
+
+    .preview-classique .sidebar {
+      background: #f3f4f6;
+      width: 30%;
+      padding: 15px;
+      border-right: 1px solid #ddd;
+    }
+
+    .preview-classique .main {
+      flex: 1;
+      padding: 15px;
+    }
+
+    .preview-minimal {
+      width: 80%;
+      height: 80%;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 30px;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .preview-securite {
+      width: 80%;
+      height: 80%;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      font-size: 12px;
+    }
+
+    .preview-securite .sidebar {
+      background: #1e3a8a;
+      color: white;
+      width: 30%;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .preview-securite .icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      margin: 0 auto 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Choisissez votre modèle de CV</h1>
+    
+    <div class="templates-grid">
+      <!-- Modèle Moderne -->
+      <div class="template-card" onclick="selectTemplate('moderne')">
+        <div class="template-preview">
+          <div class="preview-moderne">
+            <div class="header">
+              <strong>Nom Prénom</strong>
+            </div>
+            <div style="font-size: 10px;">
+              <p><strong>Contact</strong></p>
+              <p>email@example.com</p>
+              <p>514-000-0000</p>
+              <hr style="margin: 10px 0;">
+              <p><strong>Expérience</strong></p>
+              <p>• Poste actuel</p>
+              <p>• Poste précédent</p>
+            </div>
+          </div>
+        </div>
+        <div class="template-content">
+          <h3>Moderne</h3>
+          <p>Design épuré avec en-tête colorée. Parfait pour les profils techniques et agents de sécurité.</p>
+          <button class="select-btn">Utiliser ce modèle</button>
+        </div>
+      </div>
+
+      <!-- Modèle Classique -->
+      <div class="template-card" onclick="selectTemplate('classique')">
+        <div class="template-preview">
+          <div class="preview-classique">
+            <div class="sidebar">
+              <strong>Contact</strong>
+              <hr style="margin: 5px 0;">
+              <p style="font-size: 9px;">email@ex.com</p>
+              <p style="font-size: 9px;">514-000-0000</p>
+              <br>
+              <strong>Langues</strong>
+              <hr style="margin: 5px 0;">
+              <p style="font-size: 9px;">Français</p>
+              <p style="font-size: 9px;">Anglais</p>
+            </div>
+            <div class="main">
+              <h4>Nom Prénom</h4>
+              <hr style="margin: 10px 0;">
+              <p style="font-size: 10px;"><strong>Expérience</strong></p>
+              <p style="font-size: 9px;">Poste - Entreprise</p>
+              <p style="font-size: 9px;">Description des tâches</p>
+            </div>
+          </div>
+        </div>
+        <div class="template-content">
+          <h3>Classique</h3>
+          <p>Mise en page traditionnelle avec colonne latérale. Idéal pour les employeurs conservateurs.</p>
+          <button class="select-btn">Utiliser ce modèle</button>
+        </div>
+      </div>
+
+      <!-- Modèle Minimal -->
+      <div class="template-card" onclick="selectTemplate('minimal')">
+        <div class="template-preview">
+          <div class="preview-minimal">
+            <h4 style="margin-bottom: 15px;">Nom Prénom</h4>
+            <p style="font-size: 10px;">email@example.com | 514-000-0000</p>
+            <hr style="margin: 15px 0;">
+            <p style="font-size: 10px;"><strong>Résumé</strong></p>
+            <p style="font-size: 9px;">Professionnel qualifié avec expérience...</p>
+            <br>
+            <p style="font-size: 10px;"><strong>Expérience</strong></p>
+            <p style="font-size: 9px;">2020-2024 - Poste actuel</p>
+            <p style="font-size: 9px;">2018-2020 - Poste précédent</p>
+          </div>
+        </div>
+        <div class="template-content">
+          <h3>Minimal</h3>
+          <p>Design épuré et simple. Parfait pour mettre en valeur le contenu sans distraction.</p>
+          <button class="select-btn">Utiliser ce modèle</button>
+        </div>
+      </div>
+
+      <!-- Modèle Sécurité -->
+      <div class="template-card" onclick="selectTemplate('securite')">
+        <div class="template-preview">
+          <div class="preview-securite">
+            <div class="sidebar">
+              <div class="icon"></div>
+              <strong>Agent Sécurité</strong>
+              <hr style="margin: 10px 0; opacity: 0.3;">
+              <p style="font-size: 9px;">514-000-0000</p>
+              <p style="font-size: 9px;">agent@ex.com</p>
+              <br>
+              <p style="font-size: 9px;"><strong>Certifications</strong></p>
+              <p style="font-size: 8px;">• BSP</p>
+              <p style="font-size: 8px;">• RCR</p>
+              <p style="font-size: 8px;">• 54h</p>
+            </div>
+            <div class="main" style="padding: 15px;">
+              <h4>Nom de l'Agent</h4>
+              <hr style="margin: 10px 0;">
+              <p style="font-size: 10px;"><strong>Expérience Sécurité</strong></p>
+              <p style="font-size: 9px;">• Contrôle d'accès</p>
+              <p style="font-size: 9px;">• Patrouilles</p>
+              <p style="font-size: 9px;">• Rapports d'incident</p>
+            </div>
+          </div>
+        </div>
+        <div class="template-content">
+          <h3>Sécurité</h3>
+          <p>Conçu spécialement pour les agents de sécurité avec mise en avant des certifications.</p>
+          <button class="select-btn">Utiliser ce modèle</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function selectTemplate(template) {
+      // Sauvegarder le choix du template
+      localStorage.setItem('selectedTemplate', template);
+      
+      // Rediriger vers le formulaire
+      window.location.href = 'cv-builder.html';
+    }
+  </script>
+</body>
+</html>
