@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prévisualisation du CV</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <title>Créer votre CV</title>
   <style>
     * {
       margin: 0;
@@ -18,12 +17,94 @@
       padding: 20px;
     }
 
-    .actions {
-      max-width: 900px;
-      margin: 0 auto 20px;
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 40px;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 2.5em;
+    }
+
+    .template-indicator {
+      color: #666;
+      margin-bottom: 30px;
+      padding: 10px;
+      background: #f0f9ff;
+      border-radius: 5px;
+      display: inline-block;
+    }
+
+    .form-section {
+      margin-bottom: 30px;
+    }
+
+    .form-section h2 {
+      color: #2563eb;
+      margin-bottom: 15px;
+      font-size: 1.5em;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      color: #374151;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #2563eb;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .button-group {
       display: flex;
       gap: 15px;
-      justify-content: center;
+      margin-top: 40px;
     }
 
     .btn {
@@ -38,6 +119,7 @@
     .btn-primary {
       background: #2563eb;
       color: white;
+      flex: 1;
     }
 
     .btn-primary:hover {
@@ -53,577 +135,433 @@
       background: #4b5563;
     }
 
-    #cv-container {
-      max-width: 8.5in; /* Largeur du papier letter */
-      min-height: 11in; /* Hauteur du papier letter */
-      margin: 0 auto;
-      background: white;
-      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-      position: relative;
-      overflow: hidden; /* Empêche le débordement */
+    .placeholder-text {
+      color: #9ca3af;
+      font-size: 14px;
+      font-style: italic;
     }
 
-    /* Styles pour tous les templates */
-    .template-moderne,
-    .template-classique,
-    .template-minimal,
-    .template-securite {
-      min-height: 11in;
-      max-height: 11in;
-      width: 100%;
-      box-sizing: border-box;
-      position: relative;
-      overflow: hidden;
+    .quick-options {
+      background: #f9fafb;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
     }
 
-    /* Styles pour le template Moderne */
-    .template-moderne {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      padding: 0;
+    .option-buttons {
       display: flex;
-      flex-direction: column;
-      height: 11in;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
-    .template-moderne .header {
+    .option-btn {
+      background: white;
+      border: 1px solid #d1d5db;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .option-btn:hover {
       background: #2563eb;
       color: white;
-      padding: 30px 40px;
-      text-align: center;
-      flex-shrink: 0;
+      border-color: #2563eb;
     }
 
-    .template-moderne .header h1 {
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-
-    .template-moderne .contact-info {
-      font-size: 14px;
-      opacity: 0.9;
-    }
-
-    .template-moderne .content {
-      padding: 30px 40px;
-      overflow-y: auto;
-      flex: 1;
-    }
-
-    .template-moderne .section {
-      margin-bottom: 25px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .template-moderne .section:last-child {
-      border-bottom: none;
-    }
-
-    .template-moderne h2 {
-      color: #2563eb;
-      font-size: 20px;
-      margin: 0 0 10px;
-      display: flex;
-      align-items: center;
-    }
-
-    .template-moderne h2:before {
-      content: '▶';
-      margin-right: 8px;
-      font-size: 14px;
-    }
-
-    .template-moderne p {
-      line-height: 1.5;
-      margin-bottom: 8px;
-      color: #333;
-      font-size: 14px;
-    }
-
-    /* Styles pour le template Classique */
-    .template-classique {
-      font-family: Georgia, 'Times New Roman', serif;
-      display: flex;
-      height: 11in;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .template-classique .sidebar {
-      background: #f3f4f6;
-      width: 250px;
-      padding: 30px 25px;
-      border-right: 2px solid #ddd;
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      height: 100%;
-      overflow-y: auto;
-    }
-
-    .template-classique .sidebar h2 {
-      font-size: 16px;
-      margin: 20px 0 8px;
-      color: #333;
-      border-bottom: 1px solid #999;
-      padding-bottom: 5px;
-    }
-
-    .template-classique .sidebar h2:first-child {
-      margin-top: 0;
-    }
-
-    .template-classique .sidebar p {
-      font-size: 13px;
-      line-height: 1.5;
-      margin-bottom: 6px;
-    }
-
-    .template-classique .main {
-      margin-left: 250px;
-      padding: 30px;
-      height: 100%;
-      overflow-y: auto;
-    }
-
-    .template-classique .main h1 {
-      font-size: 28px;
-      color: #222;
-      margin-bottom: 15px;
-      border-bottom: 3px double #000;
-      padding-bottom: 10px;
-    }
-
-    .template-classique .section {
-      background: #fafafa;
-      padding: 15px;
-      margin-bottom: 15px;
-      border: 1px solid #e5e7eb;
-      border-radius: 4px;
-    }
-
-    .template-classique .section h2 {
-      font-size: 18px;
-      margin: 0 0 8px;
-      color: #333;
-      font-style: italic;
-    }
-
-    .template-classique p {
-      line-height: 1.5;
-      margin-bottom: 6px;
-      color: #444;
-      font-size: 14px;
-    }
-
-    /* Styles pour le template Minimal */
-    .template-minimal {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      padding: 40px 50px;
-      max-width: 800px;
-      margin: 0 auto;
-      height: 11in;
-      overflow-y: auto;
-    }
-
-    .template-minimal h1 {
-      font-size: 26px;
-      font-weight: 300;
-      margin-bottom: 15px;
-      text-align: center;
-    }
-
-    .template-minimal .contact-line {
-      text-align: center;
-      color: #666;
-      margin-bottom: 30px;
-      font-size: 13px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .template-minimal .section {
-      margin-bottom: 25px;
-    }
-
-    .template-minimal h2 {
-      font-size: 14px;
-      font-weight: 600;
-      margin: 0 0 8px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #333;
-      position: relative;
-      padding-left: 12px;
-    }
-
-    .template-minimal h2:before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 6px;
-      height: 6px;
-      background: #333;
-      border-radius: 50%;
-    }
-
-    .template-minimal p {
-      line-height: 1.6;
-      color: #555;
-      margin-bottom: 8px;
-      padding-left: 12px;
-      font-size: 13px;
-    }
-
-    /* Styles pour le template Sécurité */
-    .template-securite {
-      font-family: Arial, sans-serif;
-      display: flex;
-      height: 11in;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .template-securite .sidebar {
-      background: #1e3a8a;
+    .option-btn.selected {
+      background: #2563eb;
       color: white;
-      width: 280px;
-      padding: 30px 25px;
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      height: 100%;
-      overflow-y: auto;
-      font-size: 13px;
+      border-color: #2563eb;
     }
 
-    .template-securite .agent-icon {
-      width: 70px;
-      height: 70px;
-      margin: 0 auto 15px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .template-securite .sidebar h2 {
+    .help-text {
+      color: #6b7280;
       font-size: 14px;
-      margin: 20px 0 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border-bottom: 1px solid rgba(255,255,255,0.3);
-      padding-bottom: 5px;
-    }
-
-    .template-securite .sidebar p {
-      font-size: 12px;
-      line-height: 1.5;
-      opacity: 0.9;
-      margin-bottom: 6px;
-      word-wrap: break-word;
-    }
-
-    .template-securite .main {
-      margin-left: 280px;
-      padding: 30px;
-      background: white;
-      height: 100%;
-      overflow-y: auto;
-    }
-
-    .template-securite .main h1 {
-      font-size: 30px;
-      color: #1e3a8a;
-      margin-bottom: 5px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .template-securite .main .title {
-      color: #666;
-      font-size: 16px;
-      margin-bottom: 30px;
+      margin-top: 5px;
       font-style: italic;
-    }
-
-    .template-securite .section {
-      background: #f8f9fa;
-      border-left: 4px solid #1e3a8a;
-      padding: 15px;
-      margin-bottom: 20px;
-      border-radius: 0 6px 6px 0;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    .template-securite .section h2 {
-      font-size: 18px;
-      color: #1e3a8a;
-      margin: 0 0 10px 0;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .template-securite .section p {
-      line-height: 1.6;
-      color: #333;
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
-
-    .template-securite .section ul {
-      margin: 8px 0;
-      padding-left: 20px;
-    }
-
-    .template-securite .section li {
-      color: #333;
-      margin-bottom: 6px;
-      line-height: 1.5;
-      font-size: 14px;
-    }
-
-    /* Ajustements pour l'impression et PDF */
-    @media print {
-      body {
-        background: white;
-        padding: 0;
-        margin: 0;
-      }
-      
-      .actions {
-        display: none;
-      }
-      
-      #cv-container {
-        box-shadow: none;
-        max-width: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      
-      /* S'assurer que le contenu tient sur une page 8.5x11 */
-      @page {
-        size: letter portrait;
-        margin: 0.5in;
-      }
-      
-      /* Éviter les coupures de page */
-      h1, h2, h3 {
-        page-break-after: avoid;
-      }
-      
-      p {
-        page-break-inside: avoid;
-      }
-      
-      .template-moderne,
-      .template-classique,
-      .template-minimal,
-      .template-securite {
-        page-break-inside: avoid;
-        height: 11in !important;
-        max-height: 11in !important;
-      }
-
-      /* Réduire légèrement les tailles pour l'impression si nécessaire */
-      .template-securite .sidebar p,
-      .template-classique .sidebar p {
-        font-size: 11px;
-      }
-
-      .template-moderne p,
-      .template-classique .main p,
-      .template-minimal p,
-      .template-securite .main p {
-        font-size: 12px;
-      }
     }
   </style>
 </head>
 <body>
-  <div class="actions">
-    <button class="btn btn-secondary" onclick="goBack()">← Retour</button>
-    <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button>
-    <button class="btn btn-primary" onclick="exportPDF()">📄 Télécharger en PDF</button>
-  </div>
-  
-  <div id="notification" style="display: none; position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 15px 25px; border-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 1000;">
-    ✓ PDF généré avec succès!
-  </div>
+  <div class="container">
+    <h1>Créer votre CV</h1>
+    <div class="template-indicator">
+      Modèle sélectionné : <strong id="selectedTemplate">Moderne</strong>
+    </div>
 
-  <div id="cv-container">
-    <!-- Le contenu du CV sera injecté ici -->
+    <form id="cvForm">
+      <!-- Informations personnelles -->
+      <div class="form-section">
+        <h2>Informations personnelles</h2>
+        
+        <div class="form-group">
+          <label for="nom">Nom complet *</label>
+          <input type="text" id="nom" name="nom" required placeholder="Jean Tremblay">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Adresse courriel *</label>
+            <input type="email" id="email" name="email" required placeholder="jean.tremblay@email.com">
+          </div>
+          
+          <div class="form-group">
+            <label for="telephone">Numéro de téléphone *</label>
+            <input type="tel" id="telephone" name="telephone" required placeholder="514-123-4567">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="adresse">Adresse</label>
+          <input type="text" id="adresse" name="adresse" placeholder="123 rue Principale, Montréal, QC">
+        </div>
+      </div>
+
+      <!-- Résumé professionnel -->
+      <div class="form-section">
+        <h2>Résumé professionnel</h2>
+        
+        <div class="quick-options">
+          <label style="display: block; margin-bottom: 10px;">Exemples de résumés (cliquez pour utiliser comme base):</label>
+          <div class="option-buttons">
+            <button type="button" class="option-btn" onclick="setResume('debutant')" style="width: auto;">Débutant motivé</button>
+            <button type="button" class="option-btn" onclick="setResume('experimente')" style="width: auto;">Agent expérimenté</button>
+            <button type="button" class="option-btn" onclick="setResume('bilingue')" style="width: auto;">Agent bilingue</button>
+            <button type="button" class="option-btn" onclick="setResume('superviseur')" style="width: auto;">Profil superviseur</button>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="resume">Décrivez-vous en quelques lignes</label>
+          <textarea id="resume" name="resume" placeholder="Agent de sécurité expérimenté avec plus de 5 ans d'expérience dans la surveillance et le contrôle d'accès..."></textarea>
+        </div>
+      </div>
+
+      <!-- Éducation -->
+      <div class="form-section">
+        <h2>Éducation</h2>
+        
+        <div class="quick-options">
+          <label style="display: block; margin-bottom: 10px;">Formations communes:</label>
+          <div class="option-buttons">
+            <button type="button" class="option-btn" onclick="addEducation('DEP')">DEP</button>
+            <button type="button" class="option-btn" onclick="addEducation('AEP')">AEP</button>
+            <button type="button" class="option-btn" onclick="addEducation('DES (Diplôme d\'études secondaires)')">DES</button>
+            <button type="button" class="option-btn" onclick="addEducation('Formation agent de sécurité')">Formation Agent</button>
+            <button type="button" class="option-btn" onclick="addEducation('Études collégiales')">Études collégiales</button>
+            <button type="button" class="option-btn" onclick="addEducation('Études universitaires')">Études universitaires</button>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="education">Formation et diplômes</label>
+          <textarea id="education" name="education" placeholder="Cliquez sur les boutons ci-dessus ou tapez votre formation"></textarea>
+          <p class="help-text">Incluez vos formations de votre pays d'origine ou autres domaines d'études</p>
+        </div>
+      </div>
+
+      <!-- Expérience professionnelle -->
+      <div class="form-section">
+        <h2>Expérience professionnelle</h2>
+        
+        <div class="quick-options">
+          <label style="display: block; margin-bottom: 10px;">Types d'expérience:</label>
+          <div class="option-buttons">
+            <button type="button" class="option-btn" onclick="addExperienceType('Service à la clientèle')">Service client</button>
+            <button type="button" class="option-btn" onclick="addExperienceType('Entrepôt/Manutention')">Entrepôt</button>
+            <button type="button" class="option-btn" onclick="addExperienceType('Restauration')">Restauration</button>
+            <button type="button" class="option-btn" onclick="addExperienceType('Commerce de détail')">Commerce détail</button>
+            <button type="button" class="option-btn" onclick="addExperienceType('Transport/Livraison')">Transport</button>
+            <button type="button" class="option-btn" onclick="addExperienceType('Construction')">Construction</button>
+            <button type="button" class="option-btn" onclick="addExperienceType('Sécurité')">Sécurité</button>
+            <button type="button" class="option-btn" onclick="addExperienceType('Autre domaine')">Autre</button>
+          </div>
+        </div>
+
+        <div class="quick-options">
+          <label style="display: block; margin-bottom: 10px;">Compétences transférables (utiles en sécurité):</label>
+          <div class="option-buttons">
+            <button type="button" class="option-btn" onclick="addTask('Gestion de situations difficiles')">Situations difficiles</button>
+            <button type="button" class="option-btn" onclick="addTask('Travail d\'équipe')">Travail équipe</button>
+            <button type="button" class="option-btn" onclick="addTask('Communication avec le public')">Communication</button>
+            <button type="button" class="option-btn" onclick="addTask('Respect des procédures')">Procédures</button>
+            <button type="button" class="option-btn" onclick="addTask('Ponctualité et fiabilité')">Ponctualité</button>
+            <button type="button" class="option-btn" onclick="addTask('Observation et vigilance')">Observation</button>
+            <button type="button" class="option-btn" onclick="addTask('Résolution de problèmes')">Résolution problèmes</button>
+            <button type="button" class="option-btn" onclick="addTask('Gestion du stress')">Gestion stress</button>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="experience">Postes occupés et responsabilités</label>
+          <textarea id="experience" name="experience" placeholder="Ex: Commis - Restaurant ABC (2020-2024)&#10;Ou: Expérience dans mon pays d'origine&#10;Cliquez sur les boutons pour ajouter des compétences"></textarea>
+          <p class="help-text">Incluez toute expérience de travail, même si ce n'est pas en sécurité. Les compétences sont transférables!</p>
+        </div>
+      </div>
+
+      <!-- Certifications -->
+      <div class="form-section">
+        <h2>Certifications et formations</h2>
+        
+        <div class="quick-options">
+          <label style="display: block; margin-bottom: 10px;">Sélection rapide (cliquez pour ajouter):</label>
+          <div class="option-buttons">
+            <button type="button" class="option-btn" onclick="addCertification('Permis BSP (Bureau de la sécurité privée)')">Permis BSP</button>
+            <button type="button" class="option-btn" onclick="addCertification('Formation secourisme RCR/DEA')">Secourisme RCR/DEA</button>
+            <button type="button" class="option-btn" onclick="addCertification('Formation usage de la force')">Usage de la force</button>
+            <button type="button" class="option-btn" onclick="addCertification('Formation 54h obligatoire')">Formation 54h</button>
+            <button type="button" class="option-btn" onclick="addCertification('SIMDUT 2015')">SIMDUT</button>
+            <button type="button" class="option-btn" onclick="addCertification('Formation incendie')">Prévention incendie</button>
+            <button type="button" class="option-btn" onclick="addCertification('Carte CPI (Crisis Prevention Institute)')">CPI</button>
+            <button type="button" class="option-btn" onclick="addCertification('Formation désescalade')">Désescalade</button>
+            <button type="button" class="option-btn" onclick="addCertification('ASP Construction')">ASP</button>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="certifications">Certifications obtenues (modifiez au besoin)</label>
+          <textarea id="certifications" name="certifications" placeholder="Cliquez sur les boutons ci-dessus ou tapez vos certifications"></textarea>
+        </div>
+      </div>
+
+      <!-- Compétences et langues -->
+      <div class="form-section">
+        <h2>Compétences et langues</h2>
+        
+        <div class="quick-options">
+          <label style="display: block; margin-bottom: 10px;">Compétences en sécurité:</label>
+          <div class="option-buttons">
+            <button type="button" class="option-btn" onclick="addCompetence('Surveillance')">Surveillance</button>
+            <button type="button" class="option-btn" onclick="addCompetence('Contrôle d\'accès')">Contrôle d'accès</button>
+            <button type="button" class="option-btn" onclick="addCompetence('Rédaction de rapports')">Rapports</button>
+            <button type="button" class="option-btn" onclick="addCompetence('Intervention d\'urgence')">Intervention urgence</button>
+          </div>
+        </div>
+
+        <div class="quick-options">
+          <label style="display: block; margin-bottom: 10px;">Qualités d'un bon employé:</label>
+          <div class="option-buttons">
+            <button type="button" class="option-btn" onclick="addCompetence('Ponctualité')">Ponctualité</button>
+            <button type="button" class="option-btn" onclick="addCompetence('Travail d\'équipe')">Travail d'équipe</button>
+            <button type="button" class="option-btn" onclick="addCompetence('Service à la clientèle')">Service client</button>
+            <button type="button" class="option-btn" onclick="addCompetence('Professionnalisme')">Professionnalisme</button>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="competences">Compétences clés</label>
+          <textarea id="competences" name="competences" placeholder="Cliquez sur les boutons ci-dessus ou tapez vos compétences"></textarea>
+        </div>
+
+        <div class="quick-options">
+          <label style="display: block; margin-bottom: 10px;">Langues:</label>
+          <div class="option-buttons">
+            <button type="button" class="option-btn" onclick="addLangue('Français')">Français</button>
+            <button type="button" class="option-btn" onclick="addLangue('Anglais')">Anglais</button>
+            <button type="button" class="option-btn" onclick="addLangue('Espagnol')">Espagnol</button>
+            <button type="button" class="option-btn" onclick="addLangue('Arabe')">Arabe</button>
+            <button type="button" class="option-btn" onclick="addLangue('Créole')">Créole</button>
+            <button type="button" class="option-btn" onclick="addLangue('Portugais')">Portugais</button>
+            <button type="button" class="option-btn" onclick="addLangue('Mandarin')">Mandarin</button>
+            <button type="button" class="option-btn" onclick="addLangue('Punjabi')">Punjabi</button>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="langues">Langues parlées</label>
+          <input type="text" id="langues" name="langues" placeholder="Cliquez sur les boutons pour ajouter vos langues">
+          <p class="help-text">Vous pouvez ajouter le niveau après chaque langue (ex: Français - Natif, Anglais - Intermédiaire)</p>
+        </div>
+      </div>
+
+      <!-- Boutons d'action -->
+      <div class="button-group">
+        <button type="button" class="btn btn-secondary" onclick="goBack()">Retour</button>
+        <button type="submit" class="btn btn-primary">Prévisualiser mon CV</button>
+      </div>
+    </form>
   </div>
 
   <script>
-    // Charger les données depuis localStorage
-    const cvData = JSON.parse(localStorage.getItem('cvData') || '{}');
+    // Afficher le template sélectionné
     const selectedTemplate = localStorage.getItem('selectedTemplate') || 'moderne';
+    document.getElementById('selectedTemplate').textContent = 
+      selectedTemplate.charAt(0).toUpperCase() + selectedTemplate.slice(1);
 
-    // Vérifier si les données sont présentes
-    if (!cvData.nom) {
-      document.getElementById('cv-container').innerHTML = `
-        <div style="padding: 40px; text-align: center;">
-          <p style="color: #dc2626; font-size: 18px;">Erreur : Aucune donnée trouvée.</p>
-          <p style="margin-top: 10px;">Veuillez remplir le formulaire d'abord.</p>
-          <button class="btn btn-primary" onclick="goBack()" style="margin-top: 20px;">Retour au formulaire</button>
-        </div>
-      `;
-    } else {
-      // Générer le CV selon le template sélectionné
-      generateCV();
-    }
+    // Charger les données existantes si disponibles
+    window.addEventListener('DOMContentLoaded', function() {
+      const savedData = localStorage.getItem('cvData');
+      if (savedData) {
+        const data = JSON.parse(savedData);
+        Object.keys(data).forEach(key => {
+          const field = document.getElementById(key);
+          if (field) {
+            field.value = data[key];
+          }
+        });
+      }
+    });
 
-    function generateCV() {
-      let cvHTML = '';
+    // Fonction pour ajouter une certification
+    function addCertification(cert) {
+      const textarea = document.getElementById('certifications');
+      const currentValue = textarea.value.trim();
       
-      switch(selectedTemplate) {
-        case 'moderne':
-          cvHTML = `
-            <div class="template-moderne">
-              <div class="header">
-                <h1>${cvData.nom}</h1>
-                <div class="contact-info">
-                  ${cvData.email} | ${cvData.telephone}
-                  ${cvData.adresse ? ' | ' + cvData.adresse : ''}
-                </div>
-              </div>
-              <div class="content">
-                ${cvData.resume ? `<div class="section"><h2>Résumé professionnel</h2><p>${cvData.resume}</p></div>` : ''}
-                ${cvData.education ? `<div class="section"><h2>Éducation</h2><p>${cvData.education.replace(/\n/g, '<br>')}</p></div>` : ''}
-                ${cvData.experience ? `<div class="section"><h2>Expérience professionnelle</h2><p>${cvData.experience.replace(/\n/g, '<br>')}</p></div>` : ''}
-                ${cvData.certifications ? `<div class="section"><h2>Certifications</h2><p>${cvData.certifications.replace(/\n/g, '<br>')}</p></div>` : ''}
-                ${cvData.competences ? `<div class="section"><h2>Compétences</h2><p>${cvData.competences}</p></div>` : ''}
-                ${cvData.langues ? `<div class="section"><h2>Langues</h2><p>${cvData.langues}</p></div>` : ''}
-              </div>
-            </div>
-          `;
-          break;
-          
-        case 'classique':
-          cvHTML = `
-            <div class="template-classique">
-              <div class="sidebar">
-                <h2>Coordonnées</h2>
-                <p><strong>Courriel :</strong><br>${cvData.email}</p>
-                <p><strong>Tél. :</strong><br>${cvData.telephone}</p>
-                ${cvData.adresse ? `<p><strong>Adresse :</strong><br>${cvData.adresse}</p>` : ''}
-                
-                ${cvData.langues ? `<h2>Langues</h2><p>${cvData.langues}</p>` : ''}
-                ${cvData.competences ? `<h2>Compétences</h2><p>${cvData.competences.replace(/,/g, '<br>')}</p>` : ''}
-              </div>
-              <div class="main">
-                <h1>${cvData.nom}</h1>
-                ${cvData.resume ? `<div class="section"><h2>Résumé professionnel</h2><p>${cvData.resume}</p></div>` : ''}
-                ${cvData.education ? `<div class="section"><h2>Éducation</h2><p>${cvData.education.replace(/\n/g, '<br>')}</p></div>` : ''}
-                ${cvData.experience ? `<div class="section"><h2>Expérience professionnelle</h2><p>${cvData.experience.replace(/\n/g, '<br>')}</p></div>` : ''}
-                ${cvData.certifications ? `<div class="section"><h2>Certifications</h2><p>${cvData.certifications.replace(/\n/g, '<br>')}</p></div>` : ''}
-              </div>
-            </div>
-          `;
-          break;
-          
-        case 'minimal':
-          cvHTML = `
-            <div class="template-minimal">
-              <h1>${cvData.nom}</h1>
-              <div class="contact-line">
-                ${cvData.email} • ${cvData.telephone}${cvData.adresse ? ' • ' + cvData.adresse : ''}
-              </div>
-              ${cvData.resume ? `<div class="section"><h2>Résumé</h2><p>${cvData.resume}</p></div>` : ''}
-              ${cvData.experience ? `<div class="section"><h2>Expérience</h2><p>${cvData.experience.replace(/\n/g, '<br>')}</p></div>` : ''}
-              ${cvData.education ? `<div class="section"><h2>Éducation</h2><p>${cvData.education.replace(/\n/g, '<br>')}</p></div>` : ''}
-              ${cvData.certifications ? `<div class="section"><h2>Certifications</h2><p>${cvData.certifications.replace(/\n/g, '<br>')}</p></div>` : ''}
-              ${cvData.competences ? `<div class="section"><h2>Compétences</h2><p>${cvData.competences}</p></div>` : ''}
-              ${cvData.langues ? `<div class="section"><h2>Langues</h2><p>${cvData.langues}</p></div>` : ''}
-            </div>
-          `;
-          break;
-          
-        case 'securite':
-          cvHTML = `
-            <div class="template-securite">
-              <div class="sidebar">
-                <div class="agent-icon">
-                  <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                    <circle cx="12" cy="8" r="3"/>
-                    <path d="M12 11c3.3 0 6 2.7 6 6v2H6v-2c0-3.3 2.7-6 6-6z"/>
-                    <path d="M12 2l2 3.5L18 6l-1 4-5 1-5-1-1-4 4-0.5z"/>
-                  </svg>
-                </div>
-                
-                <h2>Contact</h2>
-                <p>${cvData.email}</p>
-                <p>${cvData.telephone}</p>
-                ${cvData.adresse ? `<p>${cvData.adresse}</p>` : ''}
-                
-                ${cvData.certifications ? `<h2>Certifications</h2><p>${cvData.certifications.replace(/\n/g, '<br>')}</p>` : ''}
-                ${cvData.langues ? `<h2>Langues</h2><p>${cvData.langues}</p>` : ''}
-                ${cvData.competences ? `<h2>Compétences</h2><p>${cvData.competences.replace(/,/g, '<br>')}</p>` : ''}
-              </div>
-              <div class="main">
-                <h1>${cvData.nom}</h1>
-                <div class="title">Agent de Sécurité Professionnel</div>
-                
-                ${cvData.resume ? `<div class="section"><h2>Profil</h2><p>${cvData.resume}</p></div>` : ''}
-                ${cvData.experience ? `<div class="section"><h2>Expérience en Sécurité</h2><p>${cvData.experience.replace(/\n/g, '<br>')}</p></div>` : ''}
-                ${cvData.education ? `<div class="section"><h2>Formation</h2><p>${cvData.education.replace(/\n/g, '<br>')}</p></div>` : ''}
-              </div>
-            </div>
-          `;
-          break;
+      // Ajouter l'année actuelle par défaut
+      const year = new Date().getFullYear();
+      const certWithYear = cert + ' - ' + year;
+      
+      if (currentValue) {
+        textarea.value = currentValue + '\n' + certWithYear;
+      } else {
+        textarea.value = certWithYear;
       }
       
-      document.getElementById('cv-container').innerHTML = cvHTML;
+      // Faire défiler jusqu'au bas du textarea
+      textarea.scrollTop = textarea.scrollHeight;
     }
 
-    function goBack() {
-      window.location.href = 'cv-builder.html';
+    // Fonction pour ajouter une compétence
+    function addCompetence(competence) {
+      const textarea = document.getElementById('competences');
+      const currentValue = textarea.value.trim();
+      
+      if (currentValue) {
+        // Vérifier si la compétence n'est pas déjà présente
+        if (!currentValue.includes(competence)) {
+          textarea.value = currentValue + ', ' + competence;
+        }
+      } else {
+        textarea.value = competence;
+      }
     }
 
-    function exportPDF() {
-      const element = document.getElementById('cv-container');
-      const opt = {
-        margin: [0.5, 0.5, 0.5, 0.5], // Marges de 0.5 pouce (1.27 cm) tout autour
-        filename: `CV_${cvData.nom || 'document'}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-          scale: 2,
-          useCORS: true,
-          letterRendering: true
-        },
-        jsPDF: { 
-          unit: 'in', 
-          format: 'letter', // 8.5 x 11 pouces
-          orientation: 'portrait',
-          compress: true
-        },
-        pagebreak: { mode: 'avoid-all' } // Évite les coupures de page au milieu du contenu
+    // Fonction pour définir le résumé professionnel
+    function setResume(type) {
+      const resumes = {
+        'debutant': 'Agent de sécurité nouvellement certifié, motivé et fiable. Excellentes compétences en service à la clientèle et forte capacité d\'adaptation. Désireux d\'apprendre et de contribuer à la sécurité des personnes et des biens. Disponible pour tous les quarts de travail.',
+        'experimente': 'Agent de sécurité expérimenté avec plus de 5 ans d\'expérience dans la surveillance, le contrôle d\'accès et la gestion des situations d\'urgence. Reconnu pour mon professionnalisme, ma vigilance et ma capacité à maintenir un environnement sécuritaire.',
+        'bilingue': 'Agent de sécurité bilingue (français/anglais) avec expérience en milieu commercial et corporatif. Excellent communicateur capable de gérer efficacement les interactions avec une clientèle diversifiée. Spécialisé dans la désescalade et la résolution de conflits.',
+        'superviseur': 'Agent de sécurité senior avec expérience en supervision d\'équipe. Compétences démontrées en formation du personnel, coordination des opérations et rédaction de rapports détaillés. Leadership naturel et capacité à prendre des décisions rapides en situation de crise.'
       };
       
-      // Ajouter une indication visuelle pendant la génération
-      const btn = event.target;
-      const originalText = btn.textContent;
-      btn.textContent = 'Génération en cours...';
-      btn.disabled = true;
+      document.getElementById('resume').value = resumes[type] || '';
+    }
+
+    // Fonction pour ajouter une langue
+    function addLangue(langue) {
+      const input = document.getElementById('langues');
+      const currentValue = input.value.trim();
       
-      html2pdf().set(opt).from(element).save().then(() => {
-        btn.textContent = originalText;
-        btn.disabled = false;
+      if (currentValue) {
+        // Vérifier si la langue n'est pas déjà présente
+        if (!currentValue.includes(langue)) {
+          input.value = currentValue + ', ' + langue;
+        }
+      } else {
+        input.value = langue;
+      }
+    }
+
+    // Fonction pour ajouter une formation
+    function addEducation(education) {
+      const textarea = document.getElementById('education');
+      const currentValue = textarea.value.trim();
+      
+      if (education === 'DEP' || education === 'AEP') {
+        // Pour DEP et AEP, demander le domaine
+        const domaine = prompt('Dans quel domaine?', '');
+        const ecole = prompt('Nom de l\'école ou institution:', '');
+        const annee = prompt('Année d\'obtention:', new Date().getFullYear());
         
-        // Afficher notification de succès
-        const notification = document.getElementById('notification');
-        notification.style.display = 'block';
-        setTimeout(() => {
-          notification.style.display = 'none';
-        }, 3000);
+        if (domaine && ecole && annee) {
+          const educationComplete = education + ' en ' + domaine + ' - ' + ecole + ' (' + annee + ')';
+          
+          if (currentValue) {
+            textarea.value = currentValue + '\n' + educationComplete;
+          } else {
+            textarea.value = educationComplete;
+          }
+        }
+      } else {
+        // Pour les autres formations
+        const ecole = prompt('Nom de l\'école ou institution:', '');
+        const annee = prompt('Année d\'obtention:', new Date().getFullYear());
+        
+        if (ecole && annee) {
+          const educationComplete = education + ' - ' + ecole + ' (' + annee + ')';
+          
+          if (currentValue) {
+            textarea.value = currentValue + '\n' + educationComplete;
+          } else {
+            textarea.value = educationComplete;
+          }
+        }
+      }
+    }
+
+    // Fonction pour ajouter un type d'expérience
+    function addExperienceType(type) {
+      const textarea = document.getElementById('experience');
+      const currentValue = textarea.value.trim();
+      
+      const entreprise = prompt('Nom de l\'entreprise:', '');
+      const periode = prompt('Période (ex: 2020-2024):', '');
+      
+      if (entreprise && periode) {
+        const experienceLine = type + ' - ' + entreprise + ' (' + periode + ')';
+        
+        if (currentValue) {
+          textarea.value = currentValue + '\n\n' + experienceLine;
+        } else {
+          textarea.value = experienceLine;
+        }
+        
+        textarea.scrollTop = textarea.scrollHeight;
+      }
+    }
+
+    // Fonction pour ajouter une tâche d'expérience
+    function addTask(task) {
+      const textarea = document.getElementById('experience');
+      const currentValue = textarea.value.trim();
+      
+      if (currentValue) {
+        // Ajouter la tâche avec une puce
+        textarea.value = currentValue + '\n• ' + task;
+      } else {
+        alert('Veuillez d\'abord entrer un poste ou cliquer sur un type d\'expérience');
+      }
+      
+      textarea.scrollTop = textarea.scrollHeight;
+    }
+
+    // Gérer la soumission du formulaire
+    document.getElementById('cvForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Collecter toutes les données du formulaire
+      const formData = {};
+      const fields = ['nom', 'email', 'telephone', 'adresse', 'resume', 
+                     'education', 'experience', 'certifications', 
+                     'competences', 'langues'];
+      
+      fields.forEach(field => {
+        formData[field] = document.getElementById(field).value || '';
       });
+      
+      // Sauvegarder les données
+      localStorage.setItem('cvData', JSON.stringify(formData));
+      
+      // Rediriger vers la page de prévisualisation
+      window.location.href = 'cv-preview.html';
+    });
+
+    // Fonction pour revenir en arrière
+    function goBack() {
+      window.location.href = 'cv-selector.html';
     }
   </script>
 </body>
