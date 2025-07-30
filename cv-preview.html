@@ -312,6 +312,11 @@
       justify-content: center;
     }
 
+    .template-securite .agent-icon svg {
+      width: 50px;
+      height: 50px;
+    }
+
     .template-securite .sidebar h2 {
       font-size: 14px;
       margin: 20px 0 8px;
@@ -551,10 +556,31 @@
             <div class="template-securite">
               <div class="sidebar">
                 <div class="agent-icon">
-                  <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                    <circle cx="12" cy="8" r="3"/>
-                    <path d="M12 11c3.3 0 6 2.7 6 6v2H6v-2c0-3.3 2.7-6 6-6z"/>
-                    <path d="M12 2l2 3.5L18 6l-1 4-5 1-5-1-1-4 4-0.5z"/>
+                  <svg width="50" height="50" viewBox="0 0 100 100" fill="white">
+                    <!-- Casquette/Chapeau de police -->
+                    <ellipse cx="50" cy="30" rx="25" ry="8" fill="white"/>
+                    <path d="M25 30 Q25 20 50 20 Q75 20 75 30 L75 35 Q75 40 50 40 Q25 40 25 35 Z" fill="white"/>
+                    <!-- Visière de la casquette -->
+                    <ellipse cx="50" cy="32" rx="20" ry="3" fill="white" opacity="0.8"/>
+                    <!-- Badge sur la casquette -->
+                    <circle cx="50" cy="28" r="4" fill="none" stroke="#1e3a8a" stroke-width="1"/>
+                    
+                    <!-- Tête -->
+                    <circle cx="50" cy="45" r="12" fill="none" stroke="white" stroke-width="3"/>
+                    
+                    <!-- Corps/uniforme -->
+                    <path d="M50 57 Q35 57 30 65 L30 85 L70 85 L70 65 Q65 57 50 57" fill="white"/>
+                    
+                    <!-- Col de chemise -->
+                    <path d="M45 57 L45 65 L50 62 L55 65 L55 57" fill="none" stroke="white" stroke-width="2"/>
+                    
+                    <!-- Badge étoile sur la poitrine -->
+                    <path d="M50 70 L47 76 L40 77 L45 82 L43 89 L50 85 L57 89 L55 82 L60 77 L53 76 Z" 
+                          fill="none" stroke="#1e3a8a" stroke-width="1.5"/>
+                    
+                    <!-- Épaulettes -->
+                    <rect x="30" y="60" width="8" height="3" fill="white" opacity="0.7"/>
+                    <rect x="62" y="60" width="8" height="3" fill="white" opacity="0.7"/>
                   </svg>
                 </div>
                 
