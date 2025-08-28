@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prévisualisation du CV</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <style>
     * {
       margin: 0;
@@ -69,17 +69,12 @@
       width: 100%;
       box-sizing: border-box;
       position: relative;
-      min-height: 10in;
-      max-height: 11in;
-      overflow: hidden;
     }
 
     /* Styles pour le template Moderne */
     .template-moderne {
       font-family: 'Helvetica Neue', Arial, sans-serif;
       padding: 0;
-      display: flex;
-      flex-direction: column;
     }
 
     .template-moderne .header {
@@ -87,7 +82,6 @@
       color: white;
       padding: 25px 35px;
       text-align: center;
-      flex-shrink: 0;
     }
 
     .template-moderne .header h1 {
@@ -104,7 +98,6 @@
 
     .template-moderne .content {
       padding: 25px 35px;
-      flex: 1;
       overflow-wrap: break-word;
     }
 
@@ -394,26 +387,6 @@
       font-size: 13px;
     }
 
-    /* Styles spécifiques pour PDF */
-    .pdf-mode .template-moderne,
-    .pdf-mode .template-classique,
-    .pdf-mode .template-minimal,
-    .pdf-mode .template-securite {
-      max-height: none !important;
-      min-height: auto !important;
-      overflow: visible !important;
-      page-break-inside: auto;
-    }
-
-    .pdf-mode .template-moderne .content,
-    .pdf-mode .template-classique .main,
-    .pdf-mode .template-classique .sidebar,
-    .pdf-mode .template-securite .main,
-    .pdf-mode .template-securite .sidebar {
-      overflow: visible !important;
-      max-height: none !important;
-    }
-
     /* Ajustements pour l'impression et PDF */
     @media print {
       body {
@@ -588,9 +561,13 @@
 
     // Fonction pour échapper le HTML
     function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
+      if (!text) return '';
+      return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
     }
 
     // Fonction pour formater le texte avec retours à la ligne
@@ -608,35 +585,61 @@
     }
 
     function exportPDF() {
-      // Ajouter classe pour mode PDF
-      document.getElementById('cv-container').classList.add('pdf-mode');
-      
       const element = document.getElementById('cv-container');
+      
+      // Créer une copie temporaire pour le PDF
+      const clone = element.cloneNode(true);
+      clone.style.position = 'absolute';
+      clone.style.left = '-9999px';
+      clone.style.width = '816px'; // 8.5in * 96dpi
+      clone.style.maxWidth = '816px';
+      clone.style.height = 'auto';
+      clone.style.overflow = 'visible';
+      clone.style.backgroundColor = '#ffffff';
+      document.body.appendChild(clone);
+      
+      // S'assurer que tous les éléments dans le clone sont visibles
+      const allElements = clone.querySelectorAll('*');
+      allElements.forEach(el => {
+        el.style.height = 'auto';
+        el.style.maxHeight = 'none';
+        el.style.minHeight = '0';
+        el.style.overflow = 'visible';
+      });
+      
+      // S'assurer que le template moderne est correctement affiché
+      const modernTemplate = clone.querySelector('.template-moderne');
+      if (modernTemplate) {
+        modernTemplate.style.display = 'block';
+        modernTemplate.style.height = 'auto';
+        const content = modernTemplate.querySelector('.content');
+        if (content) {
+          content.style.display = 'block';
+          content.style.height = 'auto';
+          content.style.overflow = 'visible';
+        }
+      }
+      
       const opt = {
-        margin: [0.3, 0.3, 0.3, 0.3], // Marges réduites
+        margin: 0.5,
         filename: `CV_${cvData.nom || 'document'}.pdf`,
-        image: { type: 'jpeg', quality: 0.95 },
+        image: { 
+          type: 'jpeg', 
+          quality: 0.98 
+        },
         html2canvas: { 
-          scale: 3, // Augmenter la qualité
+          scale: 2,
           useCORS: true,
+          logging: false, // Désactiver le logging
           letterRendering: true,
-          windowWidth: element.scrollWidth,
-          windowHeight: element.scrollHeight,
-          scrollX: 0,
           scrollY: 0,
-          backgroundColor: '#ffffff'
+          windowHeight: 2000, // Forcer une grande hauteur
+          height: 2000
         },
         jsPDF: { 
           unit: 'in', 
           format: 'letter',
-          orientation: 'portrait',
-          compress: true
-        },
-        pagebreak: { 
-          mode: ['avoid-all', 'css', 'legacy'],
-          before: '.page-break-before',
-          after: '.page-break-after',
-          avoid: ['.section', 'h2']
+          orientation: 'portrait'
         }
       };
       
@@ -646,28 +649,25 @@
       btn.textContent = 'Génération en cours...';
       btn.disabled = true;
       
-      // Petit délai pour s'assurer que les styles PDF sont appliqués
       setTimeout(() => {
-        html2pdf().set(opt).from(element).save().then(() => {
-          btn.textContent = originalText;
-          btn.disabled = false;
-          
-          // Retirer la classe PDF mode
-          document.getElementById('cv-container').classList.remove('pdf-mode');
-          
-          // Afficher notification de succès
-          const notification = document.getElementById('notification');
-          notification.style.display = 'block';
-          setTimeout(() => {
-            notification.style.display = 'none';
-          }, 3000);
-        }).catch((error) => {
-          console.error('Erreur lors de la génération du PDF:', error);
-          btn.textContent = originalText;
-          btn.disabled = false;
-          document.getElementById('cv-container').classList.remove('pdf-mode');
-          alert('Une erreur est survenue lors de la génération du PDF. Veuillez réessayer.');
-        });
+        html2pdf().set(opt).from(clone).save().then(() => {
+        document.body.removeChild(clone);
+        btn.textContent = originalText;
+        btn.disabled = false;
+        
+        // Afficher notification de succès
+        const notification = document.getElementById('notification');
+        notification.style.display = 'block';
+        setTimeout(() => {
+          notification.style.display = 'none';
+        }, 3000);
+      }).catch((error) => {
+        console.error('Erreur lors de la génération du PDF:', error);
+        document.body.removeChild(clone);
+        btn.textContent = originalText;
+        btn.disabled = false;
+        alert('Une erreur est survenue lors de la génération du PDF. Veuillez réessayer.');
+      });
       }, 100);
     }
   </script>
