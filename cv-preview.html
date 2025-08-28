@@ -430,7 +430,7 @@
   <div class="actions">
     <button class="btn btn-secondary" onclick="goBack()">← Retour</button>
     <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button>
-    <button class="btn btn-primary" onclick="exportPDF()">📄 Aperçu PDF</button>
+    <button class="btn btn-primary" onclick="exportPDF()">📄 Télécharger en PDF</button>
   </div>
   
   <div id="notification" style="display: none; position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 15px 25px; border-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 1000;">
@@ -448,21 +448,13 @@
 
     // Vérifier si les données sont présentes
     if (!cvData.nom) {
-      // TEMPORAIRE: Créer des données de test
-      const testData = {
-        nom: "Test Utilisateur",
-        email: "test@email.com",
-        telephone: "514-123-4567",
-        adresse: "123 rue Test, Montréal",
-        resume: "Agent de sécurité motivé et professionnel.",
-        education: "Formation agent de sécurité - 2024",
-        experience: "Expérience en sécurité - 2 ans",
-        certifications: "BSP, RCR/DEA",
-        competences: "Surveillance, Contrôle d'accès",
-        langues: "Français, Anglais"
-      };
-      localStorage.setItem('cvData', JSON.stringify(testData));
-      location.reload(); // Recharger pour appliquer les données
+      document.getElementById('cv-container').innerHTML = `
+        <div style="padding: 40px; text-align: center;">
+          <p style="color: #dc2626; font-size: 18px;">Erreur : Aucune donnée trouvée.</p>
+          <p style="margin-top: 10px;">Veuillez remplir le formulaire d'abord.</p>
+          <button class="btn btn-primary" onclick="goBack()" style="margin-top: 20px;">Retour au formulaire</button>
+        </div>
+      `;
     } else {
       // Générer le CV selon le template sélectionné
       generateCV();
