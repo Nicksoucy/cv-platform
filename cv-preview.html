@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prévisualisation du CV</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -54,11 +54,13 @@
     }
 
     #cv-container {
-      max-width: 8.5in;
+      max-width: 8.5in; /* Largeur du papier letter */
+      min-height: 11in; /* Hauteur du papier letter */
       margin: 0 auto;
       background: white;
       box-shadow: 0 2px 20px rgba(0,0,0,0.1);
       position: relative;
+      overflow: hidden; /* Empêche le débordement */
     }
 
     /* Styles pour tous les templates */
@@ -66,57 +68,61 @@
     .template-classique,
     .template-minimal,
     .template-securite {
+      min-height: 11in;
+      max-height: 11in;
       width: 100%;
       box-sizing: border-box;
       position: relative;
+      overflow: hidden;
     }
 
     /* Styles pour le template Moderne */
     .template-moderne {
       font-family: 'Helvetica Neue', Arial, sans-serif;
       padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 11in;
     }
 
     .template-moderne .header {
       background: #2563eb;
       color: white;
-      padding: 25px 35px;
+      padding: 30px 40px;
       text-align: center;
+      flex-shrink: 0;
     }
 
     .template-moderne .header h1 {
-      font-size: 28px;
-      margin-bottom: 8px;
-      word-wrap: break-word;
+      font-size: 32px;
+      margin-bottom: 10px;
     }
 
     .template-moderne .contact-info {
-      font-size: 13px;
+      font-size: 14px;
       opacity: 0.9;
-      word-wrap: break-word;
     }
 
     .template-moderne .content {
-      padding: 25px 35px;
-      overflow-wrap: break-word;
+      padding: 30px 40px;
+      overflow-y: auto;
+      flex: 1;
     }
 
     .template-moderne .section {
-      margin-bottom: 20px;
-      padding-bottom: 12px;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
       border-bottom: 1px solid #e5e7eb;
     }
 
     .template-moderne .section:last-child {
       border-bottom: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
     }
 
     .template-moderne h2 {
       color: #2563eb;
-      font-size: 18px;
-      margin: 0 0 8px;
+      font-size: 20px;
+      margin: 0 0 10px;
       display: flex;
       align-items: center;
     }
@@ -124,39 +130,44 @@
     .template-moderne h2:before {
       content: '▶';
       margin-right: 8px;
-      font-size: 12px;
+      font-size: 14px;
     }
 
     .template-moderne p {
-      line-height: 1.4;
-      margin-bottom: 6px;
+      line-height: 1.5;
+      margin-bottom: 8px;
       color: #333;
-      font-size: 13px;
-      word-wrap: break-word;
-      white-space: pre-wrap;
+      font-size: 14px;
     }
 
     /* Styles pour le template Classique */
     .template-classique {
       font-family: Georgia, 'Times New Roman', serif;
       display: flex;
+      height: 11in;
       position: relative;
+      overflow: hidden;
     }
 
     .template-classique .sidebar {
       background: #f3f4f6;
-      width: 35%;
-      padding: 25px 20px;
+      width: 250px;
+      padding: 30px 25px;
       border-right: 2px solid #ddd;
-      word-wrap: break-word;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      height: 100%;
+      overflow-y: auto;
     }
 
     .template-classique .sidebar h2 {
-      font-size: 15px;
-      margin: 15px 0 6px;
+      font-size: 16px;
+      margin: 20px 0 8px;
       color: #333;
       border-bottom: 1px solid #999;
-      padding-bottom: 4px;
+      padding-bottom: 5px;
     }
 
     .template-classique .sidebar h2:first-child {
@@ -164,82 +175,82 @@
     }
 
     .template-classique .sidebar p {
-      font-size: 12px;
-      line-height: 1.4;
-      margin-bottom: 5px;
-      word-wrap: break-word;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 6px;
     }
 
     .template-classique .main {
-      flex: 1;
-      padding: 25px;
-      overflow-wrap: break-word;
+      margin-left: 250px;
+      padding: 30px;
+      height: 100%;
+      overflow-y: auto;
     }
 
     .template-classique .main h1 {
-      font-size: 24px;
+      font-size: 28px;
       color: #222;
-      margin-bottom: 12px;
+      margin-bottom: 15px;
       border-bottom: 3px double #000;
-      padding-bottom: 8px;
-      word-wrap: break-word;
+      padding-bottom: 10px;
     }
 
     .template-classique .section {
       background: #fafafa;
-      padding: 12px;
-      margin-bottom: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
       border: 1px solid #e5e7eb;
       border-radius: 4px;
     }
 
     .template-classique .section h2 {
-      font-size: 16px;
-      margin: 0 0 6px;
+      font-size: 18px;
+      margin: 0 0 8px;
       color: #333;
       font-style: italic;
     }
 
     .template-classique p {
-      line-height: 1.4;
-      margin-bottom: 5px;
+      line-height: 1.5;
+      margin-bottom: 6px;
       color: #444;
-      font-size: 13px;
-      white-space: pre-wrap;
+      font-size: 14px;
     }
 
     /* Styles pour le template Minimal */
     .template-minimal {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      padding: 35px 45px;
+      padding: 40px 50px;
+      max-width: 800px;
+      margin: 0 auto;
+      height: 11in;
+      overflow-y: auto;
     }
 
     .template-minimal h1 {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 300;
-      margin-bottom: 12px;
+      margin-bottom: 15px;
       text-align: center;
-      word-wrap: break-word;
     }
 
     .template-minimal .contact-line {
       text-align: center;
       color: #666;
-      margin-bottom: 25px;
-      font-size: 12px;
-      padding-bottom: 12px;
+      margin-bottom: 30px;
+      font-size: 13px;
+      padding-bottom: 15px;
       border-bottom: 1px solid #e5e7eb;
-      word-wrap: break-word;
     }
 
     .template-minimal .section {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
 
     .template-minimal h2 {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 600;
-      margin: 0 0 6px;
+      margin: 0 0 8px;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: #333;
@@ -253,41 +264,47 @@
       left: 0;
       top: 50%;
       transform: translateY(-50%);
-      width: 5px;
-      height: 5px;
+      width: 6px;
+      height: 6px;
       background: #333;
       border-radius: 50%;
     }
 
     .template-minimal p {
-      line-height: 1.5;
+      line-height: 1.6;
       color: #555;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       padding-left: 12px;
-      font-size: 12px;
-      white-space: pre-wrap;
+      font-size: 13px;
     }
 
     /* Styles pour le template Sécurité */
     .template-securite {
       font-family: Arial, sans-serif;
       display: flex;
+      height: 11in;
       position: relative;
+      overflow: hidden;
     }
 
     .template-securite .sidebar {
       background: #1e3a8a;
       color: white;
-      width: 35%;
-      padding: 25px 20px;
-      font-size: 12px;
-      word-wrap: break-word;
+      width: 280px;
+      padding: 30px 25px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      height: 100%;
+      overflow-y: auto;
+      font-size: 13px;
     }
 
     .template-securite .agent-icon {
-      width: 70px;
-      height: 70px;
-      margin: 0 auto 15px;
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
       background: rgba(255,255,255,0.15);
       border: 2px solid rgba(255,255,255,0.3);
       border-radius: 50%;
@@ -300,8 +317,8 @@
     .template-securite .agent-icon::after {
       content: '';
       position: absolute;
-      width: 80px;
-      height: 80px;
+      width: 90px;
+      height: 90px;
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 50%;
       top: -5px;
@@ -309,82 +326,79 @@
     }
 
     .template-securite .sidebar h2 {
-      font-size: 13px;
-      margin: 15px 0 6px;
+      font-size: 14px;
+      margin: 20px 0 8px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       border-bottom: 1px solid rgba(255,255,255,0.3);
-      padding-bottom: 4px;
+      padding-bottom: 5px;
     }
 
     .template-securite .sidebar p {
-      font-size: 11px;
-      line-height: 1.4;
+      font-size: 12px;
+      line-height: 1.5;
       opacity: 0.9;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
       word-wrap: break-word;
-      overflow-wrap: break-word;
-      hyphens: auto;
     }
 
     .template-securite .main {
-      flex: 1;
-      padding: 25px;
+      margin-left: 280px;
+      padding: 30px;
       background: white;
-      overflow-wrap: break-word;
+      height: 100%;
+      overflow-y: auto;
     }
 
     .template-securite .main h1 {
-      font-size: 26px;
+      font-size: 30px;
       color: #1e3a8a;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
       text-transform: uppercase;
       letter-spacing: 1px;
-      word-wrap: break-word;
     }
 
     .template-securite .main .title {
       color: #666;
-      font-size: 14px;
-      margin-bottom: 25px;
+      font-size: 16px;
+      margin-bottom: 30px;
       font-style: italic;
     }
 
     .template-securite .section {
       background: #f8f9fa;
       border-left: 4px solid #1e3a8a;
-      padding: 12px;
-      margin-bottom: 15px;
-      border-radius: 0 5px 5px 0;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 0 6px 6px 0;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
 
     .template-securite .section h2 {
-      font-size: 16px;
+      font-size: 18px;
       color: #1e3a8a;
-      margin: 0 0 8px 0;
+      margin: 0 0 10px 0;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
     .template-securite .section p {
-      line-height: 1.5;
+      line-height: 1.6;
       color: #333;
-      margin-bottom: 6px;
-      font-size: 13px;
-      white-space: pre-wrap;
+      margin-bottom: 8px;
+      font-size: 14px;
     }
 
     .template-securite .section ul {
-      margin: 6px 0;
+      margin: 8px 0;
       padding-left: 20px;
     }
 
     .template-securite .section li {
       color: #333;
-      margin-bottom: 5px;
-      line-height: 1.4;
-      font-size: 13px;
+      margin-bottom: 6px;
+      line-height: 1.5;
+      font-size: 14px;
     }
 
     /* Ajustements pour l'impression et PDF */
@@ -396,7 +410,7 @@
       }
       
       .actions {
-        display: none !important;
+        display: none;
       }
       
       #cv-container {
@@ -406,22 +420,41 @@
         padding: 0;
       }
       
+      /* S'assurer que le contenu tient sur une page 8.5x11 */
       @page {
         size: letter portrait;
         margin: 0.5in;
       }
       
+      /* Éviter les coupures de page */
       h1, h2, h3 {
         page-break-after: avoid;
       }
       
       p {
-        orphans: 3;
-        widows: 3;
+        page-break-inside: avoid;
       }
       
-      .section {
+      .template-moderne,
+      .template-classique,
+      .template-minimal,
+      .template-securite {
         page-break-inside: avoid;
+        height: 11in !important;
+        max-height: 11in !important;
+      }
+
+      /* Réduire légèrement les tailles pour l'impression si nécessaire */
+      .template-securite .sidebar p,
+      .template-classique .sidebar p {
+        font-size: 11px;
+      }
+
+      .template-moderne p,
+      .template-classique .main p,
+      .template-minimal p,
+      .template-securite .main p {
+        font-size: 12px;
       }
     }
   </style>
@@ -468,19 +501,19 @@
           cvHTML = `
             <div class="template-moderne">
               <div class="header">
-                <h1>${escapeHtml(cvData.nom)}</h1>
+                <h1>${cvData.nom}</h1>
                 <div class="contact-info">
-                  ${escapeHtml(cvData.email)} | ${escapeHtml(cvData.telephone)}
-                  ${cvData.adresse ? ' | ' + escapeHtml(cvData.adresse) : ''}
+                  ${cvData.email} | ${cvData.telephone}
+                  ${cvData.adresse ? ' | ' + cvData.adresse : ''}
                 </div>
               </div>
               <div class="content">
-                ${cvData.resume ? `<div class="section"><h2>Résumé professionnel</h2><p>${formatText(cvData.resume)}</p></div>` : ''}
-                ${cvData.education ? `<div class="section"><h2>Éducation</h2><p>${formatText(cvData.education)}</p></div>` : ''}
-                ${cvData.experience ? `<div class="section"><h2>Expérience professionnelle</h2><p>${formatText(cvData.experience)}</p></div>` : ''}
-                ${cvData.certifications ? `<div class="section"><h2>Certifications</h2><p>${formatText(cvData.certifications)}</p></div>` : ''}
-                ${cvData.competences ? `<div class="section"><h2>Compétences</h2><p>${formatText(cvData.competences)}</p></div>` : ''}
-                ${cvData.langues ? `<div class="section"><h2>Langues</h2><p>${formatText(cvData.langues)}</p></div>` : ''}
+                ${cvData.resume ? `<div class="section"><h2>Résumé professionnel</h2><p>${cvData.resume}</p></div>` : ''}
+                ${cvData.education ? `<div class="section"><h2>Éducation</h2><p>${cvData.education.replace(/\n/g, '<br>')}</p></div>` : ''}
+                ${cvData.experience ? `<div class="section"><h2>Expérience professionnelle</h2><p>${cvData.experience.replace(/\n/g, '<br>')}</p></div>` : ''}
+                ${cvData.certifications ? `<div class="section"><h2>Certifications</h2><p>${cvData.certifications.replace(/\n/g, '<br>')}</p></div>` : ''}
+                ${cvData.competences ? `<div class="section"><h2>Compétences</h2><p>${cvData.competences}</p></div>` : ''}
+                ${cvData.langues ? `<div class="section"><h2>Langues</h2><p>${cvData.langues}</p></div>` : ''}
               </div>
             </div>
           `;
@@ -491,19 +524,19 @@
             <div class="template-classique">
               <div class="sidebar">
                 <h2>Coordonnées</h2>
-                <p><strong>Courriel :</strong><br>${escapeHtml(cvData.email)}</p>
-                <p><strong>Tél. :</strong><br>${escapeHtml(cvData.telephone)}</p>
-                ${cvData.adresse ? `<p><strong>Adresse :</strong><br>${escapeHtml(cvData.adresse)}</p>` : ''}
+                <p><strong>Courriel :</strong><br>${cvData.email}</p>
+                <p><strong>Tél. :</strong><br>${cvData.telephone}</p>
+                ${cvData.adresse ? `<p><strong>Adresse :</strong><br>${cvData.adresse}</p>` : ''}
                 
-                ${cvData.langues ? `<h2>Langues</h2><p>${formatList(cvData.langues)}</p>` : ''}
-                ${cvData.competences ? `<h2>Compétences</h2><p>${formatList(cvData.competences)}</p>` : ''}
+                ${cvData.langues ? `<h2>Langues</h2><p>${cvData.langues}</p>` : ''}
+                ${cvData.competences ? `<h2>Compétences</h2><p>${cvData.competences.replace(/,/g, '<br>')}</p>` : ''}
               </div>
               <div class="main">
-                <h1>${escapeHtml(cvData.nom)}</h1>
-                ${cvData.resume ? `<div class="section"><h2>Résumé professionnel</h2><p>${formatText(cvData.resume)}</p></div>` : ''}
-                ${cvData.education ? `<div class="section"><h2>Éducation</h2><p>${formatText(cvData.education)}</p></div>` : ''}
-                ${cvData.experience ? `<div class="section"><h2>Expérience professionnelle</h2><p>${formatText(cvData.experience)}</p></div>` : ''}
-                ${cvData.certifications ? `<div class="section"><h2>Certifications</h2><p>${formatText(cvData.certifications)}</p></div>` : ''}
+                <h1>${cvData.nom}</h1>
+                ${cvData.resume ? `<div class="section"><h2>Résumé professionnel</h2><p>${cvData.resume}</p></div>` : ''}
+                ${cvData.education ? `<div class="section"><h2>Éducation</h2><p>${cvData.education.replace(/\n/g, '<br>')}</p></div>` : ''}
+                ${cvData.experience ? `<div class="section"><h2>Expérience professionnelle</h2><p>${cvData.experience.replace(/\n/g, '<br>')}</p></div>` : ''}
+                ${cvData.certifications ? `<div class="section"><h2>Certifications</h2><p>${cvData.certifications.replace(/\n/g, '<br>')}</p></div>` : ''}
               </div>
             </div>
           `;
@@ -512,16 +545,16 @@
         case 'minimal':
           cvHTML = `
             <div class="template-minimal">
-              <h1>${escapeHtml(cvData.nom)}</h1>
+              <h1>${cvData.nom}</h1>
               <div class="contact-line">
-                ${escapeHtml(cvData.email)} • ${escapeHtml(cvData.telephone)}${cvData.adresse ? ' • ' + escapeHtml(cvData.adresse) : ''}
+                ${cvData.email} • ${cvData.telephone}${cvData.adresse ? ' • ' + cvData.adresse : ''}
               </div>
-              ${cvData.resume ? `<div class="section"><h2>Résumé</h2><p>${formatText(cvData.resume)}</p></div>` : ''}
-              ${cvData.experience ? `<div class="section"><h2>Expérience</h2><p>${formatText(cvData.experience)}</p></div>` : ''}
-              ${cvData.education ? `<div class="section"><h2>Éducation</h2><p>${formatText(cvData.education)}</p></div>` : ''}
-              ${cvData.certifications ? `<div class="section"><h2>Certifications</h2><p>${formatText(cvData.certifications)}</p></div>` : ''}
-              ${cvData.competences ? `<div class="section"><h2>Compétences</h2><p>${formatText(cvData.competences)}</p></div>` : ''}
-              ${cvData.langues ? `<div class="section"><h2>Langues</h2><p>${formatText(cvData.langues)}</p></div>` : ''}
+              ${cvData.resume ? `<div class="section"><h2>Résumé</h2><p>${cvData.resume}</p></div>` : ''}
+              ${cvData.experience ? `<div class="section"><h2>Expérience</h2><p>${cvData.experience.replace(/\n/g, '<br>')}</p></div>` : ''}
+              ${cvData.education ? `<div class="section"><h2>Éducation</h2><p>${cvData.education.replace(/\n/g, '<br>')}</p></div>` : ''}
+              ${cvData.certifications ? `<div class="section"><h2>Certifications</h2><p>${cvData.certifications.replace(/\n/g, '<br>')}</p></div>` : ''}
+              ${cvData.competences ? `<div class="section"><h2>Compétences</h2><p>${cvData.competences}</p></div>` : ''}
+              ${cvData.langues ? `<div class="section"><h2>Langues</h2><p>${cvData.langues}</p></div>` : ''}
             </div>
           `;
           break;
@@ -531,25 +564,25 @@
             <div class="template-securite">
               <div class="sidebar">
                 <div class="agent-icon">
-                  <span style="font-size: 35px;">👮</span>
+                  <span style="font-size: 40px;">👮</span>
                 </div>
                 
                 <h2>Contact</h2>
-                <p>${escapeHtml(cvData.email)}</p>
-                <p>${escapeHtml(cvData.telephone)}</p>
-                ${cvData.adresse ? `<p>${escapeHtml(cvData.adresse)}</p>` : ''}
+                <p>${cvData.email}</p>
+                <p>${cvData.telephone}</p>
+                ${cvData.adresse ? `<p>${cvData.adresse}</p>` : ''}
                 
-                ${cvData.certifications ? `<h2>Certifications</h2><p>${formatText(cvData.certifications)}</p>` : ''}
-                ${cvData.langues ? `<h2>Langues</h2><p>${formatText(cvData.langues)}</p>` : ''}
-                ${cvData.competences ? `<h2>Compétences</h2><p>${formatList(cvData.competences)}</p>` : ''}
+                ${cvData.certifications ? `<h2>Certifications</h2><p>${cvData.certifications.replace(/\n/g, '<br>')}</p>` : ''}
+                ${cvData.langues ? `<h2>Langues</h2><p>${cvData.langues}</p>` : ''}
+                ${cvData.competences ? `<h2>Compétences</h2><p>${cvData.competences.replace(/,/g, '<br>')}</p>` : ''}
               </div>
               <div class="main">
-                <h1>${escapeHtml(cvData.nom)}</h1>
+                <h1>${cvData.nom}</h1>
                 <div class="title">Agent de Sécurité Professionnel</div>
                 
-                ${cvData.resume ? `<div class="section"><h2>Profil</h2><p>${formatText(cvData.resume)}</p></div>` : ''}
-                ${cvData.experience ? `<div class="section"><h2>Expérience en Sécurité</h2><p>${formatText(cvData.experience)}</p></div>` : ''}
-                ${cvData.education ? `<div class="section"><h2>Formation</h2><p>${formatText(cvData.education)}</p></div>` : ''}
+                ${cvData.resume ? `<div class="section"><h2>Profil</h2><p>${cvData.resume}</p></div>` : ''}
+                ${cvData.experience ? `<div class="section"><h2>Expérience en Sécurité</h2><p>${cvData.experience.replace(/\n/g, '<br>')}</p></div>` : ''}
+                ${cvData.education ? `<div class="section"><h2>Formation</h2><p>${cvData.education.replace(/\n/g, '<br>')}</p></div>` : ''}
               </div>
             </div>
           `;
@@ -559,88 +592,28 @@
       document.getElementById('cv-container').innerHTML = cvHTML;
     }
 
-    // Fonction pour échapper le HTML
-    function escapeHtml(text) {
-      if (!text) return '';
-      return text
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
-
-    // Fonction pour formater le texte avec retours à la ligne
-    function formatText(text) {
-      return escapeHtml(text).replace(/\n/g, '<br>');
-    }
-
-    // Fonction pour formater les listes (virgules vers retours à la ligne)
-    function formatList(text) {
-      return escapeHtml(text).replace(/,\s*/g, '<br>');
-    }
-
     function goBack() {
       window.location.href = 'cv-builder.html';
     }
 
     function exportPDF() {
       const element = document.getElementById('cv-container');
-      
-      // Créer une copie temporaire pour le PDF
-      const clone = element.cloneNode(true);
-      clone.style.position = 'absolute';
-      clone.style.left = '-9999px';
-      clone.style.width = '816px'; // 8.5in * 96dpi
-      clone.style.maxWidth = '816px';
-      clone.style.height = 'auto';
-      clone.style.overflow = 'visible';
-      clone.style.backgroundColor = '#ffffff';
-      document.body.appendChild(clone);
-      
-      // S'assurer que tous les éléments dans le clone sont visibles
-      const allElements = clone.querySelectorAll('*');
-      allElements.forEach(el => {
-        el.style.height = 'auto';
-        el.style.maxHeight = 'none';
-        el.style.minHeight = '0';
-        el.style.overflow = 'visible';
-      });
-      
-      // S'assurer que le template moderne est correctement affiché
-      const modernTemplate = clone.querySelector('.template-moderne');
-      if (modernTemplate) {
-        modernTemplate.style.display = 'block';
-        modernTemplate.style.height = 'auto';
-        const content = modernTemplate.querySelector('.content');
-        if (content) {
-          content.style.display = 'block';
-          content.style.height = 'auto';
-          content.style.overflow = 'visible';
-        }
-      }
-      
       const opt = {
-        margin: 0.5,
+        margin: [0.5, 0.5, 0.5, 0.5], // Marges de 0.5 pouce (1.27 cm) tout autour
         filename: `CV_${cvData.nom || 'document'}.pdf`,
-        image: { 
-          type: 'jpeg', 
-          quality: 0.98 
-        },
+        image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { 
           scale: 2,
           useCORS: true,
-          logging: false, // Désactiver le logging
-          letterRendering: true,
-          scrollY: 0,
-          windowHeight: 2000, // Forcer une grande hauteur
-          height: 2000
+          letterRendering: true
         },
         jsPDF: { 
           unit: 'in', 
-          format: 'letter',
-          orientation: 'portrait'
-        }
+          format: 'letter', // 8.5 x 11 pouces
+          orientation: 'portrait',
+          compress: true
+        },
+        pagebreak: { mode: 'avoid-all' } // Évite les coupures de page au milieu du contenu
       };
       
       // Ajouter une indication visuelle pendant la génération
@@ -649,9 +622,7 @@
       btn.textContent = 'Génération en cours...';
       btn.disabled = true;
       
-      setTimeout(() => {
-        html2pdf().set(opt).from(clone).save().then(() => {
-        document.body.removeChild(clone);
+      html2pdf().set(opt).from(element).save().then(() => {
         btn.textContent = originalText;
         btn.disabled = false;
         
@@ -661,14 +632,7 @@
         setTimeout(() => {
           notification.style.display = 'none';
         }, 3000);
-      }).catch((error) => {
-        console.error('Erreur lors de la génération du PDF:', error);
-        document.body.removeChild(clone);
-        btn.textContent = originalText;
-        btn.disabled = false;
-        alert('Une erreur est survenue lors de la génération du PDF. Veuillez réessayer.');
       });
-      }, 100);
     }
   </script>
 </body>
