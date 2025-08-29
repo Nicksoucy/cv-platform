@@ -55,7 +55,8 @@
 
     #cv-container {
       max-width: 8.5in; /* Largeur du papier letter */
-      min-height: 11in; /* Hauteur du papier letter */
+      height: 11in; /* Hauteur fixe du papier letter */
+      max-height: 11in;
       margin: 0 auto;
       background: white;
       box-shadow: 0 2px 20px rgba(0,0,0,0.1);
@@ -68,8 +69,7 @@
     .template-classique,
     .template-minimal,
     .template-securite {
-      min-height: 11in;
-      max-height: 11in;
+      height: 11in; /* Hauteur fixe */
       width: 100%;
       box-sizing: border-box;
       position: relative;
@@ -291,21 +291,21 @@
     .template-securite .sidebar {
       background: #1e3a8a;
       color: white;
-      width: 260px; /* Réduit de 280px */
-      padding: 25px 20px; /* Réduit */
+      width: 220px; /* TRÈS réduit */
+      padding: 15px 12px; /* TRÈS réduit */
       position: absolute;
       left: 0;
       top: 0;
       bottom: 0;
       height: 100%;
       overflow-y: auto;
-      font-size: 12px; /* Réduit de 13px */
+      font-size: 10px; /* TRÈS réduit */
     }
 
     .template-securite .agent-icon {
-      width: 70px; /* Réduit de 80px */
-      height: 70px;
-      margin: 0 auto 15px; /* Réduit */
+      width: 50px; /* TRÈS réduit */
+      height: 50px;
+      margin: 0 auto 10px; /* TRÈS réduit */
       background: rgba(255,255,255,0.15);
       border: 2px solid rgba(255,255,255,0.3);
       border-radius: 50%;
@@ -318,8 +318,8 @@
     .template-securite .agent-icon::after {
       content: '';
       position: absolute;
-      width: 80px; /* Réduit de 90px */
-      height: 80px;
+      width: 60px; /* TRÈS réduit */
+      height: 60px;
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 50%;
       top: -5px;
@@ -327,75 +327,82 @@
     }
 
     .template-securite .agent-icon span {
-      font-size: 35px; /* Réduit de 40px */
+      font-size: 25px; /* TRÈS réduit */
     }
 
     .template-securite .sidebar h2 {
-      font-size: 13px; /* Réduit de 14px */
-      margin: 18px 0 6px; /* Réduit */
+      font-size: 11px; /* TRÈS réduit */
+      margin: 12px 0 4px; /* TRÈS réduit */
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
       border-bottom: 1px solid rgba(255,255,255,0.3);
-      padding-bottom: 4px;
+      padding-bottom: 2px;
     }
 
     .template-securite .sidebar p {
-      font-size: 11px; /* Réduit de 12px */
-      line-height: 1.4;
+      font-size: 9px; /* TRÈS réduit */
+      line-height: 1.3;
       opacity: 0.9;
-      margin-bottom: 5px;
+      margin-bottom: 3px;
       word-wrap: break-word;
     }
 
     .template-securite .main {
-      margin-left: 260px; /* Ajusté */
-      padding: 25px; /* Réduit de 30px */
+      margin-left: 220px; /* Ajusté */
+      padding: 15px; /* TRÈS réduit */
       background: white;
       height: 100%;
       overflow-y: auto;
     }
 
     .template-securite .main h1 {
-      font-size: 26px; /* Réduit de 30px */
+      font-size: 22px; /* TRÈS réduit */
       color: #1e3a8a;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
     }
 
     .template-securite .main .title {
       color: #666;
-      font-size: 14px; /* Réduit de 16px */
-      margin-bottom: 25px; /* Réduit de 30px */
+      font-size: 12px; /* TRÈS réduit */
+      margin-bottom: 15px; /* TRÈS réduit */
       font-style: italic;
     }
 
     .template-securite .section {
       background: #f8f9fa;
       border-left: 4px solid #1e3a8a;
-      padding: 12px; /* Réduit de 15px */
-      margin-bottom: 16px; /* Réduit de 20px */
+      padding: 8px; /* TRÈS réduit */
+      margin-bottom: 10px; /* TRÈS réduit */
       border-radius: 0 6px 6px 0;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
 
     .template-securite .section h2 {
-      font-size: 16px; /* Réduit de 18px */
+      font-size: 13px; /* TRÈS réduit */
       color: #1e3a8a;
-      margin: 0 0 8px 0;
+      margin: 0 0 5px 0;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
     }
 
     .template-securite .section p {
-      line-height: 1.5; /* Réduit de 1.6 */
+      line-height: 1.3; /* TRÈS réduit */
       color: #333;
-      margin-bottom: 6px; /* Réduit de 8px */
-      font-size: 13px; /* Réduit de 14px */
+      margin-bottom: 4px; /* TRÈS réduit */
+      font-size: 11px; /* TRÈS réduit */
     }
 
     /* Ajustements spécifiques pour l'impression */
     @media print {
+      /* FORCE L'IMPRESSION DES COULEURS DE FOND */
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+      
       body {
         background: white;
         padding: 0;
@@ -413,10 +420,10 @@
         padding: 0;
       }
       
-      /* Force une seule page */
+      /* Force une seule page avec marges minimales */
       @page {
         size: letter;
-        margin: 0.3in; /* Marges réduites */
+        margin: 0.15in !important; /* Marges ULTRA réduites */
       }
       
       /* Empêcher les coupures de page */
@@ -426,9 +433,35 @@
       .template-securite {
         page-break-inside: avoid !important;
         page-break-after: avoid !important;
-        height: 100vh !important;
-        max-height: 100vh !important;
+        height: 10.5in !important; /* Réduit pour tenir dans les marges */
+        max-height: 10.5in !important;
         overflow: hidden !important;
+      }
+      
+      /* Force les couleurs de fond pour chaque template */
+      .template-moderne .header {
+        background-color: #2563eb !important;
+        -webkit-print-color-adjust: exact !important;
+      }
+      
+      .template-classique .sidebar {
+        background-color: #f3f4f6 !important;
+        -webkit-print-color-adjust: exact !important;
+      }
+      
+      .template-securite .sidebar {
+        background-color: #1e3a8a !important;
+        -webkit-print-color-adjust: exact !important;
+      }
+      
+      .template-securite .section {
+        background-color: #f8f9fa !important;
+        -webkit-print-color-adjust: exact !important;
+      }
+      
+      .template-securite .agent-icon {
+        background-color: rgba(255,255,255,0.15) !important;
+        -webkit-print-color-adjust: exact !important;
       }
       
       /* Ajustements supplémentaires pour l'impression */
@@ -449,14 +482,28 @@
       .template-minimal p { font-size: 11px !important; }
       .template-minimal h2 { font-size: 12px !important; }
       
-      .template-securite p { font-size: 11px !important; }
-      .template-securite h2 { font-size: 14px !important; }
+      .template-securite p { font-size: 9px !important; }
+      .template-securite h2 { font-size: 11px !important; }
+      .template-securite h1 { font-size: 20px !important; }
+      .template-securite .title { font-size: 11px !important; }
+      .template-securite .sidebar { width: 200px !important; padding: 10px !important; }
+      .template-securite .main { margin-left: 200px !important; padding: 12px !important; }
+      .template-securite .section { padding: 6px !important; margin-bottom: 8px !important; }
+      .template-securite .agent-icon { width: 40px !important; height: 40px !important; margin-bottom: 8px !important; }
+      .template-securite .agent-icon span { font-size: 20px !important; }
       
-      /* Réduction des marges et espacements */
+      /* Réduction supplémentaire des marges et espacements */
       .template-moderne .section { margin-bottom: 12px !important; padding-bottom: 8px !important; }
       .template-classique .section { margin-bottom: 8px !important; padding: 8px !important; }
       .template-minimal .section { margin-bottom: 12px !important; }
-      .template-securite .section { margin-bottom: 10px !important; padding: 10px !important; }
+      .template-securite .section { margin-bottom: 6px !important; padding: 5px !important; }
+      
+      /* Force la hauteur maximale */
+      #cv-container {
+        height: 10.5in !important;
+        max-height: 10.5in !important;
+        overflow: hidden !important;
+      }
     }
   </style>
 </head>
@@ -600,7 +647,7 @@
     function exportPDF() {
       const element = document.getElementById('cv-container');
       const opt = {
-        margin: 0.3, // Marges réduites pour maximiser l'espace
+        margin: 0.2, // Marges TRÈS réduites pour maximiser l'espace
         filename: `CV_${cvData.nom || 'document'}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { 
