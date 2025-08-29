@@ -60,7 +60,7 @@
       background: white;
       box-shadow: 0 2px 20px rgba(0,0,0,0.1);
       position: relative;
-      overflow: hidden; /* Empêche le débordement */
+      overflow: hidden;
     }
 
     /* Styles pour tous les templates */
@@ -88,41 +88,42 @@
     .template-moderne .header {
       background: #2563eb;
       color: white;
-      padding: 30px 40px;
+      padding: 25px 30px; /* Réduit de 30px 40px */
       text-align: center;
       flex-shrink: 0;
     }
 
     .template-moderne .header h1 {
-      font-size: 32px;
-      margin-bottom: 10px;
+      font-size: 28px; /* Réduit de 32px */
+      margin-bottom: 8px;
     }
 
     .template-moderne .contact-info {
-      font-size: 14px;
+      font-size: 13px; /* Réduit de 14px */
       opacity: 0.9;
     }
 
     .template-moderne .content {
-      padding: 30px 40px;
+      padding: 20px 30px; /* Réduit de 30px 40px */
       overflow-y: auto;
       flex: 1;
     }
 
     .template-moderne .section {
-      margin-bottom: 25px;
-      padding-bottom: 15px;
+      margin-bottom: 18px; /* Réduit de 25px */
+      padding-bottom: 10px; /* Réduit de 15px */
       border-bottom: 1px solid #e5e7eb;
     }
 
     .template-moderne .section:last-child {
       border-bottom: none;
+      margin-bottom: 0;
     }
 
     .template-moderne h2 {
       color: #2563eb;
-      font-size: 20px;
-      margin: 0 0 10px;
+      font-size: 18px; /* Réduit de 20px */
+      margin: 0 0 8px; /* Réduit de 10px */
       display: flex;
       align-items: center;
     }
@@ -130,14 +131,14 @@
     .template-moderne h2:before {
       content: '▶';
       margin-right: 8px;
-      font-size: 14px;
+      font-size: 12px; /* Réduit de 14px */
     }
 
     .template-moderne p {
-      line-height: 1.5;
-      margin-bottom: 8px;
+      line-height: 1.4; /* Réduit de 1.5 */
+      margin-bottom: 6px; /* Réduit de 8px */
       color: #333;
-      font-size: 14px;
+      font-size: 13px; /* Réduit de 14px */
     }
 
     /* Styles pour le template Classique */
@@ -151,8 +152,8 @@
 
     .template-classique .sidebar {
       background: #f3f4f6;
-      width: 250px;
-      padding: 30px 25px;
+      width: 230px; /* Réduit de 250px */
+      padding: 25px 20px; /* Réduit de 30px 25px */
       border-right: 2px solid #ddd;
       position: absolute;
       left: 0;
@@ -163,11 +164,11 @@
     }
 
     .template-classique .sidebar h2 {
-      font-size: 16px;
-      margin: 20px 0 8px;
+      font-size: 14px; /* Réduit de 16px */
+      margin: 18px 0 6px; /* Réduit */
       color: #333;
       border-bottom: 1px solid #999;
-      padding-bottom: 5px;
+      padding-bottom: 4px;
     }
 
     .template-classique .sidebar h2:first-child {
@@ -175,52 +176,52 @@
     }
 
     .template-classique .sidebar p {
-      font-size: 13px;
-      line-height: 1.5;
-      margin-bottom: 6px;
+      font-size: 12px; /* Réduit de 13px */
+      line-height: 1.4;
+      margin-bottom: 5px;
     }
 
     .template-classique .main {
-      margin-left: 250px;
-      padding: 30px;
+      margin-left: 230px; /* Ajusté */
+      padding: 25px; /* Réduit de 30px */
       height: 100%;
       overflow-y: auto;
     }
 
     .template-classique .main h1 {
-      font-size: 28px;
+      font-size: 26px; /* Réduit de 28px */
       color: #222;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       border-bottom: 3px double #000;
-      padding-bottom: 10px;
+      padding-bottom: 8px;
     }
 
     .template-classique .section {
       background: #fafafa;
-      padding: 15px;
-      margin-bottom: 15px;
+      padding: 12px; /* Réduit de 15px */
+      margin-bottom: 12px; /* Réduit de 15px */
       border: 1px solid #e5e7eb;
       border-radius: 4px;
     }
 
     .template-classique .section h2 {
-      font-size: 18px;
-      margin: 0 0 8px;
+      font-size: 16px; /* Réduit de 18px */
+      margin: 0 0 6px;
       color: #333;
       font-style: italic;
     }
 
     .template-classique p {
-      line-height: 1.5;
-      margin-bottom: 6px;
+      line-height: 1.4;
+      margin-bottom: 5px;
       color: #444;
-      font-size: 14px;
+      font-size: 13px; /* Réduit de 14px */
     }
 
     /* Styles pour le template Minimal */
     .template-minimal {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      padding: 40px 50px;
+      padding: 30px 40px; /* Réduit de 40px 50px */
       max-width: 800px;
       margin: 0 auto;
       height: 11in;
@@ -228,29 +229,29 @@
     }
 
     .template-minimal h1 {
-      font-size: 26px;
+      font-size: 24px; /* Réduit de 26px */
       font-weight: 300;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       text-align: center;
     }
 
     .template-minimal .contact-line {
       text-align: center;
       color: #666;
-      margin-bottom: 30px;
-      font-size: 13px;
-      padding-bottom: 15px;
+      margin-bottom: 25px; /* Réduit de 30px */
+      font-size: 12px; /* Réduit de 13px */
+      padding-bottom: 12px;
       border-bottom: 1px solid #e5e7eb;
     }
 
     .template-minimal .section {
-      margin-bottom: 25px;
+      margin-bottom: 20px; /* Réduit de 25px */
     }
 
     .template-minimal h2 {
-      font-size: 14px;
+      font-size: 13px; /* Réduit de 14px */
       font-weight: 600;
-      margin: 0 0 8px;
+      margin: 0 0 6px;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: #333;
@@ -264,18 +265,18 @@
       left: 0;
       top: 50%;
       transform: translateY(-50%);
-      width: 6px;
-      height: 6px;
+      width: 5px;
+      height: 5px;
       background: #333;
       border-radius: 50%;
     }
 
     .template-minimal p {
-      line-height: 1.6;
+      line-height: 1.5; /* Réduit de 1.6 */
       color: #555;
-      margin-bottom: 8px;
+      margin-bottom: 6px; /* Réduit de 8px */
       padding-left: 12px;
-      font-size: 13px;
+      font-size: 12px; /* Réduit de 13px */
     }
 
     /* Styles pour le template Sécurité */
@@ -290,21 +291,21 @@
     .template-securite .sidebar {
       background: #1e3a8a;
       color: white;
-      width: 280px;
-      padding: 30px 25px;
+      width: 260px; /* Réduit de 280px */
+      padding: 25px 20px; /* Réduit */
       position: absolute;
       left: 0;
       top: 0;
       bottom: 0;
       height: 100%;
       overflow-y: auto;
-      font-size: 13px;
+      font-size: 12px; /* Réduit de 13px */
     }
 
     .template-securite .agent-icon {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 20px;
+      width: 70px; /* Réduit de 80px */
+      height: 70px;
+      margin: 0 auto 15px; /* Réduit */
       background: rgba(255,255,255,0.15);
       border: 2px solid rgba(255,255,255,0.3);
       border-radius: 50%;
@@ -317,91 +318,83 @@
     .template-securite .agent-icon::after {
       content: '';
       position: absolute;
-      width: 90px;
-      height: 90px;
+      width: 80px; /* Réduit de 90px */
+      height: 80px;
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 50%;
       top: -5px;
       left: -5px;
     }
 
+    .template-securite .agent-icon span {
+      font-size: 35px; /* Réduit de 40px */
+    }
+
     .template-securite .sidebar h2 {
-      font-size: 14px;
-      margin: 20px 0 8px;
+      font-size: 13px; /* Réduit de 14px */
+      margin: 18px 0 6px; /* Réduit */
       text-transform: uppercase;
       letter-spacing: 0.5px;
       border-bottom: 1px solid rgba(255,255,255,0.3);
-      padding-bottom: 5px;
+      padding-bottom: 4px;
     }
 
     .template-securite .sidebar p {
-      font-size: 12px;
-      line-height: 1.5;
+      font-size: 11px; /* Réduit de 12px */
+      line-height: 1.4;
       opacity: 0.9;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       word-wrap: break-word;
     }
 
     .template-securite .main {
-      margin-left: 280px;
-      padding: 30px;
+      margin-left: 260px; /* Ajusté */
+      padding: 25px; /* Réduit de 30px */
       background: white;
       height: 100%;
       overflow-y: auto;
     }
 
     .template-securite .main h1 {
-      font-size: 30px;
+      font-size: 26px; /* Réduit de 30px */
       color: #1e3a8a;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
     }
 
     .template-securite .main .title {
       color: #666;
-      font-size: 16px;
-      margin-bottom: 30px;
+      font-size: 14px; /* Réduit de 16px */
+      margin-bottom: 25px; /* Réduit de 30px */
       font-style: italic;
     }
 
     .template-securite .section {
       background: #f8f9fa;
       border-left: 4px solid #1e3a8a;
-      padding: 15px;
-      margin-bottom: 20px;
+      padding: 12px; /* Réduit de 15px */
+      margin-bottom: 16px; /* Réduit de 20px */
       border-radius: 0 6px 6px 0;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
 
     .template-securite .section h2 {
-      font-size: 18px;
+      font-size: 16px; /* Réduit de 18px */
       color: #1e3a8a;
-      margin: 0 0 10px 0;
+      margin: 0 0 8px 0;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
     .template-securite .section p {
-      line-height: 1.6;
+      line-height: 1.5; /* Réduit de 1.6 */
       color: #333;
-      margin-bottom: 8px;
-      font-size: 14px;
+      margin-bottom: 6px; /* Réduit de 8px */
+      font-size: 13px; /* Réduit de 14px */
     }
 
-    .template-securite .section ul {
-      margin: 8px 0;
-      padding-left: 20px;
-    }
-
-    .template-securite .section li {
-      color: #333;
-      margin-bottom: 6px;
-      line-height: 1.5;
-      font-size: 14px;
-    }
-
-    /* Ajustements pour l'impression et PDF */
+    /* Ajustements spécifiques pour l'impression */
     @media print {
       body {
         background: white;
@@ -410,7 +403,7 @@
       }
       
       .actions {
-        display: none;
+        display: none !important;
       }
       
       #cv-container {
@@ -420,42 +413,50 @@
         padding: 0;
       }
       
-      /* S'assurer que le contenu tient sur une page 8.5x11 */
+      /* Force une seule page */
       @page {
-        size: letter portrait;
-        margin: 0.5in;
+        size: letter;
+        margin: 0.3in; /* Marges réduites */
       }
       
-      /* Éviter les coupures de page */
-      h1, h2, h3 {
-        page-break-after: avoid;
-      }
-      
-      p {
-        page-break-inside: avoid;
-      }
-      
+      /* Empêcher les coupures de page */
       .template-moderne,
       .template-classique,
       .template-minimal,
       .template-securite {
-        page-break-inside: avoid;
-        height: 11in !important;
-        max-height: 11in !important;
+        page-break-inside: avoid !important;
+        page-break-after: avoid !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        overflow: hidden !important;
       }
-
-      /* Réduire légèrement les tailles pour l'impression si nécessaire */
-      .template-securite .sidebar p,
-      .template-classique .sidebar p {
-        font-size: 11px;
+      
+      /* Ajustements supplémentaires pour l'impression */
+      .template-moderne .content,
+      .template-classique .main,
+      .template-minimal,
+      .template-securite .main {
+        overflow: hidden !important;
       }
-
-      .template-moderne p,
-      .template-classique .main p,
-      .template-minimal p,
-      .template-securite .main p {
-        font-size: 12px;
-      }
+      
+      /* Réduction supplémentaire des tailles de police pour l'impression */
+      .template-moderne p { font-size: 11px !important; }
+      .template-moderne h2 { font-size: 15px !important; }
+      
+      .template-classique p { font-size: 11px !important; }
+      .template-classique h2 { font-size: 14px !important; }
+      
+      .template-minimal p { font-size: 11px !important; }
+      .template-minimal h2 { font-size: 12px !important; }
+      
+      .template-securite p { font-size: 11px !important; }
+      .template-securite h2 { font-size: 14px !important; }
+      
+      /* Réduction des marges et espacements */
+      .template-moderne .section { margin-bottom: 12px !important; padding-bottom: 8px !important; }
+      .template-classique .section { margin-bottom: 8px !important; padding: 8px !important; }
+      .template-minimal .section { margin-bottom: 12px !important; }
+      .template-securite .section { margin-bottom: 10px !important; padding: 10px !important; }
     }
   </style>
 </head>
@@ -509,8 +510,8 @@
               </div>
               <div class="content">
                 ${cvData.resume ? `<div class="section"><h2>Résumé professionnel</h2><p>${cvData.resume}</p></div>` : ''}
-                ${cvData.education ? `<div class="section"><h2>Éducation</h2><p>${cvData.education.replace(/\n/g, '<br>')}</p></div>` : ''}
                 ${cvData.experience ? `<div class="section"><h2>Expérience professionnelle</h2><p>${cvData.experience.replace(/\n/g, '<br>')}</p></div>` : ''}
+                ${cvData.education ? `<div class="section"><h2>Éducation</h2><p>${cvData.education.replace(/\n/g, '<br>')}</p></div>` : ''}
                 ${cvData.certifications ? `<div class="section"><h2>Certifications</h2><p>${cvData.certifications.replace(/\n/g, '<br>')}</p></div>` : ''}
                 ${cvData.competences ? `<div class="section"><h2>Compétences</h2><p>${cvData.competences}</p></div>` : ''}
                 ${cvData.langues ? `<div class="section"><h2>Langues</h2><p>${cvData.langues}</p></div>` : ''}
@@ -534,8 +535,8 @@
               <div class="main">
                 <h1>${cvData.nom}</h1>
                 ${cvData.resume ? `<div class="section"><h2>Résumé professionnel</h2><p>${cvData.resume}</p></div>` : ''}
-                ${cvData.education ? `<div class="section"><h2>Éducation</h2><p>${cvData.education.replace(/\n/g, '<br>')}</p></div>` : ''}
                 ${cvData.experience ? `<div class="section"><h2>Expérience professionnelle</h2><p>${cvData.experience.replace(/\n/g, '<br>')}</p></div>` : ''}
+                ${cvData.education ? `<div class="section"><h2>Éducation</h2><p>${cvData.education.replace(/\n/g, '<br>')}</p></div>` : ''}
                 ${cvData.certifications ? `<div class="section"><h2>Certifications</h2><p>${cvData.certifications.replace(/\n/g, '<br>')}</p></div>` : ''}
               </div>
             </div>
@@ -564,7 +565,7 @@
             <div class="template-securite">
               <div class="sidebar">
                 <div class="agent-icon">
-                  <span style="font-size: 40px;">👮</span>
+                  <span>👮</span>
                 </div>
                 
                 <h2>Contact</h2>
@@ -599,21 +600,22 @@
     function exportPDF() {
       const element = document.getElementById('cv-container');
       const opt = {
-        margin: [0.5, 0.5, 0.5, 0.5], // Marges de 0.5 pouce (1.27 cm) tout autour
+        margin: 0.3, // Marges réduites pour maximiser l'espace
         filename: `CV_${cvData.nom || 'document'}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { 
           scale: 2,
           useCORS: true,
-          letterRendering: true
+          letterRendering: true,
+          scrollY: -window.scrollY // Évite les problèmes de défilement
         },
         jsPDF: { 
           unit: 'in', 
-          format: 'letter', // 8.5 x 11 pouces
+          format: 'letter',
           orientation: 'portrait',
           compress: true
         },
-        pagebreak: { mode: 'avoid-all' } // Évite les coupures de page au milieu du contenu
+        pagebreak: { mode: 'avoid-all', before: '.page-break' }
       };
       
       // Ajouter une indication visuelle pendant la génération
