@@ -291,15 +291,15 @@
     .template-securite .sidebar {
       background: #1e3a8a;
       color: white;
-      width: 220px; /* TRÈS réduit */
-      padding: 15px 12px; /* TRÈS réduit */
+      width: 200px; /* Encore plus réduit */
+      padding: 15px 10px; /* Padding minimal */
       position: absolute;
       left: 0;
       top: 0;
       bottom: 0;
-      height: 100%;
-      overflow-y: auto;
-      font-size: 10px; /* TRÈS réduit */
+      height: 11in; /* Hauteur fixe exacte */
+      overflow: hidden; /* Changé de overflow-y: auto */
+      font-size: 10px;
     }
 
     .template-securite .agent-icon {
@@ -348,11 +348,11 @@
     }
 
     .template-securite .main {
-      margin-left: 220px; /* Ajusté */
+      margin-left: 200px; /* Ajusté pour correspondre */
       padding: 15px; /* TRÈS réduit */
       background: white;
-      height: 100%;
-      overflow-y: auto;
+      height: 11in; /* Hauteur fixe */
+      overflow: hidden; /* Empêche le débordement */
     }
 
     .template-securite .main h1 {
@@ -394,117 +394,126 @@
       font-size: 11px; /* TRÈS réduit */
     }
 
-    /* Ajustements spécifiques pour l'impression */
-    @media print {
-      /* FORCE L'IMPRESSION DES COULEURS DE FOND */
-      * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        color-adjust: exact !important;
+          /* Fix spécifique pour Chrome - empêche le débordement */
+      @media print {
+        /* FORCE L'IMPRESSION DES COULEURS DE FOND */
+        * {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          color-adjust: exact !important;
+        }
+        
+        body {
+          background: white;
+          padding: 0;
+          margin: 0;
+        }
+        
+        .actions {
+          display: none !important;
+        }
+        
+        #cv-container {
+          box-shadow: none;
+          max-width: 8.5in !important;
+          width: 8.5in !important;
+          height: 11in !important;
+          margin: 0;
+          padding: 0;
+          overflow: hidden !important;
+          page-break-after: avoid !important;
+        }
+        
+        /* Force une seule page avec marges Chrome */
+        @page {
+          size: letter;
+          margin: 0;
+        }
+        
+        /* Fix Chrome pour éviter page vide */
+        .template-securite {
+          width: 8.5in !important;
+          height: 11in !important;
+          max-height: 11in !important;
+          overflow: hidden !important;
+          position: relative !important;
+          page-break-inside: avoid !important;
+          page-break-after: avoid !important;
+        }
+        
+        .template-securite .sidebar {
+          position: absolute !important;
+          left: 0 !important;
+          top: 0 !important;
+          width: 190px !important;
+          height: 11in !important;
+          max-height: 11in !important;
+          overflow: hidden !important;
+          padding: 10px !important;
+          background-color: #1e3a8a !important;
+          -webkit-print-color-adjust: exact !important;
+        }
+        
+        .template-securite .main {
+          position: absolute !important;
+          left: 190px !important;
+          top: 0 !important;
+          width: calc(8.5in - 190px) !important;
+          height: 11in !important;
+          max-height: 11in !important;
+          overflow: hidden !important;
+          padding: 12px !important;
+          background-color: white !important;
+        }
+        
+        /* Force les couleurs de fond pour chaque template */
+        .template-moderne .header {
+          background-color: #2563eb !important;
+          -webkit-print-color-adjust: exact !important;
+        }
+        
+        .template-classique .sidebar {
+          background-color: #f3f4f6 !important;
+          -webkit-print-color-adjust: exact !important;
+        }
+        
+        .template-securite .section {
+          background-color: #f8f9fa !important;
+          -webkit-print-color-adjust: exact !important;
+        }
+        
+        .template-securite .agent-icon {
+          background-color: rgba(255,255,255,0.15) !important;
+          -webkit-print-color-adjust: exact !important;
+        }
+        
+        /* Empêcher toute coupure de page */
+        .template-moderne,
+        .template-classique,
+        .template-minimal {
+          page-break-inside: avoid !important;
+          page-break-after: avoid !important;
+          height: 11in !important;
+          max-height: 11in !important;
+          overflow: hidden !important;
+        }
+        
+        /* Réduction supplémentaire des tailles de police pour l'impression */
+        .template-securite p { font-size: 9px !important; }
+        .template-securite h2 { font-size: 11px !important; }
+        .template-securite h1 { font-size: 20px !important; }
+        .template-securite .title { font-size: 11px !important; }
+        .template-securite .section { padding: 5px !important; margin-bottom: 6px !important; }
+        .template-securite .agent-icon { width: 40px !important; height: 40px !important; margin-bottom: 8px !important; }
+        .template-securite .agent-icon span { font-size: 20px !important; }
+        
+        /* Force la hauteur maximale */
+        #cv-container {
+          height: 11in !important;
+          max-height: 11in !important;
+          overflow: hidden !important;
+        }
       }
-      
-      body {
-        background: white;
-        padding: 0;
-        margin: 0;
-      }
-      
-      .actions {
-        display: none !important;
-      }
-      
-      #cv-container {
-        box-shadow: none;
-        max-width: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      
-      /* Force une seule page avec marges minimales */
-      @page {
-        size: letter;
-        margin: 0.15in !important; /* Marges ULTRA réduites */
-      }
-      
-      /* Empêcher les coupures de page */
-      .template-moderne,
-      .template-classique,
-      .template-minimal,
-      .template-securite {
-        page-break-inside: avoid !important;
-        page-break-after: avoid !important;
-        height: 10.5in !important; /* Réduit pour tenir dans les marges */
-        max-height: 10.5in !important;
-        overflow: hidden !important;
-      }
-      
-      /* Force les couleurs de fond pour chaque template */
-      .template-moderne .header {
-        background-color: #2563eb !important;
-        -webkit-print-color-adjust: exact !important;
-      }
-      
-      .template-classique .sidebar {
-        background-color: #f3f4f6 !important;
-        -webkit-print-color-adjust: exact !important;
-      }
-      
-      .template-securite .sidebar {
-        background-color: #1e3a8a !important;
-        -webkit-print-color-adjust: exact !important;
-      }
-      
-      .template-securite .section {
-        background-color: #f8f9fa !important;
-        -webkit-print-color-adjust: exact !important;
-      }
-      
-      .template-securite .agent-icon {
-        background-color: rgba(255,255,255,0.15) !important;
-        -webkit-print-color-adjust: exact !important;
-      }
-      
-      /* Ajustements supplémentaires pour l'impression */
-      .template-moderne .content,
-      .template-classique .main,
-      .template-minimal,
-      .template-securite .main {
-        overflow: hidden !important;
-      }
-      
-      /* Réduction supplémentaire des tailles de police pour l'impression */
-      .template-moderne p { font-size: 11px !important; }
-      .template-moderne h2 { font-size: 15px !important; }
-      
-      .template-classique p { font-size: 11px !important; }
-      .template-classique h2 { font-size: 14px !important; }
-      
-      .template-minimal p { font-size: 11px !important; }
-      .template-minimal h2 { font-size: 12px !important; }
-      
-      .template-securite p { font-size: 9px !important; }
-      .template-securite h2 { font-size: 11px !important; }
-      .template-securite h1 { font-size: 20px !important; }
-      .template-securite .title { font-size: 11px !important; }
-      .template-securite .sidebar { width: 200px !important; padding: 10px !important; }
-      .template-securite .main { margin-left: 200px !important; padding: 12px !important; }
-      .template-securite .section { padding: 6px !important; margin-bottom: 8px !important; }
-      .template-securite .agent-icon { width: 40px !important; height: 40px !important; margin-bottom: 8px !important; }
-      .template-securite .agent-icon span { font-size: 20px !important; }
-      
-      /* Réduction supplémentaire des marges et espacements */
-      .template-moderne .section { margin-bottom: 12px !important; padding-bottom: 8px !important; }
-      .template-classique .section { margin-bottom: 8px !important; padding: 8px !important; }
-      .template-minimal .section { margin-bottom: 12px !important; }
-      .template-securite .section { margin-bottom: 6px !important; padding: 5px !important; }
-      
-      /* Force la hauteur maximale */
-      #cv-container {
-        height: 10.5in !important;
-        max-height: 10.5in !important;
-        overflow: hidden !important;
-      }
-    }
   </style>
 </head>
 <body>
