@@ -1,642 +1,1141 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Créer votre CV</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Créer votre CV</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: #f5f5f5;
-      padding: 20px;
-    }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background-color: #f5f5f5;
+        padding: 20px;
+      }
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      padding: 40px;
-    }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+      }
 
-    h1 {
-      color: #333;
-      margin-bottom: 10px;
-      font-size: 2.5em;
-    }
+      h1 {
+        color: #333;
+        margin-bottom: 10px;
+        font-size: 2.5em;
+      }
 
-    .template-indicator {
-      color: #666;
-      margin-bottom: 30px;
-      padding: 10px;
-      background: #f0f9ff;
-      border-radius: 5px;
-      display: inline-block;
-    }
+      .template-indicator {
+        color: #666;
+        margin-bottom: 30px;
+        padding: 10px;
+        background: #f0f9ff;
+        border-radius: 5px;
+        display: inline-block;
+      }
 
-    .form-section {
-      margin-bottom: 30px;
-    }
+      .form-section {
+        margin-bottom: 30px;
+      }
 
-    .form-section h2 {
-      color: #2563eb;
-      margin-bottom: 15px;
-      font-size: 1.5em;
-      border-bottom: 2px solid #e5e7eb;
-      padding-bottom: 10px;
-    }
+      .form-section h2 {
+        color: #2563eb;
+        margin-bottom: 15px;
+        font-size: 1.5em;
+        border-bottom: 2px solid #e5e7eb;
+        padding-bottom: 10px;
+      }
 
-    .form-group {
-      margin-bottom: 20px;
-    }
+      .form-group {
+        margin-bottom: 20px;
+      }
 
-    label {
-      display: block;
-      color: #374151;
-      font-weight: 500;
-      margin-bottom: 8px;
-    }
+      label {
+        display: block;
+        color: #374151;
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
 
-    input[type="text"],
-    input[type="email"],
-    input[type="tel"],
-    textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 5px;
-      font-size: 16px;
-      transition: border-color 0.3s ease;
-    }
+      input[type="text"],
+      input[type="email"],
+      input[type="tel"],
+      textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+      }
 
-    input[type="text"]:focus,
-    input[type="email"]:focus,
-    input[type="tel"]:focus,
-    textarea:focus {
-      outline: none;
-      border-color: #2563eb;
-    }
+      input[type="text"]:focus,
+      input[type="email"]:focus,
+      input[type="tel"]:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #2563eb;
+      }
 
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
 
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    @media (max-width: 600px) {
       .form-row {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
       }
-    }
 
-    .button-group {
-      display: flex;
-      gap: 15px;
-      margin-top: 40px;
-    }
-
-    .btn {
-      padding: 12px 30px;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .btn-primary {
-      background: #2563eb;
-      color: white;
-      flex: 1;
-    }
-
-    .btn-primary:hover {
-      background: #1d4ed8;
-    }
-
-    .btn-secondary {
-      background: #6b7280;
-      color: white;
-    }
-
-    .btn-secondary:hover {
-      background: #4b5563;
-    }
-
-    .placeholder-text {
-      color: #9ca3af;
-      font-size: 14px;
-      font-style: italic;
-    }
-
-    .quick-options {
-      background: #f9fafb;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-    }
-
-    .option-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .option-btn {
-      background: white;
-      border: 1px solid #d1d5db;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .option-btn:hover {
-      background: #2563eb;
-      color: white;
-      border-color: #2563eb;
-    }
-
-    .option-btn.selected {
-      background: #2563eb;
-      color: white;
-      border-color: #2563eb;
-    }
-
-    .help-text {
-      color: #6b7280;
-      font-size: 14px;
-      margin-top: 5px;
-      font-style: italic;
-    }
-
-    /* Styles pour les confettis */
-    .confetti {
-      position: fixed;
-      width: 10px;
-      height: 10px;
-      background-color: #f0f;
-      position: absolute;
-      animation: confetti-fall 3s ease-out forwards;
-      z-index: 9999;
-    }
-
-    @keyframes confetti-fall {
-      0% {
-        transform: translateY(-100vh) rotate(0deg);
-        opacity: 1;
+      @media (max-width: 600px) {
+        .form-row {
+          grid-template-columns: 1fr;
+        }
       }
-      100% {
-        transform: translateY(100vh) rotate(720deg);
-        opacity: 0;
-      }
-    }
 
-    .confetti-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 9999;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Créer votre CV</h1>
-    <div class="template-indicator">
-      Modèle sélectionné : <strong id="selectedTemplate">Moderne</strong>
+      .button-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 40px;
+      }
+
+      .btn {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary {
+        background: #2563eb;
+        color: white;
+        flex: 1;
+      }
+
+      .btn-primary:hover {
+        background: #1d4ed8;
+      }
+
+      .btn-secondary {
+        background: #6b7280;
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: #4b5563;
+      }
+
+      .placeholder-text {
+        color: #9ca3af;
+        font-size: 14px;
+        font-style: italic;
+      }
+
+      .quick-options {
+        background: #f9fafb;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+      }
+
+      .option-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .option-btn {
+        background: white;
+        border: 1px solid #d1d5db;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .option-btn:hover {
+        background: #2563eb;
+        color: white;
+        border-color: #2563eb;
+      }
+
+      .option-btn.selected {
+        background: #2563eb;
+        color: white;
+        border-color: #2563eb;
+      }
+
+      .help-text {
+        color: #6b7280;
+        font-size: 14px;
+        margin-top: 5px;
+        font-style: italic;
+      }
+
+      /* Styles pour les confettis */
+      .confetti {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background-color: #f0f;
+        position: absolute;
+        animation: confetti-fall 3s ease-out forwards;
+        z-index: 9999;
+      }
+
+      @keyframes confetti-fall {
+        0% {
+          transform: translateY(-100vh) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) rotate(720deg);
+          opacity: 0;
+        }
+      }
+
+      .confetti-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 9999;
+      }
+      .checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .checkbox-group label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #fff;
+        border: 1px solid #d1d5db;
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .checkbox-group input[type="checkbox"] {
+        accent-color: #2563eb;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Créer votre CV</h1>
+      <div class="template-indicator">
+        Modèle sélectionné : <strong id="selectedTemplate">Moderne</strong>
+      </div>
+
+      <form id="cvForm">
+        <!-- Informations personnelles -->
+        <div class="form-section">
+          <h2>Informations personnelles</h2>
+
+          <div class="form-group">
+            <label for="nom">Nom complet *</label>
+            <input
+              type="text"
+              id="nom"
+              name="nom"
+              required
+              placeholder="Jean Tremblay"
+            />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Adresse courriel *</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                placeholder="jean.tremblay@email.com"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="telephone">Numéro de téléphone *</label>
+              <input
+                type="tel"
+                id="telephone"
+                name="telephone"
+                required
+                placeholder="514-123-4567"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="adresse">Adresse</label>
+            <input
+              type="text"
+              id="adresse"
+              name="adresse"
+              placeholder="123 rue Principale, Montréal, QC"
+            />
+          </div>
+          <div class="form-group">
+            <label>Disponibilité</label>
+            <div class="checkbox-group">
+              <label
+                ><input
+                  type="checkbox"
+                  name="disponibilite"
+                  value="Immédiate"
+                />
+                Immédiate</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  name="disponibilite"
+                  value="Temps plein"
+                />
+                Temps plein</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  name="disponibilite"
+                  value="Temps partiel"
+                />
+                Temps partiel</label
+              >
+              <label
+                ><input type="checkbox" name="disponibilite" value="Jour" />
+                Jour</label
+              >
+              <label
+                ><input type="checkbox" name="disponibilite" value="Soir" />
+                Soir</label
+              >
+              <label
+                ><input type="checkbox" name="disponibilite" value="Nuit" />
+                Nuit</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  name="disponibilite"
+                  value="Fin de semaine"
+                />
+                Fin de semaine</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Résumé professionnel -->
+        <div class="form-section">
+          <h2>Résumé professionnel</h2>
+
+          <div class="quick-options">
+            <label style="display: block; margin-bottom: 10px"
+              >Exemples de résumés (cliquez pour utiliser comme base):</label
+            >
+            <div class="option-buttons">
+              <button
+                type="button"
+                class="option-btn"
+                onclick="setResume('debutant')"
+                style="width: auto"
+              >
+                Débutant motivé
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="setResume('experimente')"
+                style="width: auto"
+              >
+                Agent expérimenté
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="setResume('bilingue')"
+                style="width: auto"
+              >
+                Agent bilingue
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="setResume('superviseur')"
+                style="width: auto"
+              >
+                Profil superviseur
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="resume">Décrivez-vous en quelques lignes</label>
+            <textarea
+              id="resume"
+              name="resume"
+              placeholder="Agent de sécurité expérimenté avec plus de 5 ans d'expérience dans la surveillance et le contrôle d'accès..."
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Éducation -->
+        <div class="form-section">
+          <h2>Éducation</h2>
+
+          <div class="quick-options">
+            <label style="display: block; margin-bottom: 10px"
+              >Formations communes:</label
+            >
+            <div class="option-buttons">
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addEducation('DEP')"
+              >
+                DEP
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addEducation('AEP')"
+              >
+                AEP
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addEducation('DES (Diplôme d\'études secondaires)')"
+              >
+                DES
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addEducation('Formation agent de sécurité')"
+              >
+                Formation Agent
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addEducation('Études collégiales')"
+              >
+                Études collégiales
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addEducation('Études universitaires')"
+              >
+                Études universitaires
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="education">Formation et diplômes</label>
+            <textarea
+              id="education"
+              name="education"
+              placeholder="Cliquez sur les boutons ci-dessus ou tapez votre formation"
+            ></textarea>
+            <p class="help-text">
+              Incluez vos formations de votre pays d'origine ou autres domaines
+              d'études
+            </p>
+          </div>
+        </div>
+
+        <!-- Expérience professionnelle -->
+        <div class="form-section">
+          <h2>Expérience professionnelle</h2>
+
+          <div class="quick-options">
+            <label style="display: block; margin-bottom: 10px"
+              >Types d'expérience:</label
+            >
+            <div class="option-buttons">
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addExperienceType('Service à la clientèle')"
+              >
+                Service client
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addExperienceType('Entrepôt/Manutention')"
+              >
+                Entrepôt
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addExperienceType('Restauration')"
+              >
+                Restauration
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addExperienceType('Commerce de détail')"
+              >
+                Commerce détail
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addExperienceType('Transport/Livraison')"
+              >
+                Transport
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addExperienceType('Construction')"
+              >
+                Construction
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addExperienceType('Sécurité')"
+              >
+                Sécurité
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addExperienceType('Autre domaine')"
+              >
+                Autre
+              </button>
+            </div>
+          </div>
+
+          <div class="quick-options">
+            <label style="display: block; margin-bottom: 10px"
+              >Compétences transférables (utiles en sécurité):</label
+            >
+            <div class="option-buttons">
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addTask('Gestion de situations difficiles')"
+              >
+                Situations difficiles
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addTask('Travail d\'équipe')"
+              >
+                Travail équipe
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addTask('Communication avec le public')"
+              >
+                Communication
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addTask('Respect des procédures')"
+              >
+                Procédures
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addTask('Ponctualité et fiabilité')"
+              >
+                Ponctualité
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addTask('Observation et vigilance')"
+              >
+                Observation
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addTask('Résolution de problèmes')"
+              >
+                Résolution problèmes
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addTask('Gestion du stress')"
+              >
+                Gestion stress
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="experience">Postes occupés et responsabilités</label>
+            <textarea
+              id="experience"
+              name="experience"
+              placeholder="Ex: Commis - Restaurant ABC (2020-2024)&#10;Ou: Expérience dans mon pays d'origine&#10;Cliquez sur les boutons pour ajouter des compétences"
+            ></textarea>
+            <p class="help-text">
+              Incluez toute expérience de travail, même si ce n'est pas en
+              sécurité. Les compétences sont transférables!
+            </p>
+          </div>
+        </div>
+
+        <!-- Certifications -->
+        <div class="form-section">
+          <h2>Certifications et formations</h2>
+
+          <div class="quick-options">
+            <label style="display: block; margin-bottom: 10px"
+              >Sélection rapide (cliquez pour ajouter):</label
+            >
+            <div class="option-buttons">
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addCertification('Permis BSP (Bureau de la sécurité privée)')"
+              >
+                Permis BSP
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addCertification('Formation secourisme RCR/DEA')"
+              >
+                Secourisme RCR/DEA
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addCertification('Formation usage de la force')"
+              >
+                Usage de la force
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addCertification('Formation 54h obligatoire')"
+              >
+                Formation 54h
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addCertification('SIMDUT 2015')"
+              >
+                SIMDUT
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addCertification('Formation incendie')"
+              >
+                Prévention incendie
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addCertification('Carte CPI (Crisis Prevention Institute)')"
+              >
+                CPI
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addCertification('Formation désescalade')"
+              >
+                Désescalade
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addCertification('ASP Construction')"
+              >
+                ASP
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="certifications"
+              >Certifications obtenues (modifiez au besoin)</label
+            >
+            <textarea
+              id="certifications"
+              name="certifications"
+              placeholder="Cliquez sur les boutons ci-dessus ou tapez vos certifications"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Compétences et langues -->
+        <div class="form-section">
+          <h2>Compétences et langues</h2>
+
+          <div class="quick-options">
+            <label style="display: block; margin-bottom: 10px"
+              >Compétences en sécurité:</label
+            >
+            <div class="option-buttons">
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addCompetence('Surveillance')"
+              >
+                Surveillance
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addCompetence('Contrôle d\'accès')"
+              >
+                Contrôle d'accès
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addCompetence('Rédaction de rapports')"
+              >
+                Rapports
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addCompetence('Intervention d\'urgence')"
+              >
+                Intervention urgence
+              </button>
+            </div>
+          </div>
+
+          <div class="quick-options">
+            <label style="display: block; margin-bottom: 10px"
+              >Qualités d'un bon employé:</label
+            >
+            <div class="option-buttons">
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addCompetence('Ponctualité')"
+              >
+                Ponctualité
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addCompetence('Travail d\'équipe')"
+              >
+                Travail d'équipe
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addCompetence('Service à la clientèle')"
+              >
+                Service client
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addCompetence('Professionnalisme')"
+              >
+                Professionnalisme
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="competences">Compétences clés</label>
+            <textarea
+              id="competences"
+              name="competences"
+              placeholder="Cliquez sur les boutons ci-dessus ou tapez vos compétences"
+            ></textarea>
+          </div>
+
+          <div class="quick-options">
+            <label style="display: block; margin-bottom: 10px">Langues:</label>
+            <div class="option-buttons">
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addLangue('Français')"
+              >
+                Français
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addLangue('Anglais')"
+              >
+                Anglais
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addLangue('Espagnol')"
+              >
+                Espagnol
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addLangue('Arabe')"
+              >
+                Arabe
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addLangue('Créole')"
+              >
+                Créole
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addLangue('Portugais')"
+              >
+                Portugais
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addLangue('Mandarin')"
+              >
+                Mandarin
+              </button>
+              <button
+                type="button"
+                class="option-btn"
+                onclick="addLangue('Punjabi')"
+              >
+                Punjabi
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="langues">Langues parlées</label>
+            <input
+              type="text"
+              id="langues"
+              name="langues"
+              placeholder="Cliquez sur les boutons pour ajouter vos langues"
+            />
+            <p class="help-text">
+              Vous pouvez ajouter le niveau après chaque langue (ex: Français -
+              Natif, Anglais - Intermédiaire)
+            </p>
+          </div>
+        </div>
+
+        <!-- Boutons d'action -->
+        <div class="button-group">
+          <button type="button" class="btn btn-secondary" onclick="goBack()">
+            Retour
+          </button>
+          <button type="submit" class="btn btn-primary">
+            Prévisualiser mon CV
+          </button>
+        </div>
+      </form>
     </div>
 
-    <form id="cvForm">
-      <!-- Informations personnelles -->
-      <div class="form-section">
-        <h2>Informations personnelles</h2>
-        
-        <div class="form-group">
-          <label for="nom">Nom complet *</label>
-          <input type="text" id="nom" name="nom" required placeholder="Jean Tremblay">
-        </div>
+    <script>
+      // Afficher le template sélectionné
+      const selectedTemplate =
+        localStorage.getItem("selectedTemplate") || "moderne";
+      document.getElementById("selectedTemplate").textContent =
+        selectedTemplate.charAt(0).toUpperCase() + selectedTemplate.slice(1);
 
-        <div class="form-row">
-          <div class="form-group">
-            <label for="email">Adresse courriel *</label>
-            <input type="email" id="email" name="email" required placeholder="jean.tremblay@email.com">
-          </div>
-          
-          <div class="form-group">
-            <label for="telephone">Numéro de téléphone *</label>
-            <input type="tel" id="telephone" name="telephone" required placeholder="514-123-4567">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="adresse">Adresse</label>
-          <input type="text" id="adresse" name="adresse" placeholder="123 rue Principale, Montréal, QC">
-        </div>
-      </div>
-
-      <!-- Résumé professionnel -->
-      <div class="form-section">
-        <h2>Résumé professionnel</h2>
-        
-        <div class="quick-options">
-          <label style="display: block; margin-bottom: 10px;">Exemples de résumés (cliquez pour utiliser comme base):</label>
-          <div class="option-buttons">
-            <button type="button" class="option-btn" onclick="setResume('debutant')" style="width: auto;">Débutant motivé</button>
-            <button type="button" class="option-btn" onclick="setResume('experimente')" style="width: auto;">Agent expérimenté</button>
-            <button type="button" class="option-btn" onclick="setResume('bilingue')" style="width: auto;">Agent bilingue</button>
-            <button type="button" class="option-btn" onclick="setResume('superviseur')" style="width: auto;">Profil superviseur</button>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="resume">Décrivez-vous en quelques lignes</label>
-          <textarea id="resume" name="resume" placeholder="Agent de sécurité expérimenté avec plus de 5 ans d'expérience dans la surveillance et le contrôle d'accès..."></textarea>
-        </div>
-      </div>
-
-      <!-- Éducation -->
-      <div class="form-section">
-        <h2>Éducation</h2>
-        
-        <div class="quick-options">
-          <label style="display: block; margin-bottom: 10px;">Formations communes:</label>
-          <div class="option-buttons">
-            <button type="button" class="option-btn" onclick="addEducation('DEP')">DEP</button>
-            <button type="button" class="option-btn" onclick="addEducation('AEP')">AEP</button>
-            <button type="button" class="option-btn" onclick="addEducation('DES (Diplôme d\'études secondaires)')">DES</button>
-            <button type="button" class="option-btn" onclick="addEducation('Formation agent de sécurité')">Formation Agent</button>
-            <button type="button" class="option-btn" onclick="addEducation('Études collégiales')">Études collégiales</button>
-            <button type="button" class="option-btn" onclick="addEducation('Études universitaires')">Études universitaires</button>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="education">Formation et diplômes</label>
-          <textarea id="education" name="education" placeholder="Cliquez sur les boutons ci-dessus ou tapez votre formation"></textarea>
-          <p class="help-text">Incluez vos formations de votre pays d'origine ou autres domaines d'études</p>
-        </div>
-      </div>
-
-      <!-- Expérience professionnelle -->
-      <div class="form-section">
-        <h2>Expérience professionnelle</h2>
-        
-        <div class="quick-options">
-          <label style="display: block; margin-bottom: 10px;">Types d'expérience:</label>
-          <div class="option-buttons">
-            <button type="button" class="option-btn" onclick="addExperienceType('Service à la clientèle')">Service client</button>
-            <button type="button" class="option-btn" onclick="addExperienceType('Entrepôt/Manutention')">Entrepôt</button>
-            <button type="button" class="option-btn" onclick="addExperienceType('Restauration')">Restauration</button>
-            <button type="button" class="option-btn" onclick="addExperienceType('Commerce de détail')">Commerce détail</button>
-            <button type="button" class="option-btn" onclick="addExperienceType('Transport/Livraison')">Transport</button>
-            <button type="button" class="option-btn" onclick="addExperienceType('Construction')">Construction</button>
-            <button type="button" class="option-btn" onclick="addExperienceType('Sécurité')">Sécurité</button>
-            <button type="button" class="option-btn" onclick="addExperienceType('Autre domaine')">Autre</button>
-          </div>
-        </div>
-
-        <div class="quick-options">
-          <label style="display: block; margin-bottom: 10px;">Compétences transférables (utiles en sécurité):</label>
-          <div class="option-buttons">
-            <button type="button" class="option-btn" onclick="addTask('Gestion de situations difficiles')">Situations difficiles</button>
-            <button type="button" class="option-btn" onclick="addTask('Travail d\'équipe')">Travail équipe</button>
-            <button type="button" class="option-btn" onclick="addTask('Communication avec le public')">Communication</button>
-            <button type="button" class="option-btn" onclick="addTask('Respect des procédures')">Procédures</button>
-            <button type="button" class="option-btn" onclick="addTask('Ponctualité et fiabilité')">Ponctualité</button>
-            <button type="button" class="option-btn" onclick="addTask('Observation et vigilance')">Observation</button>
-            <button type="button" class="option-btn" onclick="addTask('Résolution de problèmes')">Résolution problèmes</button>
-            <button type="button" class="option-btn" onclick="addTask('Gestion du stress')">Gestion stress</button>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="experience">Postes occupés et responsabilités</label>
-          <textarea id="experience" name="experience" placeholder="Ex: Commis - Restaurant ABC (2020-2024)&#10;Ou: Expérience dans mon pays d'origine&#10;Cliquez sur les boutons pour ajouter des compétences"></textarea>
-          <p class="help-text">Incluez toute expérience de travail, même si ce n'est pas en sécurité. Les compétences sont transférables!</p>
-        </div>
-      </div>
-
-      <!-- Certifications -->
-      <div class="form-section">
-        <h2>Certifications et formations</h2>
-        
-        <div class="quick-options">
-          <label style="display: block; margin-bottom: 10px;">Sélection rapide (cliquez pour ajouter):</label>
-          <div class="option-buttons">
-            <button type="button" class="option-btn" onclick="addCertification('Permis BSP (Bureau de la sécurité privée)')">Permis BSP</button>
-            <button type="button" class="option-btn" onclick="addCertification('Formation secourisme RCR/DEA')">Secourisme RCR/DEA</button>
-            <button type="button" class="option-btn" onclick="addCertification('Formation usage de la force')">Usage de la force</button>
-            <button type="button" class="option-btn" onclick="addCertification('Formation 54h obligatoire')">Formation 54h</button>
-            <button type="button" class="option-btn" onclick="addCertification('SIMDUT 2015')">SIMDUT</button>
-            <button type="button" class="option-btn" onclick="addCertification('Formation incendie')">Prévention incendie</button>
-            <button type="button" class="option-btn" onclick="addCertification('Carte CPI (Crisis Prevention Institute)')">CPI</button>
-            <button type="button" class="option-btn" onclick="addCertification('Formation désescalade')">Désescalade</button>
-            <button type="button" class="option-btn" onclick="addCertification('ASP Construction')">ASP</button>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="certifications">Certifications obtenues (modifiez au besoin)</label>
-          <textarea id="certifications" name="certifications" placeholder="Cliquez sur les boutons ci-dessus ou tapez vos certifications"></textarea>
-        </div>
-      </div>
-
-      <!-- Compétences et langues -->
-      <div class="form-section">
-        <h2>Compétences et langues</h2>
-        
-        <div class="quick-options">
-          <label style="display: block; margin-bottom: 10px;">Compétences en sécurité:</label>
-          <div class="option-buttons">
-            <button type="button" class="option-btn" onclick="addCompetence('Surveillance')">Surveillance</button>
-            <button type="button" class="option-btn" onclick="addCompetence('Contrôle d\'accès')">Contrôle d'accès</button>
-            <button type="button" class="option-btn" onclick="addCompetence('Rédaction de rapports')">Rapports</button>
-            <button type="button" class="option-btn" onclick="addCompetence('Intervention d\'urgence')">Intervention urgence</button>
-          </div>
-        </div>
-
-        <div class="quick-options">
-          <label style="display: block; margin-bottom: 10px;">Qualités d'un bon employé:</label>
-          <div class="option-buttons">
-            <button type="button" class="option-btn" onclick="addCompetence('Ponctualité')">Ponctualité</button>
-            <button type="button" class="option-btn" onclick="addCompetence('Travail d\'équipe')">Travail d'équipe</button>
-            <button type="button" class="option-btn" onclick="addCompetence('Service à la clientèle')">Service client</button>
-            <button type="button" class="option-btn" onclick="addCompetence('Professionnalisme')">Professionnalisme</button>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="competences">Compétences clés</label>
-          <textarea id="competences" name="competences" placeholder="Cliquez sur les boutons ci-dessus ou tapez vos compétences"></textarea>
-        </div>
-
-        <div class="quick-options">
-          <label style="display: block; margin-bottom: 10px;">Langues:</label>
-          <div class="option-buttons">
-            <button type="button" class="option-btn" onclick="addLangue('Français')">Français</button>
-            <button type="button" class="option-btn" onclick="addLangue('Anglais')">Anglais</button>
-            <button type="button" class="option-btn" onclick="addLangue('Espagnol')">Espagnol</button>
-            <button type="button" class="option-btn" onclick="addLangue('Arabe')">Arabe</button>
-            <button type="button" class="option-btn" onclick="addLangue('Créole')">Créole</button>
-            <button type="button" class="option-btn" onclick="addLangue('Portugais')">Portugais</button>
-            <button type="button" class="option-btn" onclick="addLangue('Mandarin')">Mandarin</button>
-            <button type="button" class="option-btn" onclick="addLangue('Punjabi')">Punjabi</button>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="langues">Langues parlées</label>
-          <input type="text" id="langues" name="langues" placeholder="Cliquez sur les boutons pour ajouter vos langues">
-          <p class="help-text">Vous pouvez ajouter le niveau après chaque langue (ex: Français - Natif, Anglais - Intermédiaire)</p>
-        </div>
-      </div>
-
-      <!-- Boutons d'action -->
-      <div class="button-group">
-        <button type="button" class="btn btn-secondary" onclick="goBack()">Retour</button>
-        <button type="submit" class="btn btn-primary">Prévisualiser mon CV</button>
-      </div>
-    </form>
-  </div>
-
-  <script>
-    // Afficher le template sélectionné
-    const selectedTemplate = localStorage.getItem('selectedTemplate') || 'moderne';
-    document.getElementById('selectedTemplate').textContent = 
-      selectedTemplate.charAt(0).toUpperCase() + selectedTemplate.slice(1);
-
-    // Charger les données existantes si disponibles
-    window.addEventListener('DOMContentLoaded', function() {
-      const savedData = localStorage.getItem('cvData');
-      if (savedData) {
-        const data = JSON.parse(savedData);
-        Object.keys(data).forEach(key => {
-          const field = document.getElementById(key);
-          if (field) {
-            field.value = data[key];
-          }
-        });
-      }
-    });
-
-    // Fonction pour ajouter une certification
-    function addCertification(cert) {
-      const textarea = document.getElementById('certifications');
-      const currentValue = textarea.value.trim();
-      
-      // Ajouter l'année actuelle par défaut
-      const year = new Date().getFullYear();
-      const certWithYear = cert + ' - ' + year;
-      
-      if (currentValue) {
-        textarea.value = currentValue + '\n' + certWithYear;
-      } else {
-        textarea.value = certWithYear;
-      }
-      
-      // Faire défiler jusqu'au bas du textarea
-      textarea.scrollTop = textarea.scrollHeight;
-    }
-
-    // Fonction pour ajouter une compétence
-    function addCompetence(competence) {
-      const textarea = document.getElementById('competences');
-      const currentValue = textarea.value.trim();
-      
-      if (currentValue) {
-        // Vérifier si la compétence n'est pas déjà présente
-        if (!currentValue.includes(competence)) {
-          textarea.value = currentValue + ', ' + competence;
-        }
-      } else {
-        textarea.value = competence;
-      }
-    }
-
-    // Fonction pour définir le résumé professionnel
-    function setResume(type) {
-      const resumes = {
-        'debutant': 'Agent de sécurité nouvellement certifié, motivé et fiable. Excellentes compétences en service à la clientèle et forte capacité d\'adaptation. Désireux d\'apprendre et de contribuer à la sécurité des personnes et des biens. Disponible pour tous les quarts de travail.',
-        'experimente': 'Agent de sécurité expérimenté avec plus de 5 ans d\'expérience dans la surveillance, le contrôle d\'accès et la gestion des situations d\'urgence. Reconnu pour mon professionnalisme, ma vigilance et ma capacité à maintenir un environnement sécuritaire.',
-        'bilingue': 'Agent de sécurité bilingue (français/anglais) avec expérience en milieu commercial et corporatif. Excellent communicateur capable de gérer efficacement les interactions avec une clientèle diversifiée. Spécialisé dans la désescalade et la résolution de conflits.',
-        'superviseur': 'Agent de sécurité senior avec expérience en supervision d\'équipe. Compétences démontrées en formation du personnel, coordination des opérations et rédaction de rapports détaillés. Leadership naturel et capacité à prendre des décisions rapides en situation de crise.'
-      };
-      
-      document.getElementById('resume').value = resumes[type] || '';
-    }
-
-    // Fonction pour ajouter une langue
-    function addLangue(langue) {
-      const input = document.getElementById('langues');
-      const currentValue = input.value.trim();
-      
-      if (currentValue) {
-        // Vérifier si la langue n'est pas déjà présente
-        if (!currentValue.includes(langue)) {
-          input.value = currentValue + ', ' + langue;
-        }
-      } else {
-        input.value = langue;
-      }
-    }
-
-    // Fonction pour ajouter une formation
-    function addEducation(education) {
-      const textarea = document.getElementById('education');
-      const currentValue = textarea.value.trim();
-      
-      if (education === 'DEP' || education === 'AEP') {
-        // Pour DEP et AEP, demander le domaine
-        const domaine = prompt('Dans quel domaine?', '');
-        const ecole = prompt('Nom de l\'école ou institution:', '');
-        const annee = prompt('Année d\'obtention:', new Date().getFullYear());
-        
-        if (domaine && ecole && annee) {
-          const educationComplete = education + ' en ' + domaine + ' - ' + ecole + ' (' + annee + ')';
-          
-          if (currentValue) {
-            textarea.value = currentValue + '\n' + educationComplete;
-          } else {
-            textarea.value = educationComplete;
+      // Charger les données existantes si disponibles
+      window.addEventListener("DOMContentLoaded", function () {
+        const savedData = localStorage.getItem("cvData");
+        if (savedData) {
+          const data = JSON.parse(savedData);
+          Object.keys(data).forEach((key) => {
+            const field = document.getElementById(key);
+            if (field) {
+              field.value = data[key];
+            }
+          });
+          if (data.disponibilite) {
+            const selected = data.disponibilite.split(",").map((s) => s.trim());
+            selected.forEach((val) => {
+              const cb = document.querySelector(
+                `input[name="disponibilite"][value="${val}"]`
+              );
+              if (cb) cb.checked = true;
+            });
           }
         }
-      } else {
-        // Pour les autres formations
-        const ecole = prompt('Nom de l\'école ou institution:', '');
-        const annee = prompt('Année d\'obtention:', new Date().getFullYear());
-        
-        if (ecole && annee) {
-          const educationComplete = education + ' - ' + ecole + ' (' + annee + ')';
-          
-          if (currentValue) {
-            textarea.value = currentValue + '\n' + educationComplete;
-          } else {
-            textarea.value = educationComplete;
-          }
-        }
-      }
-    }
+      });
 
-    // Fonction pour ajouter un type d'expérience
-    function addExperienceType(type) {
-      const textarea = document.getElementById('experience');
-      const currentValue = textarea.value.trim();
-      
-      const entreprise = prompt('Nom de l\'entreprise:', '');
-      const periode = prompt('Période (ex: 2020-2024):', '');
-      
-      if (entreprise && periode) {
-        const experienceLine = type + ' - ' + entreprise + ' (' + periode + ')';
-        
+      // Fonction pour ajouter une certification
+      function addCertification(cert) {
+        const textarea = document.getElementById("certifications");
+        const currentValue = textarea.value.trim();
+
+        // Ajouter l'année actuelle par défaut
+        const year = new Date().getFullYear();
+        const certWithYear = cert + " - " + year;
+
         if (currentValue) {
-          textarea.value = currentValue + '\n\n' + experienceLine;
+          textarea.value = currentValue + "\n" + certWithYear;
         } else {
-          textarea.value = experienceLine;
+          textarea.value = certWithYear;
         }
-        
+
+        // Faire défiler jusqu'au bas du textarea
         textarea.scrollTop = textarea.scrollHeight;
       }
-    }
 
-    // Fonction pour ajouter une tâche d'expérience
-    function addTask(task) {
-      const textarea = document.getElementById('experience');
-      const currentValue = textarea.value.trim();
-      
-      if (currentValue) {
-        // Ajouter la tâche avec une puce
-        textarea.value = currentValue + '\n• ' + task;
-      } else {
-        alert('Veuillez d\'abord entrer un poste ou cliquer sur un type d\'expérience');
-      }
-      
-      textarea.scrollTop = textarea.scrollHeight;
-    }
+      // Fonction pour ajouter une compétence
+      function addCompetence(competence) {
+        const textarea = document.getElementById("competences");
+        const currentValue = textarea.value.trim();
 
-    // Fonction pour créer des confettis
-    function createConfetti() {
-      const container = document.createElement('div');
-      container.className = 'confetti-container';
-      document.body.appendChild(container);
-
-      const colors = ['#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'];
-      const confettiCount = 100;
-
-      for (let i = 0; i < confettiCount; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.left = Math.random() * 100 + '%';
-        confetti.style.animationDelay = Math.random() * 0.5 + 's';
-        confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        
-        // Formes variées
-        const shapes = ['10px', '8px', '12px', '6px'];
-        const shape = shapes[Math.floor(Math.random() * shapes.length)];
-        confetti.style.width = shape;
-        confetti.style.height = shape;
-        
-        // Certains confettis sont ronds, d'autres carrés
-        if (Math.random() > 0.5) {
-          confetti.style.borderRadius = '50%';
+        if (currentValue) {
+          // Vérifier si la compétence n'est pas déjà présente
+          if (!currentValue.includes(competence)) {
+            textarea.value = currentValue + ", " + competence;
+          }
+        } else {
+          textarea.value = competence;
         }
-        
-        container.appendChild(confetti);
       }
 
-      // Supprimer les confettis après l'animation
-      setTimeout(() => {
-        container.remove();
-      }, 5000);
-    }
+      // Fonction pour définir le résumé professionnel
+      function setResume(type) {
+        const resumes = {
+          debutant:
+            "Agent de sécurité nouvellement certifié, motivé et fiable. Excellentes compétences en service à la clientèle et forte capacité d'adaptation. Désireux d'apprendre et de contribuer à la sécurité des personnes et des biens. Disponible pour tous les quarts de travail.",
+          experimente:
+            "Agent de sécurité expérimenté avec plus de 5 ans d'expérience dans la surveillance, le contrôle d'accès et la gestion des situations d'urgence. Reconnu pour mon professionnalisme, ma vigilance et ma capacité à maintenir un environnement sécuritaire.",
+          bilingue:
+            "Agent de sécurité bilingue (français/anglais) avec expérience en milieu commercial et corporatif. Excellent communicateur capable de gérer efficacement les interactions avec une clientèle diversifiée. Spécialisé dans la désescalade et la résolution de conflits.",
+          superviseur:
+            "Agent de sécurité senior avec expérience en supervision d'équipe. Compétences démontrées en formation du personnel, coordination des opérations et rédaction de rapports détaillés. Leadership naturel et capacité à prendre des décisions rapides en situation de crise.",
+        };
 
-    // Gérer la soumission du formulaire
-    document.getElementById('cvForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      // Lancer les confettis
-      createConfetti();
-      
-      // Collecter toutes les données du formulaire
-      const formData = {};
-      const fields = ['nom', 'email', 'telephone', 'adresse', 'resume', 
-                     'education', 'experience', 'certifications', 
-                     'competences', 'langues'];
-      
-      fields.forEach(field => {
-        formData[field] = document.getElementById(field).value || '';
-      });
-      
-      // Sauvegarder les données
-      localStorage.setItem('cvData', JSON.stringify(formData));
-      
-      // Attendre un peu pour voir les confettis avant de rediriger
-      setTimeout(() => {
-        window.location.href = 'cv-preview.html';
-      }, 1000);
-    });
+        document.getElementById("resume").value = resumes[type] || "";
+      }
 
-    // Fonction pour revenir en arrière
-    function goBack() {
-      window.location.href = 'cv-selector.html';
-    }
-  </script>
-</body>
+      // Fonction pour ajouter une langue
+      function addLangue(langue) {
+        const input = document.getElementById("langues");
+        const currentValue = input.value.trim();
+
+        if (currentValue) {
+          // Vérifier si la langue n'est pas déjà présente
+          if (!currentValue.includes(langue)) {
+            input.value = currentValue + ", " + langue;
+          }
+        } else {
+          input.value = langue;
+        }
+      }
+
+      // Fonction pour ajouter une formation
+      function addEducation(education) {
+        const textarea = document.getElementById("education");
+        const currentValue = textarea.value.trim();
+
+        if (education === "DEP" || education === "AEP") {
+          // Pour DEP et AEP, demander le domaine
+          const domaine = prompt("Dans quel domaine?", "");
+          const ecole = prompt("Nom de l'école ou institution:", "");
+          const annee = prompt("Année d'obtention:", new Date().getFullYear());
+
+          if (domaine && ecole && annee) {
+            const educationComplete =
+              education + " en " + domaine + " - " + ecole + " (" + annee + ")";
+
+            if (currentValue) {
+              textarea.value = currentValue + "\n" + educationComplete;
+            } else {
+              textarea.value = educationComplete;
+            }
+          }
+        } else {
+          // Pour les autres formations
+          const ecole = prompt("Nom de l'école ou institution:", "");
+          const annee = prompt("Année d'obtention:", new Date().getFullYear());
+
+          if (ecole && annee) {
+            const educationComplete =
+              education + " - " + ecole + " (" + annee + ")";
+
+            if (currentValue) {
+              textarea.value = currentValue + "\n" + educationComplete;
+            } else {
+              textarea.value = educationComplete;
+            }
+          }
+        }
+      }
+
+      // Fonction pour ajouter un type d'expérience
+      function addExperienceType(type) {
+        const textarea = document.getElementById("experience");
+        const currentValue = textarea.value.trim();
+
+        const entreprise = prompt("Nom de l'entreprise:", "");
+        const periode = prompt("Période (ex: 2020-2024):", "");
+
+        if (entreprise && periode) {
+          const experienceLine =
+            type + " - " + entreprise + " (" + periode + ")";
+
+          if (currentValue) {
+            textarea.value = currentValue + "\n\n" + experienceLine;
+          } else {
+            textarea.value = experienceLine;
+          }
+
+          textarea.scrollTop = textarea.scrollHeight;
+        }
+      }
+
+      // Fonction pour ajouter une tâche d'expérience
+      function addTask(task) {
+        const textarea = document.getElementById("experience");
+        const currentValue = textarea.value.trim();
+
+        if (currentValue) {
+          // Ajouter la tâche avec une puce
+          textarea.value = currentValue + "\n• " + task;
+        } else {
+          alert(
+            "Veuillez d'abord entrer un poste ou cliquer sur un type d'expérience"
+          );
+        }
+
+        textarea.scrollTop = textarea.scrollHeight;
+      }
+
+      // Fonction pour créer des confettis
+      function createConfetti() {
+        const container = document.createElement("div");
+        container.className = "confetti-container";
+        document.body.appendChild(container);
+
+        const colors = [
+          "#2563eb",
+          "#10b981",
+          "#f59e0b",
+          "#ef4444",
+          "#8b5cf6",
+          "#ec4899",
+          "#06b6d4",
+        ];
+        const confettiCount = 100;
+
+        for (let i = 0; i < confettiCount; i++) {
+          const confetti = document.createElement("div");
+          confetti.className = "confetti";
+          confetti.style.backgroundColor =
+            colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.left = Math.random() * 100 + "%";
+          confetti.style.animationDelay = Math.random() * 0.5 + "s";
+          confetti.style.animationDuration = Math.random() * 3 + 2 + "s";
+
+          // Formes variées
+          const shapes = ["10px", "8px", "12px", "6px"];
+          const shape = shapes[Math.floor(Math.random() * shapes.length)];
+          confetti.style.width = shape;
+          confetti.style.height = shape;
+
+          // Certains confettis sont ronds, d'autres carrés
+          if (Math.random() > 0.5) {
+            confetti.style.borderRadius = "50%";
+          }
+
+          container.appendChild(confetti);
+        }
+
+        // Supprimer les confettis après l'animation
+        setTimeout(() => {
+          container.remove();
+        }, 5000);
+      }
+
+      // Gérer la soumission du formulaire
+      document
+        .getElementById("cvForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          // Lancer les confettis
+          createConfetti();
+
+          // Collecter toutes les données du formulaire
+          const formData = {};
+          const fields = [
+            "nom",
+            "email",
+            "telephone",
+            "adresse",
+            "resume",
+            "education",
+            "experience",
+            "certifications",
+            "competences",
+            "langues",
+          ];
+
+          fields.forEach((field) => {
+            formData[field] = document.getElementById(field).value || "";
+          });
+          formData.disponibilite = Array.from(
+            document.querySelectorAll('input[name="disponibilite"]:checked')
+          )
+            .map((el) => el.value)
+            .join(", ");
+          // Sauvegarder les données
+          localStorage.setItem("cvData", JSON.stringify(formData));
+
+          // Attendre un peu pour voir les confettis avant de rediriger
+          setTimeout(() => {
+            window.location.href = "cv-preview.html";
+          }, 1000);
+        });
+
+      // Fonction pour revenir en arrière
+      function goBack() {
+        window.location.href = "cv-selector.html";
+      }
+    </script>
+  </body>
 </html>
