@@ -332,6 +332,9 @@
 
       .template-securite .agent-icon span {
         font-size: 25px; /* TRÈS réduit */
+        line-height: 1;
+        display: block;
+        text-align: center;
       }
 
       .template-securite .sidebar h2 {
@@ -398,7 +401,7 @@
         font-size: 14px; /* Optimisé - Lisible */
       }
 
-      /* Fix spécifique pour Chrome - empêche le débordement */
+      /* Styles d'impression simplifiés - préserve la mise en page */
       @media print {
         /* FORCE L'IMPRESSION DES COULEURS DE FOND */
         * {
@@ -413,126 +416,55 @@
           margin: 0;
         }
 
+        /* Cache les boutons d'action */
         .actions {
           display: none !important;
         }
 
+        /* Retire l'ombre du conteneur */
         #cv-container {
           box-shadow: none;
-          max-width: 8.5in !important;
-          width: 8.5in !important;
-          height: 11in !important;
-          margin: 0;
-          padding: 0;
-          overflow: hidden !important;
-          page-break-after: avoid !important;
         }
 
-        /* Force une seule page avec marges Chrome */
+        /* Force une seule page avec petites marges */
         @page {
           size: letter;
-          margin: 0;
-        }
-
-        /* Fix Chrome pour éviter page vide */
-        .template-securite {
-          width: 8.5in !important;
-          height: 11in !important;
-          max-height: 11in !important;
-          overflow: hidden !important;
-          position: relative !important;
-          page-break-inside: avoid !important;
-          page-break-after: avoid !important;
-        }
-
-        .template-securite .sidebar {
-          position: absolute !important;
-          left: 0 !important;
-          top: 0 !important;
-          width: 190px !important;
-          height: 11in !important;
-          max-height: 11in !important;
-          overflow: hidden !important;
-          padding: 10px !important;
-          background-color: #1e3a8a !important;
-          -webkit-print-color-adjust: exact !important;
-        }
-
-        .template-securite .main {
-          position: absolute !important;
-          left: 190px !important;
-          top: 0 !important;
-          width: calc(8.5in - 190px) !important;
-          height: 11in !important;
-          max-height: 11in !important;
-          overflow: hidden !important;
-          padding: 12px !important;
-          background-color: white !important;
-        }
-
-        /* Force les couleurs de fond pour chaque template */
-        .template-moderne .header {
-          background-color: #2563eb !important;
-          -webkit-print-color-adjust: exact !important;
-        }
-
-        .template-classique .sidebar {
-          background-color: #f3f4f6 !important;
-          -webkit-print-color-adjust: exact !important;
-        }
-
-        .template-securite .section {
-          background-color: #f8f9fa !important;
-          -webkit-print-color-adjust: exact !important;
-        }
-
-        .template-securite .agent-icon {
-          background-color: rgba(255, 255, 255, 0.15) !important;
-          -webkit-print-color-adjust: exact !important;
+          margin: 0.4in;
         }
 
         /* Empêcher toute coupure de page */
         .template-moderne,
         .template-classique,
-        .template-minimal {
+        .template-minimal,
+        .template-securite {
           page-break-inside: avoid !important;
           page-break-after: avoid !important;
-          height: 11in !important;
-          max-height: 11in !important;
-          overflow: hidden !important;
         }
 
-        /* Réduction supplémentaire des tailles de police pour l'impression */
-        .template-securite p {
-          font-size: 9px !important;
+        /* Force les couleurs de fond */
+        .template-moderne .header {
+          background-color: #2563eb !important;
         }
-        .template-securite h2 {
-          font-size: 11px !important;
+
+        .template-classique .sidebar {
+          background-color: #f3f4f6 !important;
         }
-        .template-securite h1 {
-          font-size: 20px !important;
+
+        .template-securite .sidebar {
+          background-color: #1e3a8a !important;
         }
-        .template-securite .title {
-          font-size: 11px !important;
-        }
+
         .template-securite .section {
-          padding: 5px !important;
-          margin-bottom: 6px !important;
-        }
-        .template-securite .agent-icon {
-          width: 40px !important;
-          height: 40px !important;
-          margin-bottom: 8px !important;
-        }
-        .template-securite .agent-icon span {
-          font-size: 20px !important;
+          background-color: #f8f9fa !important;
         }
 
-        /* Force la hauteur maximale */
-        #cv-container {
-          height: 11in !important;
-          max-height: 11in !important;
-          overflow: hidden !important;
+        .template-securite .agent-icon {
+          background-color: rgba(255, 255, 255, 0.15) !important;
+          border-color: rgba(255, 255, 255, 0.3) !important;
+        }
+
+        .template-securite .agent-icon::after {
+          border-color: rgba(255, 255, 255, 0.1) !important;
         }
       }
     </style>
