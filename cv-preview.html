@@ -782,6 +782,49 @@
         }
 
         document.getElementById("cv-container").innerHTML = cvHTML;
+        applyCustomColors();
+      }
+
+
+      function applyCustomColors() {
+        // Appliquer les couleurs personnalisées selon le template
+        if (cvData.colorModerne && selectedTemplate === "moderne") {
+          const header = document.querySelector(".template-moderne .header");
+          if (header) {
+            header.style.backgroundColor = cvData.colorModerne;
+          }
+          const h2s = document.querySelectorAll(".template-moderne h2");
+          h2s.forEach(h2 => {
+            h2.style.color = cvData.colorModerne;
+          });
+        }
+
+        if (cvData.colorClassique && selectedTemplate === "classique") {
+          const sidebar = document.querySelector(".template-classique .sidebar");
+          if (sidebar) {
+            sidebar.style.backgroundColor = cvData.colorClassique;
+          }
+        }
+
+        if (cvData.colorSecurite && selectedTemplate === "securite") {
+          const sidebar = document.querySelector(".template-securite .sidebar");
+          if (sidebar) {
+            sidebar.style.backgroundColor = cvData.colorSecurite;
+          }
+        }
+
+        if (cvData.colorMinimal && selectedTemplate === "minimal") {
+          const h2s = document.querySelectorAll(".template-minimal h2");
+          h2s.forEach(h2 => {
+            h2.style.color = cvData.colorMinimal;
+          });
+          const h2Befores = document.querySelectorAll(".template-minimal h2");
+          h2Befores.forEach(h2 => {
+            const style = document.createElement("style");
+            style.textContent = `.template-minimal h2:before { background: ${cvData.colorMinimal} !important; }`;
+            document.head.appendChild(style);
+          });
+        }
       }
 
       function goBack() {

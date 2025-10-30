@@ -90,6 +90,54 @@
         min-height: 100px;
       }
 
+      input[type="color"] {
+        width: 100px;
+        height: 50px;
+        border: 1px solid #d1d5db;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 5px;
+      }
+
+      .color-picker-group {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        background: #f9fafb;
+        border-radius: 5px;
+        margin-bottom: 15px;
+      }
+
+      .color-picker-group label {
+        margin-bottom: 0;
+        flex: 1;
+      }
+
+      input[type="color"] {
+        width: 100px;
+        height: 50px;
+        border: 1px solid #d1d5db;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 5px;
+      }
+
+      .color-picker-group {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        background: #f9fafb;
+        border-radius: 5px;
+        margin-bottom: 15px;
+      }
+
+      .color-picker-group label {
+        margin-bottom: 0;
+        flex: 1;
+      }
+
       .form-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -783,6 +831,7 @@
             ></textarea>
           </div>
 
+
           <div class="quick-options">
             <label style="display: block; margin-bottom: 10px">Langues:</label>
             <div class="option-buttons">
@@ -860,6 +909,59 @@
           </div>
         </div>
 
+        <!-- Personnalisation des couleurs -->
+        <div class="form-section">
+          <h2>🎨 Personnalisation</h2>
+          <p style="color: #666; margin-bottom: 20px;">Personnalisez les couleurs selon votre template</p>
+
+          <div class="color-picker-group">
+            <label for="colorModerne">
+              <strong>Moderne:</strong> Couleur du header
+            </label>
+            <input
+              type="color"
+              id="colorModerne"
+              name="colorModerne"
+              value="#2563eb"
+            />
+          </div>
+
+          <div class="color-picker-group">
+            <label for="colorClassique">
+              <strong>Classique:</strong> Couleur de la sidebar
+            </label>
+            <input
+              type="color"
+              id="colorClassique"
+              name="colorClassique"
+              value="#f3f4f6"
+            />
+          </div>
+
+          <div class="color-picker-group">
+            <label for="colorSecurite">
+              <strong>Sécurité:</strong> Couleur de la sidebar
+            </label>
+            <input
+              type="color"
+              id="colorSecurite"
+              name="colorSecurite"
+              value="#1e3a8a"
+            />
+          </div>
+
+          <div class="color-picker-group">
+            <label for="colorMinimal">
+              <strong>Minimal:</strong> Couleur d'accent
+            </label>
+            <input
+              type="color"
+              id="colorMinimal"
+              name="colorMinimal"
+              value="#333333"
+            />
+          </div>
+        </div>
         <!-- Boutons d'action -->
         <div class="button-group">
           <button type="button" class="btn btn-secondary" onclick="goBack()">
@@ -1113,6 +1215,10 @@
             "certifications",
             "competences",
             "langues",
+            "colorModerne",
+            "colorClassique",
+            "colorSecurite",
+            "colorMinimal",
           ];
 
           fields.forEach((field) => {
