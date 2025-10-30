@@ -869,7 +869,7 @@
         }
 
         const opt = {
-          margin: 0.2,
+          margin: 0,
           filename: `CV_${
             JSON.parse(localStorage.getItem("cvData") || "{}").nom || "document"
           }.pdf`,
@@ -880,12 +880,15 @@
             letterRendering: true,
             scrollX: 0,
             scrollY: 0,
+            windowHeight: 11 * 96,
+            windowWidth: 8.5 * 96,
             onclone: (doc) => {
               const cv = doc.getElementById("cv-container");
               if (cv) {
-                cv.style.overflow = "visible";
-                cv.style.height = "auto";
-                cv.style.maxHeight = "none";
+                cv.style.overflow = "hidden";
+                cv.style.height = "11in";
+                cv.style.maxHeight = "11in";
+                cv.style.width = "8.5in";
               }
 
               doc
@@ -893,18 +896,15 @@
                   ".template-moderne, .template-classique, .template-minimal, .template-securite"
                 )
                 .forEach((el) => {
-                  el.style.height = "auto";
-                  el.style.maxHeight = "none";
-                  el.style.overflow = "visible";
-                  el.style.position = "static";
+                  el.style.height = "11in";
+                  el.style.maxHeight = "11in";
+                  el.style.overflow = "hidden";
                 });
 
               doc
-                .querySelectorAll(".content, .main, .sidebar")
+                .querySelectorAll(".content, .main")
                 .forEach((el) => {
-                  el.style.overflow = "visible";
-                  el.style.height = "auto";
-                  el.style.maxHeight = "none";
+                  el.style.overflow = "hidden";
                 });
             },
           },
@@ -914,7 +914,7 @@
             orientation: "portrait",
             compress: true,
           },
-          pagebreak: { mode: ["css", "legacy"] },
+          pagebreak: { mode: "avoid-all" },
         };
 
         html2pdf()
