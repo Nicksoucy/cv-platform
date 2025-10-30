@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Prévisualisation du CV</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
       * {
         margin: 0;
@@ -868,74 +869,58 @@
           btn.disabled = true;
         }
 
+        // Use html2canvas directly for better control
         const opt = {
-          margin: 0,
-          filename: `CV_${
-            JSON.parse(localStorage.getItem("cvData") || "{}").nom || "document"
-          }.pdf`,
-          image: { type: "jpeg", quality: 0.98 },
-          html2canvas: {
-            scale: 2,
-            useCORS: true,
-            letterRendering: true,
-            scrollX: 0,
-            scrollY: 0,
-            windowHeight: 11 * 96,
-            windowWidth: 8.5 * 96,
-            onclone: (doc) => {
-              const cv = doc.getElementById("cv-container");
-              if (cv) {
-                cv.style.overflow = "hidden";
-                cv.style.height = "11in";
-                cv.style.maxHeight = "11in";
-                cv.style.width = "8.5in";
-              }
-
-              doc
-                .querySelectorAll(
-                  ".template-moderne, .template-classique, .template-minimal, .template-securite"
-                )
-                .forEach((el) => {
-                  el.style.height = "11in";
-                  el.style.maxHeight = "11in";
-                  el.style.overflow = "hidden";
-                });
-
-              doc
-                .querySelectorAll(".content, .main")
-                .forEach((el) => {
-                  el.style.overflow = "hidden";
-                });
-            },
-          },
-          jsPDF: {
-            unit: "in",
-            format: "letter",
-            orientation: "portrait",
-            compress: true,
-          },
-          pagebreak: { mode: "avoid-all" },
+          scale: 2,
+          useCORS: true,
+          letterRendering: true,
+          scrollX: 0,
+          scrollY: 0,
+          width: element.offsetWidth,
+          height: element.offsetHeight,
+          windowWidth: element.offsetWidth,
+          windowHeight: element.offsetHeight
         };
 
-        html2pdf()
-          .set(opt)
-          .from(element)
-          .save()
-          .then(() => {
-            if (btn && originalText) {
-              btn.textContent = originalText;
-              btn.disabled = false;
-            }
-            const notification = document.getElementById("notification");
-            notification.style.display = "block";
-            setTimeout(() => (notification.style.display = "none"), 3000);
-          })
-          .catch(() => {
-            if (btn && originalText) {
-              btn.textContent = originalText;
-              btn.disabled = false;
-            }
+        html2canvas(element, opt).then((canvas) => {
+          const imgData = canvas.toDataURL('image/jpeg', 0.98);
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF({
+            unit: 'in',
+            format: 'letter',
+            orientation: 'portrait',
+            compress: true
           });
+
+          // Force image to fit on single letter page (8.5 x 11 inches)
+          const pageWidth = 8.5;
+          const pageHeight = 11;
+
+          // Add image to fit exactly on one page
+          pdf.addImage(imgData, 'JPEG', 0, 0, pageWidth, pageHeight);
+
+          // Save the PDF
+          const cvData = JSON.parse(localStorage.getItem("cvData") || "{}");
+          const filename = `CV_${cvData.nom || "document"}.pdf`;
+          pdf.save(filename);
+
+          // Reset button
+          if (btn && originalText) {
+            btn.textContent = originalText;
+            btn.disabled = false;
+          }
+
+          // Show notification
+          const notification = document.getElementById("notification");
+          notification.style.display = "block";
+          setTimeout(() => (notification.style.display = "none"), 3000);
+        }).catch((error) => {
+          console.error('PDF generation error:', error);
+          if (btn && originalText) {
+            btn.textContent = originalText;
+            btn.disabled = false;
+          }
+        });
       }
     </script>
   </body>
