@@ -1,0 +1,446 @@
+/* Styles pour le conteneur du CV */
+.cv-container {
+    max-width: 8.5in;
+    /* Largeur du papier letter */
+    height: 11in;
+    /* Hauteur fixe du papier letter */
+    max-height: 11in;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Styles pour tous les templates */
+.template-moderne,
+.template-classique,
+.template-minimal,
+.template-securite {
+    height: 11in;
+    /* Hauteur fixe */
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Styles pour le template Moderne - Premium Upgrade */
+.template-moderne {
+    font-family: 'Inter', sans-serif;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 11in;
+    color: #1f2937;
+}
+
+.template-moderne .header {
+    background: #2563eb;
+    color: white;
+    padding: 40px 50px 30px;
+    border-bottom: none;
+}
+
+.template-moderne .header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    letter-spacing: -0.5px;
+    color: white;
+    text-transform: none;
+}
+
+.template-moderne .contact-info {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+}
+
+.template-moderne .contact-info span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Iconic separators for contact info */
+.template-moderne .contact-info span:not(:last-child)::after {
+    content: "•";
+    margin-left: 15px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.template-moderne .content {
+    padding: 30px 50px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.template-moderne .section {
+    margin-bottom: 30px;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.template-moderne h2 {
+    color: #2563eb;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin: 0 0 15px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 8px;
+}
+
+.template-moderne h2:before {
+    display: none;
+    /* Remove old arrow */
+}
+
+/* Content typography */
+.template-moderne p {
+    line-height: 1.6;
+    margin-bottom: 10px;
+    color: #374151;
+    font-size: 14px;
+}
+
+.template-moderne strong {
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Grid layout for Skills and Languages */
+.modern-grid-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Styles pour le template Classique */
+.template-classique {
+    font-family: Georgia, "Times New Roman", serif;
+    display: flex;
+    height: 11in;
+    position: relative;
+    overflow: hidden;
+}
+
+.template-classique .sidebar {
+    background: #f3f4f6;
+    width: 230px;
+    /* Réduit de 250px */
+    padding: 18px 15px;
+    /* Réduit pour tenir sur 1 page */
+    border-right: 2px solid #ddd;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.template-classique .sidebar h2 {
+    font-size: 13px;
+    /* Réduit pour tenir sur 1 page */
+    margin: 12px 0 5px;
+    /* Réduit pour tenir sur 1 page */
+    color: #333;
+    border-bottom: 1px solid #999;
+    padding-bottom: 3px;
+}
+
+.template-classique .sidebar h2:first-child {
+    margin-top: 0;
+}
+
+.template-classique .sidebar p {
+    font-size: 11px;
+    /* Réduit pour tenir sur 1 page */
+    line-height: 1.3;
+    margin-bottom: 4px;
+}
+
+.template-classique .main {
+    margin-left: 230px;
+    /* Ajusté */
+    padding: 18px;
+    /* Réduit pour tenir sur 1 page */
+    height: 100%;
+    overflow-y: auto;
+}
+
+.template-classique .main h1 {
+    font-size: 28px;
+    /* Réduit pour tenir sur 1 page */
+    color: #222;
+    margin-bottom: 12px;
+    border-bottom: 3px double #000;
+    padding-bottom: 8px;
+}
+
+.template-classique .section {
+    background: #fafafa;
+    padding: 10px;
+    /* Réduit pour tenir sur 1 page */
+    margin-bottom: 10px;
+    /* Réduit pour tenir sur 1 page */
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+}
+
+.template-classique .section h2 {
+    font-size: 18px;
+    /* Réduit pour tenir sur 1 page */
+    margin: 0 0 8px;
+    color: #333;
+    font-style: italic;
+}
+
+.template-classique p {
+    line-height: 1.5;
+    margin-bottom: 6px;
+    color: #444;
+    font-size: 14px;
+    /* Réduit pour tenir sur 1 page */
+}
+
+/* Styles pour le template Minimal */
+.template-minimal {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        sans-serif;
+    padding: 35px 40px;
+    /* Optimisé pour une page */
+    max-width: 800px;
+    margin: 0 auto;
+    height: 11in;
+    overflow-y: auto;
+}
+
+.template-minimal h1 {
+    font-size: 30px;
+    /* Optimisé - Lisible */
+    font-weight: 300;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.template-minimal .contact-line {
+    text-align: center;
+    color: #666;
+    margin-bottom: 25px;
+    /* Optimisé pour une page */
+    font-size: 14px;
+    /* Optimisé - Lisible */
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.template-minimal .section {
+    margin-bottom: 30px;
+    /* Augmenté */
+    padding: 0;
+}
+
+.template-minimal h2 {
+    font-size: 15px;
+    /* Optimisé - Lisible */
+    font-weight: 600;
+    margin: 0 0 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #333;
+    position: relative;
+    padding-left: 12px;
+}
+
+.template-minimal h2:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 5px;
+    height: 5px;
+    background: #333;
+    border-radius: 50%;
+}
+
+.template-minimal p {
+    line-height: 1.6;
+    /* Optimisé pour une page */
+    color: #555;
+    margin-bottom: 12px;
+    /* Augmenté */
+    padding-left: 12px;
+    font-size: 14px;
+    /* Optimisé - Lisible */
+}
+
+/* Styles pour le template Sécurité */
+.template-securite {
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 11in;
+    position: relative;
+    overflow: hidden;
+}
+
+.template-securite .sidebar {
+    background: #1e3a8a;
+    color: white;
+    width: 200px;
+    /* Encore plus réduit */
+    padding: 15px 10px;
+    /* Padding minimal */
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 11in;
+    /* Hauteur fixe exacte */
+    overflow: hidden;
+    /* Changé de overflow-y: auto */
+    font-size: 10px;
+}
+
+.template-securite .agent-icon {
+    width: 50px;
+    /* TRÈS réduit */
+    height: 50px;
+    margin: 0 auto 10px;
+    /* TRÈS réduit */
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.template-securite .agent-icon::after {
+    content: "";
+    position: absolute;
+    width: 60px;
+    /* TRÈS réduit */
+    height: 60px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    top: -5px;
+    left: -5px;
+}
+
+.template-securite .agent-icon span {
+    font-size: 25px;
+    /* TRÈS réduit */
+    line-height: 1;
+    display: block;
+    text-align: center;
+}
+
+.template-securite .sidebar h2 {
+    font-size: 13px;
+    /* Optimisé - Lisible */
+    margin: 15px 0 8px;
+    /* Augmenté */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 5px;
+}
+
+.template-securite .sidebar p {
+    font-size: 11px;
+    /* Optimisé - Lisible */
+    line-height: 1.5;
+    opacity: 0.9;
+    margin-bottom: 8px;
+    word-wrap: break-word;
+}
+
+.template-securite .main {
+    margin-left: 200px;
+    /* Ajusté pour correspondre */
+    padding: 20px;
+    /* Optimisé pour une page */
+    background: white;
+    height: 11in;
+    /* Hauteur fixe */
+    overflow: hidden;
+    /* Empêche le débordement */
+}
+
+.template-securite .main h1 {
+    font-size: 28px;
+    /* Optimisé - Lisible */
+    color: #1e3a8a;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.template-securite .main .title {
+    color: #666;
+    font-size: 15px;
+    /* Optimisé - Lisible */
+    margin-bottom: 15px;
+    /* Optimisé pour une page */
+    font-style: italic;
+}
+
+.template-securite .section {
+    background: #f8f9fa;
+    border-left: 4px solid #1e3a8a;
+    padding: 12px;
+    /* Optimisé pour une page */
+    margin-bottom: 12px;
+    /* Optimisé pour une page */
+    border-radius: 0 6px 6px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.template-securite .section h2 {
+    font-size: 17px;
+    /* Optimisé - Lisible */
+    color: #1e3a8a;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.template-securite .section p {
+    line-height: 1.5;
+    /* Optimisé pour une page */
+    color: #333;
+    margin-bottom: 6px;
+    /* Optimisé pour une page */
+    font-size: 14px;
+    /* Optimisé - Lisible */
+}
+
+/* Styles d'exportation PDF */
+body.exporting .cv-container,
+body.exporting .template-moderne,
+body.exporting .template-classique,
+body.exporting .template-minimal,
+body.exporting .template-securite {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+}
+
+body.exporting .template-classique .sidebar,
+body.exporting .template-securite .sidebar {
+    height: 100% !important;
+    min-height: 11in !important;
+    position: absolute !important;
+    bottom: 0 !important;
+}

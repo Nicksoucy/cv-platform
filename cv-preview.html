@@ -1,488 +1,99 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prévisualisation du CV</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
 
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          sans-serif;
-        background-color: #f5f5f5;
-        padding: 20px;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prévisualisation du CV</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="css/templates.css">
+  <script src="js/cv-render.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-      .actions {
-        max-width: 900px;
-        margin: 0 auto 20px;
-        display: flex;
-        gap: 15px;
-        justify-content: center;
-      }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        sans-serif;
+      background-color: #f5f5f5;
+      padding: 20px;
+    }
 
-      .btn {
-        padding: 12px 30px;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
+    .actions {
+      max-width: 900px;
+      margin: 0 auto 20px;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
 
-      .btn-primary {
-        background: #2563eb;
-        color: white;
-      }
+    .btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-      .btn-primary:hover {
-        background: #1d4ed8;
-      }
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+    }
 
-      .btn-secondary {
-        background: #6b7280;
-        color: white;
-      }
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
 
-      .btn-secondary:hover {
-        background: #4b5563;
-      }
+    .btn-secondary {
+      background: #6b7280;
+      color: white;
+    }
 
-      #cv-container {
-        max-width: 8.5in; /* Largeur du papier letter */
-        height: 11in; /* Hauteur fixe du papier letter */
-        max-height: 11in;
-        margin: 0 auto;
-        background: white;
-        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-        position: relative;
-        overflow: hidden;
-      }
+    .btn-secondary:hover {
+      background: #4b5563;
+    }
 
-      /* Styles pour tous les templates */
-      .template-moderne,
-      .template-classique,
-      .template-minimal,
-      .template-securite {
-        height: 11in; /* Hauteur fixe */
-        width: 100%;
-        box-sizing: border-box;
-        position: relative;
-        overflow: hidden;
-      }
+    /* Styles d'exportation PDF - Compléments */
+    body.exporting #cv-container,
+    body.exporting .template-moderne,
+    body.exporting .template-classique,
+    body.exporting .template-minimal,
+    body.exporting .template-securite {
+      height: auto !important;
+      max-height: none !important;
+      overflow: visible !important;
+    }
 
-      /* Styles pour le template Moderne */
-      .template-moderne {
-        font-family: "Helvetica Neue", Arial, sans-serif;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        height: 11in;
-      }
+    body.exporting .template-classique .sidebar,
+    body.exporting .template-securite .sidebar {
+      height: 100% !important;
+      min-height: 11in !important;
+      position: absolute !important;
+      bottom: 0 !important;
+    }
+  </style>
+</head>
 
-      .template-moderne .header {
-        background: #2563eb;
-        color: white;
-        padding: 28px 35px; /* Optimisé pour une page */
-        text-align: center;
-        flex-shrink: 0;
-      }
+<body>
+  <div class="actions">
+    <button class="btn btn-secondary" onclick="goBack()">← Retour</button>
+    <button class="btn btn-secondary" onclick="window.print()">
+      🖨️ Imprimer
+    </button>
+    <button class="btn btn-primary" onclick="exportPDF(this)">
+      📄 Télécharger en PDF
+    </button>
+  </div>
 
-      .template-moderne .header h1 {
-        font-size: 34px; /* Optimisé - Lisible */
-        margin-bottom: 12px;
-      }
-
-      .template-moderne .contact-info {
-        font-size: 15px; /* Optimisé - Lisible */
-        opacity: 0.9;
-      }
-
-      .template-moderne .content {
-        padding: 25px 35px; /* Optimisé pour une page */
-        overflow-y: auto;
-        flex: 1;
-      }
-
-      .template-moderne .section {
-        margin-bottom: 20px; /* Optimisé pour une page */
-        padding-bottom: 15px; /* Optimisé pour une page */
-        border-bottom: 1px solid #e5e7eb;
-      }
-
-      .template-moderne .section:last-child {
-        border-bottom: none;
-        margin-bottom: 0;
-      }
-
-      .template-moderne h2 {
-        color: #2563eb;
-        font-size: 21px; /* Optimisé - Lisible */
-        margin: 0 0 12px; /* Optimisé pour une page */
-        display: flex;
-        align-items: center;
-      }
-
-      .template-moderne h2:before {
-        content: "▶";
-        margin-right: 10px;
-        font-size: 15px; /* Optimisé - Lisible */
-      }
-
-      .template-moderne p {
-        line-height: 1.6; /* Optimisé pour une page */
-        margin-bottom: 12px; /* Augmenté */
-        color: #333;
-        font-size: 15px; /* Optimisé - Lisible */
-      }
-
-      /* Styles pour le template Classique */
-      .template-classique {
-        font-family: Georgia, "Times New Roman", serif;
-        display: flex;
-        height: 11in;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .template-classique .sidebar {
-        background: #f3f4f6;
-        width: 230px; /* Réduit de 250px */
-        padding: 18px 15px; /* Réduit pour tenir sur 1 page */
-        border-right: 2px solid #ddd;
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        height: 100%;
-        overflow-y: auto;
-      }
-
-      .template-classique .sidebar h2 {
-        font-size: 13px; /* Réduit pour tenir sur 1 page */
-        margin: 12px 0 5px; /* Réduit pour tenir sur 1 page */
-        color: #333;
-        border-bottom: 1px solid #999;
-        padding-bottom: 3px;
-      }
-
-      .template-classique .sidebar h2:first-child {
-        margin-top: 0;
-      }
-
-      .template-classique .sidebar p {
-        font-size: 11px; /* Réduit pour tenir sur 1 page */
-        line-height: 1.3;
-        margin-bottom: 4px;
-      }
-
-      .template-classique .main {
-        margin-left: 230px; /* Ajusté */
-        padding: 18px; /* Réduit pour tenir sur 1 page */
-        height: 100%;
-        overflow-y: auto;
-      }
-
-      .template-classique .main h1 {
-        font-size: 28px; /* Réduit pour tenir sur 1 page */
-        color: #222;
-        margin-bottom: 12px;
-        border-bottom: 3px double #000;
-        padding-bottom: 8px;
-      }
-
-      .template-classique .section {
-        background: #fafafa;
-        padding: 10px; /* Réduit pour tenir sur 1 page */
-        margin-bottom: 10px; /* Réduit pour tenir sur 1 page */
-        border: 1px solid #e5e7eb;
-        border-radius: 4px;
-      }
-
-      .template-classique .section h2 {
-        font-size: 18px; /* Réduit pour tenir sur 1 page */
-        margin: 0 0 8px;
-        color: #333;
-        font-style: italic;
-      }
-
-      .template-classique p {
-        line-height: 1.5;
-        margin-bottom: 6px;
-        color: #444;
-        font-size: 14px; /* Réduit pour tenir sur 1 page */
-      }
-
-      /* Styles pour le template Minimal */
-      .template-minimal {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          sans-serif;
-        padding: 35px 40px; /* Optimisé pour une page */
-        max-width: 800px;
-        margin: 0 auto;
-        height: 11in;
-        overflow-y: auto;
-      }
-
-      .template-minimal h1 {
-        font-size: 30px; /* Optimisé - Lisible */
-        font-weight: 300;
-        margin-bottom: 15px;
-        text-align: center;
-      }
-
-      .template-minimal .contact-line {
-        text-align: center;
-        color: #666;
-        margin-bottom: 25px; /* Optimisé pour une page */
-        font-size: 14px; /* Optimisé - Lisible */
-        padding-bottom: 15px;
-        border-bottom: 1px solid #e5e7eb;
-      }
-
-      .template-minimal .section {
-        margin-bottom: 30px; /* Augmenté */
-        padding: 0;
-      }
-
-      .template-minimal h2 {
-        font-size: 15px; /* Optimisé - Lisible */
-        font-weight: 600;
-        margin: 0 0 12px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: #333;
-        position: relative;
-        padding-left: 12px;
-      }
-
-      .template-minimal h2:before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 5px;
-        height: 5px;
-        background: #333;
-        border-radius: 50%;
-      }
-
-      .template-minimal p {
-        line-height: 1.6; /* Optimisé pour une page */
-        color: #555;
-        margin-bottom: 12px; /* Augmenté */
-        padding-left: 12px;
-        font-size: 14px; /* Optimisé - Lisible */
-      }
-
-      /* Styles pour le template Sécurité */
-      .template-securite {
-        font-family: Arial, sans-serif;
-        display: flex;
-        height: 11in;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .template-securite .sidebar {
-        background: #1e3a8a;
-        color: white;
-        width: 200px; /* Encore plus réduit */
-        padding: 15px 10px; /* Padding minimal */
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        height: 11in; /* Hauteur fixe exacte */
-        overflow: hidden; /* Changé de overflow-y: auto */
-        font-size: 10px;
-      }
-
-      .template-securite .agent-icon {
-        width: 50px; /* TRÈS réduit */
-        height: 50px;
-        margin: 0 auto 10px; /* TRÈS réduit */
-        background: rgba(255, 255, 255, 0.15);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-      }
-
-      .template-securite .agent-icon::after {
-        content: "";
-        position: absolute;
-        width: 60px; /* TRÈS réduit */
-        height: 60px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-        top: -5px;
-        left: -5px;
-      }
-
-      .template-securite .agent-icon span {
-        font-size: 25px; /* TRÈS réduit */
-        line-height: 1;
-        display: block;
-        text-align: center;
-      }
-
-      .template-securite .sidebar h2 {
-        font-size: 13px; /* Optimisé - Lisible */
-        margin: 15px 0 8px; /* Augmenté */
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-        padding-bottom: 5px;
-      }
-
-      .template-securite .sidebar p {
-        font-size: 11px; /* Optimisé - Lisible */
-        line-height: 1.5;
-        opacity: 0.9;
-        margin-bottom: 8px;
-        word-wrap: break-word;
-      }
-
-      .template-securite .main {
-        margin-left: 200px; /* Ajusté pour correspondre */
-        padding: 20px; /* Optimisé pour une page */
-        background: white;
-        height: 11in; /* Hauteur fixe */
-        overflow: hidden; /* Empêche le débordement */
-      }
-
-      .template-securite .main h1 {
-        font-size: 28px; /* Optimisé - Lisible */
-        color: #1e3a8a;
-        margin-bottom: 8px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      .template-securite .main .title {
-        color: #666;
-        font-size: 15px; /* Optimisé - Lisible */
-        margin-bottom: 15px; /* Optimisé pour une page */
-        font-style: italic;
-      }
-
-      .template-securite .section {
-        background: #f8f9fa;
-        border-left: 4px solid #1e3a8a;
-        padding: 12px; /* Optimisé pour une page */
-        margin-bottom: 12px; /* Optimisé pour une page */
-        border-radius: 0 6px 6px 0;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      }
-
-      .template-securite .section h2 {
-        font-size: 17px; /* Optimisé - Lisible */
-        color: #1e3a8a;
-        margin: 0 0 8px 0;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      .template-securite .section p {
-        line-height: 1.5; /* Optimisé pour une page */
-        color: #333;
-        margin-bottom: 6px; /* Optimisé pour une page */
-        font-size: 14px; /* Optimisé - Lisible */
-      }
-
-      /* Styles d'impression simplifiés - préserve la mise en page */
-      @media print {
-        /* FORCE L'IMPRESSION DES COULEURS DE FOND */
-        * {
-          -webkit-print-color-adjust: exact !important;
-          print-color-adjust: exact !important;
-          color-adjust: exact !important;
-        }
-
-        body {
-          background: white;
-          padding: 0;
-          margin: 0;
-        }
-
-        /* Cache les boutons d'action */
-        .actions {
-          display: none !important;
-        }
-
-        /* Retire l'ombre du conteneur */
-        #cv-container {
-          box-shadow: none;
-        }
-
-        /* Force une seule page avec petites marges */
-        @page {
-          size: letter;
-          margin: 0.4in;
-        }
-
-        /* Empêcher toute coupure de page */
-        .template-moderne,
-        .template-classique,
-        .template-minimal,
-        .template-securite {
-          page-break-inside: avoid !important;
-          page-break-after: avoid !important;
-        }
-
-        /* Force les couleurs de fond */
-        .template-moderne .header {
-          background-color: #2563eb !important;
-        }
-
-        .template-classique .sidebar {
-          background-color: #f3f4f6 !important;
-        }
-
-        .template-securite .sidebar {
-          background-color: #1e3a8a !important;
-        }
-
-        .template-securite .section {
-          background-color: #f8f9fa !important;
-        }
-
-        .template-securite .agent-icon {
-          background-color: rgba(255, 255, 255, 0.15) !important;
-          border-color: rgba(255, 255, 255, 0.3) !important;
-        }
-
-        .template-securite .agent-icon::after {
-          border-color: rgba(255, 255, 255, 0.1) !important;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="actions">
-      <button class="btn btn-secondary" onclick="goBack()">← Retour</button>
-      <button class="btn btn-secondary" onclick="window.print()">
-        🖨️ Imprimer
-      </button>
-      <button class="btn btn-primary" onclick="exportPDF()">
-        📄 Télécharger en PDF
-      </button>
-    </div>
-
-    <div
-      id="notification"
-      style="
+  <div id="notification" style="
         display: none;
         position: fixed;
         top: 20px;
@@ -493,355 +104,63 @@
         border-radius: 5px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         z-index: 1000;
-      "
-    >
-      ✓ PDF généré avec succès!
-    </div>
+      ">
+    ✓ PDF généré avec succès!
+  </div>
 
-    <div id="cv-container">
-      <!-- Le contenu du CV sera injecté ici -->
-    </div>
-    <script>
-      // Charger les données depuis localStorage
-      const cvData = JSON.parse(localStorage.getItem("cvData") || "{}");
-      const selectedTemplate =
-        localStorage.getItem("selectedTemplate") || "moderne";
+  <div id="cv-container" class="cv-container">
+    <!-- Le contenu du CV sera injecté ici -->
+  </div>
+  <script>
+    // Charger les données depuis localStorage
+    const cvData = JSON.parse(localStorage.getItem("cvData") || "{}");
+    const selectedTemplate =
+      localStorage.getItem("selectedTemplate") || "moderne";
 
-      // Vérifier si les données sont présentes
-      if (!cvData.nom) {
-        document.getElementById("cv-container").innerHTML = `
+    // Vérifier si les données sont présentes
+    if (!cvData.nom) {
+      document.getElementById("cv-container").innerHTML = `
         <div style="padding: 40px; text-align: center;">
           <p style="color: #dc2626; font-size: 18px;">Erreur : Aucune donnée trouvée.</p>
           <p style="margin-top: 10px;">Veuillez remplir le formulaire d'abord.</p>
           <button class="btn btn-primary" onclick="goBack()" style="margin-top: 20px;">Retour au formulaire</button>
         </div>
       `;
-      } else {
-        // Générer le CV selon le template sélectionné
-        generateCV();
+    } else {
+      // Générer le CV en utilisant le script partagé
+      renderCV("cv-container", cvData, selectedTemplate);
+    }
+
+    function goBack() {
+      window.location.href = "cv-builder.html";
+    }
+
+    function exportPDF(btnEl) {
+      const element = document.getElementById("cv-container");
+
+      const btn =
+        btnEl ||
+        document.activeElement ||
+        document.querySelector(".actions .btn.btn-primary");
+      const originalText = btn ? btn.textContent : null;
+      if (btn) {
+        btn.textContent = "Génération en cours...";
+        btn.disabled = true;
       }
 
-      function generateCV() {
-        let cvHTML = "";
+      // 1. Prepare for export: Allow container to expand
+      document.body.classList.add('exporting');
 
-        switch (selectedTemplate) {
-          case "moderne":
-            cvHTML = `
-            <div class="template-moderne">
-              <div class="header">
-                <h1>${cvData.nom}</h1>
-                  <div class="contact-info">
-                    ${cvData.email} | ${cvData.telephone}
-                    ${cvData.adresse ? " | " + cvData.adresse : ""}
-                    ${
-                      cvData.disponibilite
-                        ? " | Disponibilité : " + cvData.disponibilite
-                        : ""
-                    }
-                  </div>
-              </div>
-              <div class="content">
-                ${
-                  cvData.resume
-                    ? `<div class="section"><h2>Résumé professionnel</h2><p>${cvData.resume}</p></div>`
-                    : ""
-                }
-                ${
-                  cvData.experience
-                    ? `<div class="section"><h2>Expérience professionnelle</h2><p>${cvData.experience.replace(
-                        /\n/g,
-                        "<br>"
-                      )}</p></div>`
-                    : ""
-                }
-                ${
-                  cvData.education
-                    ? `<div class="section"><h2>Éducation</h2><p>${cvData.education.replace(
-                        /\n/g,
-                        "<br>"
-                      )}</p></div>`
-                    : ""
-                }
-                ${
-                  cvData.certifications
-                    ? `<div class="section"><h2>Certifications</h2><p>${cvData.certifications.replace(
-                        /\n/g,
-                        "<br>"
-                      )}</p></div>`
-                    : ""
-                }
-                ${
-                  cvData.competences
-                    ? `<div class="section"><h2>Compétences</h2><p>${cvData.competences}</p></div>`
-                    : ""
-                }
-                ${
-                  cvData.langues
-                    ? `<div class="section"><h2>Langues</h2><p>${cvData.langues}</p></div>`
-                    : ""
-                }
-              </div>
-            </div>
-          `;
-            break;
+      // Wait a moment for layout to update
+      setTimeout(() => {
+        // Check content height
+        const fullHeight = element.scrollHeight;
+        const fullWidth = element.offsetWidth;
 
-          case "classique":
-            cvHTML = `
-            <div class="template-classique">
-              <div class="sidebar">
-                <h2>Coordonnées</h2>
-                <p><strong>Courriel :</strong><br>${cvData.email}</p>
-                <p><strong>Tél. :</strong><br>${cvData.telephone}</p>
-                ${
-                  cvData.adresse
-                    ? `<p><strong>Adresse :</strong><br>${cvData.adresse}</p>`
-                    : ""
-                }
-                ${
-                  cvData.disponibilite
-                    ? `<p><strong>Disponibilité :</strong><br>${cvData.disponibilite}</p>`
-                    : ""
-                }
-
-                ${
-                  cvData.langues
-                    ? `<h2>Langues</h2><p>${cvData.langues}</p>`
-                    : ""
-                }
-                ${
-                  cvData.competences
-                    ? `<h2>Compétences</h2><p>${cvData.competences.replace(
-                        /,/g,
-                        "<br>"
-                      )}</p>`
-                    : ""
-                }
-              </div>
-              <div class="main">
-                <h1>${cvData.nom}</h1>
-                ${
-                  cvData.resume
-                    ? `<div class="section"><h2>Résumé professionnel</h2><p>${cvData.resume}</p></div>`
-                    : ""
-                }
-                ${
-                  cvData.experience
-                    ? `<div class="section"><h2>Expérience professionnelle</h2><p>${cvData.experience.replace(
-                        /\n/g,
-                        "<br>"
-                      )}</p></div>`
-                    : ""
-                }
-                ${
-                  cvData.education
-                    ? `<div class="section"><h2>Éducation</h2><p>${cvData.education.replace(
-                        /\n/g,
-                        "<br>"
-                      )}</p></div>`
-                    : ""
-                }
-                ${
-                  cvData.certifications
-                    ? `<div class="section"><h2>Certifications</h2><p>${cvData.certifications.replace(
-                        /\n/g,
-                        "<br>"
-                      )}</p></div>`
-                    : ""
-                }
-              </div>
-            </div>
-          `;
-            break;
-
-          case "minimal":
-            cvHTML = `
-            <div class="template-minimal">
-              <h1>${cvData.nom}</h1>
-                <div class="contact-line">
-                  ${cvData.email} • ${cvData.telephone}
-                  ${cvData.adresse ? " • " + cvData.adresse : ""}
-               ${
-                 cvData.disponibilite
-                   ? " • Disponibilité : " + cvData.disponibilite
-                   : ""
-               }
-                </div>
-              ${
-                cvData.resume
-                  ? `<div class="section"><h2>Résumé</h2><p>${cvData.resume}</p></div>`
-                  : ""
-              }
-              ${
-                cvData.experience
-                  ? `<div class="section"><h2>Expérience</h2><p>${cvData.experience.replace(
-                      /\n/g,
-                      "<br>"
-                    )}</p></div>`
-                  : ""
-              }
-              ${
-                cvData.education
-                  ? `<div class="section"><h2>Éducation</h2><p>${cvData.education.replace(
-                      /\n/g,
-                      "<br>"
-                    )}</p></div>`
-                  : ""
-              }
-              ${
-                cvData.certifications
-                  ? `<div class="section"><h2>Certifications</h2><p>${cvData.certifications.replace(
-                      /\n/g,
-                      "<br>"
-                    )}</p></div>`
-                  : ""
-              }
-              ${
-                cvData.competences
-                  ? `<div class="section"><h2>Compétences</h2><p>${cvData.competences}</p></div>`
-                  : ""
-              }
-              ${
-                cvData.langues
-                  ? `<div class="section"><h2>Langues</h2><p>${cvData.langues}</p></div>`
-                  : ""
-              }
-            </div>
-          `;
-            break;
-
-          case "securite":
-            cvHTML = `
-            <div class="template-securite">
-              <div class="sidebar">
-                <div class="agent-icon">
-                  <span>👮</span>
-                </div>
-                
-                <h2>Contact</h2>
-                <p>${cvData.email}</p>
-                <p>${cvData.telephone}</p>
-                ${cvData.adresse ? `<p>${cvData.adresse}</p>` : ""}
-            ${
-              cvData.disponibilite
-                ? `<p>Disponibilité : ${cvData.disponibilite}</p>`
-                : ""
-            }
-
-
-                ${
-                  cvData.certifications
-                    ? `<h2>Certifications</h2><p>${cvData.certifications.replace(
-                        /\n/g,
-                        "<br>"
-                      )}</p>`
-                    : ""
-                }
-                ${
-                  cvData.langues
-                    ? `<h2>Langues</h2><p>${cvData.langues}</p>`
-                    : ""
-                }
-                ${
-                  cvData.competences
-                    ? `<h2>Compétences</h2><p>${cvData.competences.replace(
-                        /,/g,
-                        "<br>"
-                      )}</p>`
-                    : ""
-                }
-              </div>
-              <div class="main">
-                <h1>${cvData.nom}</h1>
-                <div class="title">Agent de Sécurité Professionnel</div>
-                
-                ${
-                  cvData.resume
-                    ? `<div class="section"><h2>Profil</h2><p>${cvData.resume}</p></div>`
-                    : ""
-                }
-                ${
-                  cvData.experience
-                    ? `<div class="section"><h2>Expérience en Sécurité</h2><p>${cvData.experience.replace(
-                        /\n/g,
-                        "<br>"
-                      )}</p></div>`
-                    : ""
-                }
-                ${
-                  cvData.education
-                    ? `<div class="section"><h2>Formation</h2><p>${cvData.education.replace(
-                        /\n/g,
-                        "<br>"
-                      )}</p></div>`
-                    : ""
-                }
-              </div>
-            </div>
-          `;
-            break;
-        }
-
-        document.getElementById("cv-container").innerHTML = cvHTML;
-        applyCustomColors();
-      }
-
-
-      function applyCustomColors() {
-        // Appliquer les couleurs personnalisées selon le template
-        if (cvData.colorModerne && selectedTemplate === "moderne") {
-          const header = document.querySelector(".template-moderne .header");
-          if (header) {
-            header.style.backgroundColor = cvData.colorModerne;
-          }
-          const h2s = document.querySelectorAll(".template-moderne h2");
-          h2s.forEach(h2 => {
-            h2.style.color = cvData.colorModerne;
-          });
-        }
-
-        if (cvData.colorClassique && selectedTemplate === "classique") {
-          const sidebar = document.querySelector(".template-classique .sidebar");
-          if (sidebar) {
-            sidebar.style.backgroundColor = cvData.colorClassique;
-          }
-        }
-
-        if (cvData.colorSecurite && selectedTemplate === "securite") {
-          const sidebar = document.querySelector(".template-securite .sidebar");
-          if (sidebar) {
-            sidebar.style.backgroundColor = cvData.colorSecurite;
-          }
-        }
-
-        if (cvData.colorMinimal && selectedTemplate === "minimal") {
-          const h2s = document.querySelectorAll(".template-minimal h2");
-          h2s.forEach(h2 => {
-            h2.style.color = cvData.colorMinimal;
-          });
-          const h2Befores = document.querySelectorAll(".template-minimal h2");
-          h2Befores.forEach(h2 => {
-            const style = document.createElement("style");
-            style.textContent = `.template-minimal h2:before { background: ${cvData.colorMinimal} !important; }`;
-            document.head.appendChild(style);
-          });
-        }
-      }
-
-      function goBack() {
-        window.location.href = "cv-builder.html";
-      }
-      // Note by Dev, this is the function that we updated for pdf download
-      function exportPDF(btnEl) {
-        const element = document.getElementById("cv-container");
-
-        const btn =
-          btnEl ||
-          document.activeElement ||
-          document.querySelector(".actions .btn.btn-primary");
-        const originalText = btn ? btn.textContent : null;
-        if (btn) {
-          btn.textContent = "Génération en cours...";
-          btn.disabled = true;
+        // Adjust sidebar height if needed (for templates with sidebar)
+        const sidebar = element.querySelector('.sidebar');
+        if (sidebar) {
+          sidebar.style.height = `${fullHeight}px`;
         }
 
         // Use html2canvas directly for better control
@@ -851,15 +170,20 @@
           letterRendering: true,
           scrollX: 0,
           scrollY: 0,
-          width: element.offsetWidth,
-          height: element.offsetHeight,
-          windowWidth: element.offsetWidth,
-          windowHeight: element.offsetHeight
+          width: fullWidth,
+          height: fullHeight,
+          windowWidth: fullWidth,
+          windowHeight: fullHeight
         };
 
         html2canvas(element, opt).then((canvas) => {
-          const imgData = canvas.toDataURL('image/jpeg', 0.98);
+          const imgData = canvas.toDataURL('image/jpeg', 0.95);
           const { jsPDF } = window.jspdf;
+
+          // Letter size in inches
+          const pdfPageWidth = 8.5;
+          const pdfPageHeight = 11;
+
           const pdf = new jsPDF({
             unit: 'in',
             format: 'letter',
@@ -867,19 +191,39 @@
             compress: true
           });
 
-          // Force image to fit on single letter page (8.5 x 11 inches)
-          const pageWidth = 8.5;
-          const pageHeight = 11;
+          // Calculate dimensions
+          const canvasWidthPx = canvas.width;
+          const canvasHeightPx = canvas.height;
 
-          // Add image to fit exactly on one page
-          pdf.addImage(imgData, 'JPEG', 0, 0, pageWidth, pageHeight);
+          // The width of the image on the PDF pages (fit to width)
+          const imgWidthOnPdf = pdfPageWidth;
+          // Consequently, the height of the full image on PDF scale
+          const imgHeightOnPdf = (canvasHeightPx * pdfPageWidth) / canvasWidthPx;
+
+          let heightLeft = imgHeightOnPdf;
+          let position = 0;
+
+          // Add first page
+          pdf.addImage(imgData, 'JPEG', 0, position, imgWidthOnPdf, imgHeightOnPdf);
+          heightLeft -= pdfPageHeight;
+
+          // Add subsequent pages if needed
+          while (heightLeft > 0) {
+            position = position - pdfPageHeight; // Move the image up
+            pdf.addPage();
+            pdf.addImage(imgData, 'JPEG', 0, position, imgWidthOnPdf, imgHeightOnPdf);
+            heightLeft -= pdfPageHeight;
+          }
 
           // Save the PDF
           const cvData = JSON.parse(localStorage.getItem("cvData") || "{}");
           const filename = `CV_${cvData.nom || "document"}.pdf`;
           pdf.save(filename);
 
-          // Reset button
+          // Reset button and styles
+          document.body.classList.remove('exporting');
+          if (sidebar) sidebar.style.height = ''; // Reset inline style
+
           if (btn && originalText) {
             btn.textContent = originalText;
             btn.disabled = false;
@@ -891,12 +235,17 @@
           setTimeout(() => (notification.style.display = "none"), 3000);
         }).catch((error) => {
           console.error('PDF generation error:', error);
+          document.body.classList.remove('exporting');
+          if (sidebar) sidebar.style.height = '';
           if (btn && originalText) {
             btn.textContent = originalText;
             btn.disabled = false;
           }
+          alert("Une erreur est survenue lors de la génération du PDF. Veuillez réessayer.");
         });
-      }
-    </script>
-  </body>
+      }, 100);
+    }
+  </script>
+</body>
+
 </html>
