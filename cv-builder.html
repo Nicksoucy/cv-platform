@@ -118,70 +118,77 @@
       flex: 1;
     }
 
-    input[type="color"] {
-      width: 100px;
-      height: 50px;
-      border: 1px solid #d1d5db;
-      border-radius: 5px;
-      cursor: pointer;
-      padding: 5px;
-    }
-
-    .color-picker-group {
-      display: flex;
-      align-items: center;
-      gap: 15px;
+    .tips-box {
+      background: #eff6ff;
+      border-left: 4px solid #3b82f6;
       padding: 15px;
-      background: #f9fafb;
-      border-radius: 5px;
       margin-bottom: 15px;
+      border-radius: 5px;
+      font-size: 14px;
     }
 
-    .color-picker-group label {
-      margin-bottom: 0;
-      flex: 1;
+    .tips-box strong {
+      color: #1e40af;
+      display: block;
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
 
-      .tips-box {
-        background: #eff6ff;
-        border-left: 4px solid #3b82f6;
-        padding: 15px;
-        margin-bottom: 15px;
-        border-radius: 5px;
-        font-size: 14px;
-      }
+    .tips-box ul {
+      margin: 0;
+      padding-left: 20px;
+    }
 
-      .tips-box strong {
-        color: #1e40af;
-        display: block;
-        margin-bottom: 10px;
-        font-size: 15px;
-      }
+    .tips-box li {
+      margin-bottom: 6px;
+      color: #1e40af;
+      line-height: 1.5;
+    }
 
-      .tips-box ul {
-        margin: 0;
-        padding-left: 20px;
-      }
+    .tips-toggle {
+      background: none;
+      border: none;
+      color: #3b82f6;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 5px 0;
+      text-decoration: underline;
+      margin-bottom: 10px;
+    }
 
-      .tips-box li {
-        margin-bottom: 6px;
-        color: #1e40af;
-        line-height: 1.5;
-      }
+    .tips-toggle:hover {
+      color: #1e40af;
+    }
 
-      .tips-toggle {
-        background: none;
-        border: none;
-        color: #3b82f6;
-        cursor: pointer;
-        font-size: 14px;
-        padding: 5px 0;
-        text-decoration: underline;
-        margin-bottom: 10px;
-      }
+    .inline-hint {
+      display: none;
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      color: #92400e;
+      padding: 10px 14px;
+      border-radius: 5px;
+      margin-top: 8px;
+      font-size: 14px;
+    }
 
-      .tips-toggle:hover {
-        color: #1e40af;
-      }
+    .inline-hint.is-visible {
+      display: block;
+    }
+
+    .overflow-warning {
+      display: none;
+      background: #fef2f2;
+      border-left: 4px solid #ef4444;
+      color: #991b1b;
+      padding: 10px 14px;
+      border-radius: 5px;
+      margin: 0 auto 15px;
+      max-width: 800px;
+      font-size: 14px;
+    }
+
+    .overflow-warning.is-visible {
+      display: block;
     }
 
     .form-row {
@@ -387,9 +394,10 @@
 </head>
 
 <body>
-
-  <body>
-    <div class="builder-layout">
+  <div class="overflow-warning" id="overflowWarning">
+    ⚠️ Votre contenu dépasse une page. Pour rester sur une seule page, raccourcissez quelques sections (l'imprimante coupera le surplus sinon).
+  </div>
+  <div class="builder-layout">
       <div class="form-pane">
         <div class="container">
           <h1>Créer votre CV</h1>
@@ -608,6 +616,9 @@
                 <label for="experience">Postes occupés et responsabilités</label>
                 <textarea id="experience" name="experience"
                   placeholder="Ex: Commis - Restaurant ABC (2020-2024)&#10;Ou: Expérience dans mon pays d'origine&#10;Cliquez sur les boutons pour ajouter des compétences"></textarea>
+                <div class="inline-hint" id="taskHint" role="status" aria-live="polite">
+                  Ajoutez d'abord un poste (boutons « Types d'expérience » ci-dessus) avant d'ajouter une compétence transférable.
+                </div>
                 <p class="help-text">
                   Incluez toute expérience de travail, même si ce n'est pas en
                   sécurité. Les compétences sont transférables!
@@ -917,10 +928,26 @@
         const formData = getFormData();
         const selectedTemplate = localStorage.getItem("selectedTemplate") || "moderne";
 
-        // Call the shared render function
         if (typeof renderCV === 'function') {
           renderCV("live-cv-container", formData, selectedTemplate);
         }
+
+        // Defer overflow check until after layout & font load.
+        requestAnimationFrame(checkOverflow);
+      }
+
+      function checkOverflow() {
+        const container = document.getElementById("live-cv-container");
+        const banner = document.getElementById("overflowWarning");
+        if (!container || !banner) return;
+        const candidates = container.querySelectorAll(
+          ".template-moderne .content, .template-classique .main, .template-classique .sidebar, .template-minimal, .template-securite .main, .template-securite .sidebar"
+        );
+        let overflows = false;
+        candidates.forEach((el) => {
+          if (el.scrollHeight > el.clientHeight + 2) overflows = true;
+        });
+        banner.classList.toggle("is-visible", overflows);
       }
 
       function scalePreview() {
@@ -1115,17 +1142,21 @@
       // Fonction pour ajouter une tâche d'expérience
       function addTask(task) {
         const textarea = document.getElementById("experience");
+        const hint = document.getElementById("taskHint");
         const currentValue = textarea.value.trim();
 
-        if (currentValue) {
-          // Ajouter la tâche avec une puce
-          textarea.value = currentValue + "\n• " + task;
-        } else {
-          alert(
-            "Veuillez d'abord entrer un poste ou cliquer sur un type d'expérience"
-          );
+        if (!currentValue) {
+          if (hint) {
+            hint.classList.add("is-visible");
+            clearTimeout(addTask._hintTimer);
+            addTask._hintTimer = setTimeout(() => hint.classList.remove("is-visible"), 4000);
+          }
+          textarea.focus();
+          return;
         }
 
+        if (hint) hint.classList.remove("is-visible");
+        textarea.value = currentValue + "\n• " + task;
         textarea.scrollTop = textarea.scrollHeight;
       }
 
