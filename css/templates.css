@@ -426,21 +426,3 @@
     /* Optimisé - Lisible */
 }
 
-/* Styles d'exportation PDF */
-body.exporting .cv-container,
-body.exporting .template-moderne,
-body.exporting .template-classique,
-body.exporting .template-minimal,
-body.exporting .template-securite {
-    height: auto !important;
-    max-height: none !important;
-    overflow: visible !important;
-}
-
-body.exporting .template-classique .sidebar,
-body.exporting .template-securite .sidebar {
-    height: 100% !important;
-    min-height: 11in !important;
-    position: absolute !important;
-    bottom: 0 !important;
-}
