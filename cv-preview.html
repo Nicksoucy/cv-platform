@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/templates.css">
+  <script src="js/storage.js"></script>
   <script src="js/cv-render.js"></script>
   <style>
     * {
@@ -121,9 +122,9 @@
     <!-- Le contenu du CV sera injecté ici -->
   </div>
   <script>
-    const cvData = JSON.parse(localStorage.getItem("cvData") || "{}");
-    const selectedTemplate =
-      localStorage.getItem("selectedTemplate") || "moderne";
+    const { cv: activeCV } = CVStore.getActive();
+    const cvData = (activeCV && activeCV.data) || {};
+    const selectedTemplate = (activeCV && activeCV.template) || 'moderne';
 
     if (!cvData.nom) {
       document.getElementById("cv-container").innerHTML = `
@@ -135,8 +136,6 @@
       `;
     } else {
       renderCV("cv-container", cvData, selectedTemplate);
-      // Set the suggested filename for the print dialog. Browsers use
-      // document.title as the default "Save as PDF" filename.
       const safeName = String(cvData.nom).trim().replace(/\s+/g, "_") || "document";
       document.title = `CV_${safeName}`;
     }

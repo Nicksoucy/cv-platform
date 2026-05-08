@@ -12,6 +12,36 @@
     overflow: hidden;
 }
 
+/* Structured experience / education items — shared across templates */
+.exp-item {
+    margin-bottom: 10px;
+}
+
+.exp-head {
+    margin-bottom: 4px;
+}
+
+.exp-period {
+    font-weight: 400;
+    opacity: 0.75;
+    margin-left: 6px;
+}
+
+.exp-bullets {
+    margin: 4px 0 0 18px;
+    padding: 0;
+}
+
+.exp-bullets li {
+    margin-bottom: 2px;
+    line-height: 1.5;
+}
+
+.edu-item {
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
 /* Styles pour tous les templates */
 .template-moderne,
 .template-classique,
