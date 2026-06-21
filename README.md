@@ -29,14 +29,16 @@ template creates a new CV and opens the builder.
 
 ```
 .
-├── cv-selector.html     # Landing page — pick a template
-├── cv-builder.html      # Form + live preview + multi-CV session bar
-├── cv-preview.html      # Final preview + browser-native PDF export
+├── cv-selector.html       # Landing page — pick a template
+├── cv-builder.html        # Form + live preview + multi-CV session bar
+├── cv-preview.html        # Final CV preview + browser-native PDF export
+├── cv-cover-letter.html   # AI-assisted cover letter that mirrors the CV
 ├── css/
-│   └── templates.css    # Shared template styles (Moderne, Classique, Minimal, Sécurité)
+│   └── templates.css      # Shared template styles (Moderne, Classique, Minimal, Sécurité) + print rules
 ├── js/
-│   ├── storage.js       # Multi-CV storage layer + legacy migration
-│   └── cv-render.js     # Renders the active CV into any of the four templates
+│   ├── storage.js         # Multi-CV storage + legacy migration + API-key store
+│   ├── cv-render.js       # Renders the active CV into any of the four templates
+│   └── ai.js              # Anthropic API helper (resume polish, translation, cover letter)
 └── start-local-server.bat
 ```
 
@@ -117,10 +119,52 @@ resulting PDF contains **selectable, parseable text**, so résumé-screening
 software (ATS) can read it. No image rasterization, no third-party PDF
 library, no extra HTTP requests.
 
-### Color customization
+### Color & font customization
 
-Each template has its own accent colour picker. Only the picker for the
-active template is shown to keep the form focused.
+Each template has its own primary colour, secondary accent colour, and a
+font picker (Inter / Georgia / Roboto / Arial). Only the controls for the
+active template are shown to keep the form focused.
+
+### Photo upload
+
+Add a profile photo from the personal-info section. Images are
+center-cropped and resized to 300×300 in a `<canvas>` and stored as
+base64 JPEG inside the active CV. Each template positions the photo
+appropriately (header in Moderne, sidebar in Classique / Sécurité,
+inline with the name in Minimal).
+
+### Section toggle & reorder
+
+The **📑 Sections** button on the session bar opens a panel where you
+can hide any section (Résumé, Expérience, Éducation, Certifications,
+Compétences, Langues) or reorder the main-content sections with the
+↑ / ↓ buttons. Order and visibility persist on the CV.
+
+### AI writing assistance (BYO key)
+
+Click **🤖 IA** in the session bar to paste an Anthropic API key (stored
+in `localStorage`). With a key set, you get:
+
+- **🤖 Améliorer ce résumé** — rewrites the résumé paragraph in clearer
+  professional French while preserving the facts.
+- **🌐 Traduire en anglais** — produces a natural English version of the
+  résumé suitable for a Canadian application.
+- **✨ next to each experience bullet** — polishes that single bullet
+  into a stronger action-verb statement.
+
+All calls use `claude-haiku-4-5` directly from the browser with the
+`anthropic-dangerous-direct-browser-access` header. **For production
+use, put a small proxy server between the browser and the API** so the
+key is not exposed.
+
+### Cover letter generator
+
+The **✉️ Lettre de motivation** button opens `cv-cover-letter.html`,
+which reads the active CV and offers a small form (company, role,
+recipient, highlights). One click on **🤖 Générer le corps de la lettre**
+asks Claude to draft a three-paragraph body using the CV's actual
+content. The letter preview is themed with the active CV's primary
+colour. PDF export uses the same browser-native print pipeline.
 
 ---
 
@@ -138,6 +182,7 @@ type CV = {
     telephone: string;
     adresse: string;
     disponibilite: string;       // comma-separated tags
+    photo: string;               // base64 data URL (300×300 JPEG)
     resume: string;
     experiences: Experience[];   // structured
     educations: Education[];     // structured
@@ -146,12 +191,20 @@ type CV = {
     certifications: string;      // newline-separated
     competences: string;         // comma-separated
     langues: string;             // comma-separated
-    colorModerne: string;        // hex
+    colorModerne: string;        // hex — primary per template
     colorClassique: string;
     colorSecurite: string;
     colorMinimal: string;
+    accentModerne: string;       // hex — secondary per template
+    accentClassique: string;
+    accentSecurite: string;
+    accentMinimal: string;
+    font: 'default' | 'inter' | 'georgia' | 'roboto' | 'arial';
+    sections: SectionState[];    // order + visibility
   };
 };
+
+type SectionState = { id: 'resume' | 'experience' | 'education' | 'certifications' | 'competences' | 'langues'; visible: boolean };
 
 type Experience = {
   id: string;
@@ -179,9 +232,18 @@ to the legacy string fields, so previously saved CVs continue to display.
 
 - All user-supplied content is HTML-escaped before being injected into
   the templates (see `esc()` / `escMultiline()` in `js/cv-render.js`).
-- Data stays on the user's device — there is no server, no analytics, no
-  third-party scripts loaded at runtime (Google Fonts is the only external
-  link, used for the Inter font).
+- CV data stays on the user's device — there is no server, no analytics,
+  no third-party scripts loaded at runtime (Google Fonts is the only
+  external link, used for the Inter font).
+- **Anthropic API key warning**: the AI features ship in "bring your own
+  key" mode. The key is stored in `localStorage` and sent directly from
+  the browser to `api.anthropic.com` with the
+  `anthropic-dangerous-direct-browser-access` header. This is fine for a
+  personal workspace but **not safe for a production multi-user
+  deployment** — extension scripts, third-party libs, or future XSS bugs
+  could exfiltrate the key. For production use, replace the direct
+  fetch in `js/ai.js` with a call to a small server-side proxy you
+  control.
 
 ---
 
@@ -206,13 +268,18 @@ The audit and roadmap that drove the recent work:
 - "Charger un exemple" sample-data shortcut
 - HTML-escaped renderer (closes the `innerHTML` injection hole)
 
-### Phase 3 — Customer experience wins (next)
-- Bilingual UI (FR / EN, then ES)
-- Photo upload for the agent profile
-- AI polish via Claude API ("Améliorer cette description")
-- Cover-letter generator that mirrors the CV
-- Section toggle / reorder
-- Print stylesheet refinement
+### Phase 3 — Customer experience wins ✅
+- Photo upload (cropped, base64) wired into every template
+- AI polish via Claude API: résumé rewrite, French→English translation,
+  per-bullet polish
+- Cover letter generator that mirrors the CV's primary colour
+- Section toggle & reorder
+- Per-template secondary colours and font picker
+- Print stylesheet refinements: `page-break-inside: avoid` on items,
+  tighter line height in print, headings not stranded at page bottoms
+
+### Phase 3.5 — Bilingual UI (deferred)
+- FR / EN UI strings (then ES)
 
 ### Phase 4 — Platform
 - Migrate to a small framework (SvelteKit / Astro / Next)

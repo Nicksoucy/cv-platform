@@ -42,6 +42,85 @@
     line-height: 1.5;
 }
 
+/* CV photo — generic + per-template positioning */
+.cv-photo-wrap {
+    display: flex;
+    justify-content: center;
+}
+
+.cv-photo {
+    display: block;
+    object-fit: cover;
+    border-radius: 50%;
+    background: #f3f4f6;
+}
+
+.template-moderne .header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.template-moderne .header-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.template-moderne .moderne-photo .cv-photo {
+    width: 90px;
+    height: 90px;
+    border: 3px solid rgba(255, 255, 255, 0.6);
+}
+
+.template-classique .sidebar-photo {
+    margin-bottom: 14px;
+}
+
+.template-classique .sidebar-photo .cv-photo {
+    width: 110px;
+    height: 110px;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.template-securite .securite-photo {
+    margin: 0 auto 12px;
+}
+
+.template-securite .securite-photo .cv-photo {
+    width: 90px;
+    height: 90px;
+    border: 3px solid rgba(255, 255, 255, 0.45);
+}
+
+.template-minimal .minimal-head {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.template-minimal .minimal-head-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.template-minimal .minimal-photo .cv-photo {
+    width: 80px;
+    height: 80px;
+}
+
+.template-minimal h1 {
+    text-align: left;
+}
+
+.template-minimal .contact-line {
+    text-align: left;
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
 /* Styles pour tous les templates */
 .template-moderne,
 .template-classique,
@@ -454,5 +533,50 @@
     /* Optimisé pour une page */
     font-size: 14px;
     /* Optimisé - Lisible */
+}
+
+/* Print refinements — applied to all templates */
+@media print {
+    .cv-container {
+        box-shadow: none !important;
+        height: auto !important;
+        max-height: none !important;
+    }
+
+    .template-moderne,
+    .template-classique,
+    .template-minimal,
+    .template-securite {
+        height: auto !important;
+    }
+
+    .template-moderne .content,
+    .template-classique .main,
+    .template-minimal,
+    .template-securite .main {
+        overflow: visible !important;
+    }
+
+    /* Keep structured items together where possible */
+    .exp-item,
+    .edu-item,
+    .section {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* Avoid headings stranded at the bottom of a page */
+    .section h2 {
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+    /* Tighter typography for print so more content fits */
+    .template-moderne .content,
+    .template-classique .main,
+    .template-minimal,
+    .template-securite .main {
+        line-height: 1.45;
+    }
 }
 
