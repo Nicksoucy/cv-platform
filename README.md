@@ -29,16 +29,22 @@ template creates a new CV and opens the builder.
 
 ```
 .
-├── cv-selector.html       # Landing page — pick a template
-├── cv-builder.html        # Form + live preview + multi-CV session bar
-├── cv-preview.html        # Final CV preview + browser-native PDF export
-├── cv-cover-letter.html   # AI-assisted cover letter that mirrors the CV
+├── cv-selector.html        # Landing page — pick a template
+├── cv-builder.html         # Form + live preview + multi-CV session bar
+├── cv-preview.html         # CV preview + PDF + DOCX export
+├── cv-cover-letter.html    # AI-assisted cover letter that mirrors the CV
+├── cv-ats-check.html       # Paste a job description, get a keyword coverage score
+├── manifest.json           # PWA manifest (installable + offline)
+├── icon.svg                # App icon
+├── service-worker.js       # Cache-first SW for offline use
 ├── css/
-│   └── templates.css      # Shared template styles (Moderne, Classique, Minimal, Sécurité) + print rules
+│   └── templates.css       # Shared template styles + print rules
 ├── js/
-│   ├── storage.js         # Multi-CV storage + legacy migration + API-key store
-│   ├── cv-render.js       # Renders the active CV into any of the four templates
-│   └── ai.js              # Anthropic API helper (resume polish, translation, cover letter)
+│   ├── storage.js          # Multi-CV storage + legacy migration + API-key store
+│   ├── cv-render.js        # Renders the active CV into any of the four templates
+│   ├── ai.js               # Anthropic API helper (resume polish, translation, cover letter)
+│   ├── docx-export.js      # Word-friendly .doc generator (no dependencies)
+│   └── ats.js              # Job-description keyword scoring
 └── start-local-server.bat
 ```
 
@@ -156,6 +162,32 @@ All calls use `claude-haiku-4-5` directly from the browser with the
 `anthropic-dangerous-direct-browser-access` header. **For production
 use, put a small proxy server between the browser and the API** so the
 key is not exposed.
+
+### DOCX (Word) export
+
+The preview page now has both **📄 Télécharger en PDF** and **📝 Télécharger
+en Word** buttons. The Word export builds a clean single-column document
+from the structured CV data (not from the rendered template) so Word and
+LibreOffice both render it predictably. No third-party library — the file
+is a Word-readable HTML document saved as `.doc`.
+
+### ATS keyword check
+
+The **🔍 Vérifier ATS** button on the session bar opens
+`cv-ats-check.html`. Paste a job description, get a coverage percentage
+along with the matched and missing keywords. Click a missing keyword to
+add it to the CV's competence list. The scorer normalizes accents, drops
+short tokens and stopwords (FR + EN), and applies a small synonym table
+for niche terms (BSP ↔ Bureau de la sécurité privée, RCR ↔ secourisme,
+etc.).
+
+### Offline / PWA
+
+The site is installable and works offline. A service worker
+(`service-worker.js`) caches the app shell on first load and serves it
+from cache thereafter; cross-origin requests (e.g. to the Anthropic API)
+are never intercepted. Bump the `CACHE` constant in
+`service-worker.js` to invalidate after a deploy.
 
 ### Cover letter generator
 
@@ -278,8 +310,17 @@ The audit and roadmap that drove the recent work:
 - Print stylesheet refinements: `page-break-inside: avoid` on items,
   tighter line height in print, headings not stranded at page bottoms
 
-### Phase 3.5 — Bilingual UI (deferred)
-- FR / EN UI strings (then ES)
+### Phase 4 — Platform (partially shipped) ✅
+- **PWA / offline support** ✅
+- **DOCX (Word) export** ✅
+- **ATS keyword check** ✅
+- **Supabase auth + cloud-saved CVs / shareable links** — deferred. Needs
+  a provisioned Supabase project (URL + anon key + schema + RLS) and is
+  better done in a focused session.
+- **Framework migration (SvelteKit / Astro / Next)** — deferred and
+  recommended *against* unless a clear product need appears. The no-build
+  static-HTML setup is currently a feature: zero install, instant deploy,
+  trivial to debug.
 
 ### Phase 4 — Platform
 - Migrate to a small framework (SvelteKit / Astro / Next)

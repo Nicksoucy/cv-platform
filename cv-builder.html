@@ -5,6 +5,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Créer votre CV</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#2563eb">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -716,6 +719,7 @@
       <button type="button" class="btn btn-ghost btn-sm" id="loadSampleBtn">✨ Charger un exemple</button>
       <button type="button" class="btn btn-ghost btn-sm" id="sectionsBtn">📑 Sections</button>
       <button type="button" class="btn btn-ghost btn-sm" id="coverLetterBtn">✉️ Lettre de motivation</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="atsCheckBtn">🔍 Vérifier ATS</button>
       <button type="button" class="btn btn-ghost btn-sm" id="aiSettingsBtn">🤖 IA</button>
 
       <label for="templatePicker" style="margin-bottom: 0; margin-left: 12px;">Modèle :</label>
@@ -1070,6 +1074,8 @@
   </div>
 
   <script>
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js').catch(() => {});
+
     (function () {
       // -- State -------------------------------------------------------------
       let active; // active CV from CVStore
@@ -1222,6 +1228,12 @@
         if (coverBtn) coverBtn.addEventListener('click', () => {
           flushSave();
           window.location.href = 'cv-cover-letter.html';
+        });
+
+        const atsBtn = document.getElementById('atsCheckBtn');
+        if (atsBtn) atsBtn.addEventListener('click', () => {
+          flushSave();
+          window.location.href = 'cv-ats-check.html';
         });
       }
 

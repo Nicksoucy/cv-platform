@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vérifier la compatibilité ATS</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#2563eb">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="js/storage.js"></script>
+  <script src="js/ats.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; padding: 20px; }
+    .toolbar { max-width: 1400px; margin: 0 auto 16px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; background: white; padding: 14px 18px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,.08); }
+    .toolbar h1 { font-size: 18px; color: #111827; flex: 1; }
+    .btn { padding: 10px 18px; border: none; border-radius: 5px; font-size: 14px; cursor: pointer; font-family: inherit; }
+    .btn-primary { background: #2563eb; color: white; }
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-ghost { background: white; color: #374151; border: 1px solid #d1d5db; }
+    .btn-ghost:hover { background: #f3f4f6; }
+
+    .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 1400px; margin: 0 auto; align-items: start; }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+    .pane { background: white; border-radius: 10px; padding: 24px; box-shadow: 0 2px 10px rgba(0,0,0,.08); }
+    .pane h2 { font-size: 16px; color: #111827; margin-bottom: 12px; }
+    textarea { width: 100%; min-height: 260px; padding: 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; font-family: inherit; resize: vertical; }
+    .hint { font-size: 13px; color: #6b7280; margin-bottom: 12px; line-height: 1.5; }
+
+    .score {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .score .num { font-size: 42px; font-weight: 700; color: #2563eb; }
+    .score .lbl { font-size: 14px; color: #6b7280; }
+    .bar { height: 8px; background: #f3f4f6; border-radius: 4px; overflow: hidden; margin-bottom: 16px; }
+    .bar > div { height: 100%; background: linear-gradient(90deg, #f59e0b, #2563eb); transition: width .3s ease; }
+
+    .kw-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
+    .kw { display: inline-flex; align-items: center; padding: 5px 10px; border-radius: 14px; font-size: 13px; }
+    .kw.match { background: #dcfce7; color: #166534; }
+    .kw.miss { background: #fef2f2; color: #991b1b; cursor: pointer; }
+    .kw.miss:hover { background: #fee2e2; }
+
+    .sub { font-size: 13px; color: #6b7280; margin-top: 4px; }
+    .empty { color: #9ca3af; font-style: italic; font-size: 14px; }
+  </style>
+</head>
+
+<body>
+  <div class="toolbar">
+    <h1>🔍 Vérification ATS</h1>
+    <button type="button" class="btn btn-ghost" onclick="window.location.href='cv-builder.html'">← Retour au CV</button>
+    <button type="button" class="btn btn-primary" id="analyseBtn">Analyser</button>
+  </div>
+
+  <div class="layout">
+    <div class="pane">
+      <h2>Description du poste visé</h2>
+      <p class="hint">Collez l'offre d'emploi telle qu'elle apparaît sur le site de l'employeur. L'outil compare les mots significatifs avec le contenu de votre CV actif.</p>
+      <textarea id="jdInput" placeholder="Collez ici le texte de l'offre d'emploi…"></textarea>
+    </div>
+
+    <div class="pane">
+      <h2>Résultats</h2>
+      <div id="results">
+        <p class="empty">Collez une offre puis cliquez sur « Analyser » pour voir le score et les mots-clés manquants.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js').catch(() => {});
+
+    const { cv } = CVStore.getActive();
+    const data = (cv && cv.data) || {};
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    function render(result) {
+      const root = document.getElementById('results');
+      if (!result.total) {
+        root.innerHTML = '<p class="empty">Aucun mot-clé exploitable trouvé dans cette offre. Essayez avec une description plus complète.</p>';
+        return;
+      }
+      const matchedHTML = result.matched.length
+        ? result.matched.map((k) => `<span class="kw match">✓ ${esc(k)}</span>`).join('')
+        : '<span class="empty">Aucun mot-clé reconnu pour le moment.</span>';
+      const missingHTML = result.missing.length
+        ? result.missing.map((k) => `<span class="kw miss" data-add="${esc(k)}">+ ${esc(k)}</span>`).join('')
+        : '<span class="empty">Aucun mot-clé manquant. Excellent.</span>';
+
+      root.innerHTML = `
+        <div class="score"><div class="num">${result.score}%</div><div class="lbl">de couverture (${result.matched.length}/${result.total})</div></div>
+        <div class="bar"><div style="width:${result.score}%"></div></div>
+        <h3 style="font-size:14px;color:#166534;margin-top:8px;">Mots-clés présents</h3>
+        <div class="kw-list">${matchedHTML}</div>
+        <h3 style="font-size:14px;color:#991b1b;margin-top:8px;">Mots-clés manquants</h3>
+        <div class="kw-list">${missingHTML}</div>
+        <p class="sub">Cliquez sur un mot-clé manquant pour l'ajouter à la liste de compétences de votre CV (s'il est pertinent).</p>
+      `;
+      root.querySelectorAll('.kw.miss').forEach((el) => el.addEventListener('click', () => addCompetence(el.dataset.add)));
+    }
+
+    function addCompetence(word) {
+      const current = (data.competences || '').split(',').map((s) => s.trim()).filter(Boolean);
+      const pretty = word.charAt(0).toUpperCase() + word.slice(1);
+      if (current.find((c) => c.toLowerCase() === pretty.toLowerCase())) return;
+      current.push(pretty);
+      data.competences = current.join(', ');
+      CVStore.updateActive({ data });
+      // Re-run analysis so the chip moves from missing to matched.
+      runAnalysis();
+    }
+
+    function runAnalysis() {
+      const jd = document.getElementById('jdInput').value;
+      const result = ATS.analyse(jd, data);
+      render(result);
+    }
+
+    document.getElementById('analyseBtn').addEventListener('click', runAnalysis);
+    document.getElementById('jdInput').addEventListener('input', () => {
+      // Debounced live update so users see things move as they paste.
+      clearTimeout(runAnalysis._t);
+      runAnalysis._t = setTimeout(runAnalysis, 250);
+    });
+  </script>
+</body>
+
+</html>
