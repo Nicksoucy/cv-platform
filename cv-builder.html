@@ -15,6 +15,7 @@
   <script src="js/storage.js"></script>
   <script src="js/cv-render.js"></script>
   <script src="js/ai.js"></script>
+  <script src="js/analytics.js"></script>
   <style>
     * {
       margin: 0;
@@ -720,6 +721,9 @@
       <button type="button" class="btn btn-ghost btn-sm" id="sectionsBtn">📑 Sections</button>
       <button type="button" class="btn btn-ghost btn-sm" id="coverLetterBtn">✉️ Lettre de motivation</button>
       <button type="button" class="btn btn-ghost btn-sm" id="atsCheckBtn">🔍 Vérifier ATS</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="exportJsonBtn">⬇️ Exporter</button>
+      <label for="importJsonInput" class="btn btn-ghost btn-sm" style="cursor:pointer;">⬆️ Importer</label>
+      <input type="file" id="importJsonInput" accept="application/json,.json" style="display:none;" />
       <button type="button" class="btn btn-ghost btn-sm" id="aiSettingsBtn">🤖 IA</button>
 
       <label for="templatePicker" style="margin-bottom: 0; margin-left: 12px;">Modèle :</label>
@@ -1233,7 +1237,44 @@
         const atsBtn = document.getElementById('atsCheckBtn');
         if (atsBtn) atsBtn.addEventListener('click', () => {
           flushSave();
+          try { Analytics.track('ats_open'); } catch (_) {}
           window.location.href = 'cv-ats-check.html';
+        });
+
+        const exportBtn = document.getElementById('exportJsonBtn');
+        if (exportBtn) exportBtn.addEventListener('click', () => {
+          flushSave();
+          const json = CVStore.exportCV(active);
+          const blob = new Blob([json], { type: 'application/json' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'CV_' + (active.name || 'export').replace(/\s+/g, '_') + '.json';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+          try { Analytics.track('cv_exported_json'); } catch (_) {}
+        });
+
+        const importInp = document.getElementById('importJsonInput');
+        if (importInp) importInp.addEventListener('change', (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = () => {
+            try {
+              const cv = CVStore.importCV(reader.result);
+              active = cv;
+              renderPickerOptions();
+              loadActiveIntoForm();
+              updatePreview();
+              try { Analytics.track('cv_imported'); } catch (_) {}
+            } catch (err) {
+              alert('Import : ' + err.message);
+            }
+          };
+          reader.readAsText(file);
+          importInp.value = '';
         });
       }
 

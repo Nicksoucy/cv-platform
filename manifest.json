@@ -2,7 +2,7 @@
   "name": "CV Platform",
   "short_name": "CV",
   "description": "Constructeur de CV pour agents de sécurité (Québec).",
-  "start_url": "./cv-selector.html",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f5f5f5",

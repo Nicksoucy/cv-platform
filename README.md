@@ -29,22 +29,25 @@ template creates a new CV and opens the builder.
 
 ```
 .
-├── cv-selector.html        # Landing page — pick a template
-├── cv-builder.html         # Form + live preview + multi-CV session bar
-├── cv-preview.html         # CV preview + PDF + DOCX export
-├── cv-cover-letter.html    # AI-assisted cover letter that mirrors the CV
-├── cv-ats-check.html       # Paste a job description, get a keyword coverage score
-├── manifest.json           # PWA manifest (installable + offline)
-├── icon.svg                # App icon
-├── service-worker.js       # Cache-first SW for offline use
+├── index.html                          # Marketing landing page (homepage)
+├── cv-selector.html                    # Template picker (entry into the builder)
+├── cv-builder.html                     # Form + live preview + multi-CV session bar
+├── cv-preview.html                     # CV preview + PDF + DOCX export
+├── cv-cover-letter.html                # AI-assisted cover letter that mirrors the CV
+├── cv-ats-check.html                   # Paste a job description, get a keyword score
+├── cv-agent-securite-quebec.html       # SEO landing page (long-tail keyword)
+├── manifest.json                       # PWA manifest (installable + offline)
+├── icon.svg                            # App icon
+├── service-worker.js                   # Cache-first SW for offline use
 ├── css/
-│   └── templates.css       # Shared template styles + print rules
+│   └── templates.css                   # Shared template styles + print rules
 ├── js/
-│   ├── storage.js          # Multi-CV storage + legacy migration + API-key store
-│   ├── cv-render.js        # Renders the active CV into any of the four templates
-│   ├── ai.js               # Anthropic API helper (resume polish, translation, cover letter)
-│   ├── docx-export.js      # Word-friendly .doc generator (no dependencies)
-│   └── ats.js              # Job-description keyword scoring
+│   ├── storage.js                      # Multi-CV storage + import/export + API-key store
+│   ├── cv-render.js                    # Template renderer
+│   ├── ai.js                           # Anthropic API helper
+│   ├── docx-export.js                  # Word-friendly .doc generator (no dependencies)
+│   ├── ats.js                          # Job-description keyword scoring
+│   └── analytics.js                    # Lightweight BYO-endpoint event logger
 └── start-local-server.bat
 ```
 
@@ -180,6 +183,25 @@ add it to the CV's competence list. The scorer normalizes accents, drops
 short tokens and stopwords (FR + EN), and applies a small synonym table
 for niche terms (BSP ↔ Bureau de la sécurité privée, RCR ↔ secourisme,
 etc.).
+
+### JSON export / import
+
+The session-bar **⬇️ Exporter** button downloads the active CV as
+`CV_<name>.json` (an envelope with `cvPlatform: 1` plus the full CV
+object). **⬆️ Importer** reads a JSON file back in, gives it a fresh
+id, marks it `(importé)`, and makes it active. Useful for backups and
+for moving a CV between devices without a server.
+
+### Analytics (BYO endpoint)
+
+`js/analytics.js` fires a small set of events: `page_view`, `cta_click`,
+`template_picked`, `sample_loaded`, `cv_exported_pdf`,
+`cv_exported_docx`, `cv_exported_json`, `cv_imported`, `ats_open`,
+`cover_letter_generated`. By default events go to `console.log` so you
+can verify they fire. Set
+`localStorage["analytics-endpoint"] = "https://your.endpoint/collect"`
+to actually report. Events use `navigator.sendBeacon` when available
+and have no PII beyond a per-browser visitor id.
 
 ### Offline / PWA
 
@@ -321,6 +343,15 @@ The audit and roadmap that drove the recent work:
   recommended *against* unless a clear product need appears. The no-build
   static-HTML setup is currently a feature: zero install, instant deploy,
   trivial to debug.
+
+### Phase 5 — Growth ✅
+- Real homepage (`index.html`) with marketing copy + CTA
+- Open Graph + canonical + meta description on every entry page
+- One niche SEO landing page (`cv-agent-securite-quebec.html`)
+- JSON export / import for CV backup and device-to-device transfer
+- Lightweight analytics module instrumenting funnel events
+  (template_picked, cv_exported_pdf/docx/json, cover_letter_generated,
+  ats_open, …)
 
 ### Phase 4 — Platform
 - Migrate to a small framework (SvelteKit / Astro / Next)

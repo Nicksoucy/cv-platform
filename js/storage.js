@@ -277,6 +277,41 @@
     return cv;
   }
 
+  function exportCV(cv) {
+    return JSON.stringify(
+      {
+        cvPlatform: 1,
+        exportedAt: new Date().toISOString(),
+        cv: cv,
+      },
+      null,
+      2
+    );
+  }
+
+  function importCV(jsonText) {
+    let parsed;
+    try {
+      parsed = JSON.parse(jsonText);
+    } catch (e) {
+      throw new Error('Fichier JSON invalide.');
+    }
+    const incoming = parsed && parsed.cv ? parsed.cv : parsed;
+    if (!incoming || typeof incoming !== 'object' || !incoming.data) {
+      throw new Error('Fichier non reconnu : pas un export CV Platform.');
+    }
+    const list = loadList();
+    const copy = JSON.parse(JSON.stringify(incoming));
+    copy.id = uid('cv');
+    copy.name = (incoming.name || 'CV importé') + ' (importé)';
+    copy.updatedAt = Date.now();
+    ensureFields(copy);
+    list.push(copy);
+    saveList(list);
+    setActive(copy.id);
+    return copy;
+  }
+
   const AI_KEY = 'anthropic-api-key';
 
   function getApiKey() {
@@ -318,5 +353,7 @@
     loadSample: loadSample,
     getApiKey: getApiKey,
     setApiKey: setApiKey,
+    exportCV: exportCV,
+    importCV: importCV,
   };
 })(window);

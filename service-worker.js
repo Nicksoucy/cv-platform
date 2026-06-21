@@ -2,20 +2,23 @@
  * Service worker — cache-first for app shell, network-first for everything
  * else. Bump CACHE to invalidate on deploy.
  */
-const CACHE = 'cv-platform-v1';
+const CACHE = 'cv-platform-v2';
 const ASSETS = [
   './',
+  './index.html',
   './cv-selector.html',
   './cv-builder.html',
   './cv-preview.html',
   './cv-cover-letter.html',
   './cv-ats-check.html',
+  './cv-agent-securite-quebec.html',
   './css/templates.css',
   './js/storage.js',
   './js/cv-render.js',
   './js/ai.js',
   './js/docx-export.js',
   './js/ats.js',
+  './js/analytics.js',
   './manifest.json',
   './icon.svg',
 ];
@@ -52,7 +55,7 @@ self.addEventListener('fetch', (event) => {
             caches.open(CACHE).then((c) => c.put(req, copy)).catch(() => {});
             return res;
           })
-          .catch(() => caches.match('./cv-selector.html'))
+          .catch(() => caches.match('./index.html'))
     )
   );
 });
