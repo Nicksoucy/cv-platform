@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV Platform — Constructeur de CV pour agents de sécurité au Québec</title>
+  <meta name="description" content="Créez un CV professionnel d'agent de sécurité en quelques minutes. Modèles adaptés au marché québécois, export PDF lisible par les systèmes de tri (ATS), lettre de motivation assistée par IA. 100 % gratuit, 100 % local." />
+  <meta name="keywords" content="CV agent de sécurité, modèle CV Québec, BSP, constructeur de CV, lettre de motivation, ATS" />
+  <link rel="canonical" href="./index.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="CV Platform — Constructeur de CV pour agents de sécurité" />
+  <meta property="og:description" content="CV ATS-friendly, lettre de motivation IA, modèles adaptés au marché québécois. Gratuit, sans inscription, vos données restent sur votre appareil." />
+  <meta property="og:image" content="./icon.svg" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <meta name="theme-color" content="#2563eb" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="js/storage.js"></script>
+  <script src="js/analytics.js"></script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "CV Platform",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" },
+      "description": "Constructeur de CV gratuit pour agents de sécurité au Québec, avec export PDF lisible par les systèmes ATS."
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #1f2937; background: #f9fafb; line-height: 1.6; }
+    a { color: #2563eb; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .nav {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .nav .brand { font-weight: 700; font-size: 18px; }
+    .nav .spacer { flex: 1; }
+    .nav a { font-size: 14px; color: #4b5563; }
+
+    .hero {
+      padding: 80px 24px;
+      text-align: center;
+      background: linear-gradient(180deg, #eff6ff 0%, #f9fafb 100%);
+    }
+    .hero h1 { font-size: 44px; font-weight: 800; color: #111827; margin-bottom: 16px; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.15; }
+    .hero p.sub { font-size: 18px; color: #4b5563; max-width: 680px; margin: 0 auto 32px; }
+
+    .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s ease;
+      border: none;
+      font-family: inherit;
+    }
+    .btn-primary { background: #2563eb; color: white; }
+    .btn-primary:hover { background: #1d4ed8; text-decoration: none; }
+    .btn-ghost { background: white; color: #374151; border: 1px solid #d1d5db; }
+    .btn-ghost:hover { background: #f3f4f6; text-decoration: none; }
+
+    .section { padding: 64px 24px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section h2 { font-size: 28px; font-weight: 700; margin-bottom: 12px; color: #111827; }
+    .section .lead { color: #4b5563; font-size: 16px; max-width: 720px; margin-bottom: 36px; }
+
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+    .feature { background: white; padding: 24px; border-radius: 10px; border: 1px solid #e5e7eb; }
+    .feature .icon { font-size: 28px; margin-bottom: 12px; display: block; }
+    .feature h3 { font-size: 17px; margin-bottom: 6px; color: #111827; }
+    .feature p { font-size: 14px; color: #4b5563; }
+
+    .who { background: white; border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; }
+    .who ul { padding-left: 18px; color: #374151; font-size: 16px; line-height: 1.9; }
+
+    .pricing {
+      background: #111827;
+      color: white;
+      text-align: center;
+    }
+    .pricing h2 { color: white; }
+    .pricing .price { font-size: 64px; font-weight: 800; margin: 18px 0; }
+    .pricing p { color: #d1d5db; font-size: 16px; max-width: 540px; margin: 0 auto 24px; }
+    .pricing .btn-primary { background: white; color: #111827; }
+    .pricing .btn-primary:hover { background: #e5e7eb; }
+
+    .faq { background: #f9fafb; }
+    .faq-item { background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 18px 22px; margin-bottom: 12px; }
+    .faq-item h3 { font-size: 16px; color: #111827; margin-bottom: 6px; }
+    .faq-item p { font-size: 14px; color: #4b5563; }
+
+    footer { padding: 32px 24px; text-align: center; color: #6b7280; font-size: 13px; background: white; border-top: 1px solid #e5e7eb; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 56px 16px; }
+      .hero h1 { font-size: 32px; }
+      .section { padding: 48px 16px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="nav">
+    <div class="brand">📄 CV Platform</div>
+    <div class="spacer"></div>
+    <a href="#features">Fonctionnalités</a>
+    <a href="#pricing">Tarif</a>
+    <a href="#faq">FAQ</a>
+    <a href="cv-selector.html" class="btn btn-primary" style="padding:8px 16px;font-size:14px;" data-track="nav_cta">Commencer</a>
+  </header>
+
+  <section class="hero">
+    <h1>Le CV d'agent de sécurité qui passe les filtres ATS.</h1>
+    <p class="sub">Modèles adaptés au marché québécois (BSP, AEP, formation 54h). Export PDF lisible par les systèmes de tri automatique. Lettre de motivation assistée par IA. 100 % gratuit, vos données restent sur votre appareil.</p>
+    <div class="cta-row">
+      <a href="cv-selector.html" class="btn btn-primary" data-track="hero_cta">Créer mon CV gratuitement</a>
+      <a href="cv-selector.html?sample=1" class="btn btn-ghost" data-track="hero_sample">Voir un exemple</a>
+    </div>
+  </section>
+
+  <section class="section" id="features">
+    <div class="container">
+      <h2>Tout ce qu'il faut pour décrocher une entrevue.</h2>
+      <p class="lead">Conçu spécifiquement pour le marché québécois de la sécurité privée — les conseils, les certifications, les exemples de tâches sont déjà là.</p>
+      <div class="features">
+        <div class="feature"><span class="icon">📄</span><h3>4 modèles professionnels</h3><p>Moderne, Classique, Minimal et Sécurité — chacun avec couleurs et polices personnalisables.</p></div>
+        <div class="feature"><span class="icon">🤖</span><h3>Assistant IA</h3><p>Améliore vos descriptions et traduit en anglais en un clic. Particulièrement utile pour les nouveaux arrivants.</p></div>
+        <div class="feature"><span class="icon">✉️</span><h3>Lettre de motivation</h3><p>Génère un brouillon personnalisé pour chaque offre à partir des données de votre CV.</p></div>
+        <div class="feature"><span class="icon">🔍</span><h3>Vérification ATS</h3><p>Collez une offre, voyez quels mots-clés manquent à votre CV avant d'envoyer votre candidature.</p></div>
+        <div class="feature"><span class="icon">📝</span><h3>Export PDF et Word</h3><p>PDF avec texte sélectionnable (compatible ATS) + fichier Word éditable.</p></div>
+        <div class="feature"><span class="icon">🔒</span><h3>100 % local</h3><p>Aucun compte, aucun serveur. Vos données restent sur votre appareil.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section who">
+    <div class="container">
+      <h2>Pour qui ?</h2>
+      <ul>
+        <li><strong>Nouveaux agents</strong> qui sortent de leur formation BSP / AEP et écrivent leur premier CV en sécurité.</li>
+        <li><strong>Agents expérimentés</strong> qui veulent un CV moderne sans payer un service de rédaction.</li>
+        <li><strong>Nouveaux arrivants au Québec</strong> qui ont besoin d'aide pour rédiger en français professionnel — l'assistant IA polit votre texte.</li>
+        <li><strong>Superviseurs</strong> qui rédigent plusieurs versions de leur CV pour différents postes.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section pricing" id="pricing">
+    <div class="container">
+      <h2>Combien ça coûte ?</h2>
+      <div class="price">0 $</div>
+      <p>Gratuit. Sans publicité, sans inscription, sans limite. Un projet personnel, pas un produit commercial.</p>
+      <a href="cv-selector.html" class="btn btn-primary" data-track="pricing_cta">Commencer maintenant</a>
+    </div>
+  </section>
+
+  <section class="section faq" id="faq">
+    <div class="container">
+      <h2>Questions fréquentes</h2>
+      <div class="faq-item">
+        <h3>Mes informations sont-elles envoyées sur internet ?</h3>
+        <p>Non. Tout le contenu reste dans le navigateur de votre appareil (localStorage). La seule connexion externe est vers l'API Anthropic <em>si</em> vous activez l'assistant IA avec votre propre clé.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Le PDF est-il lisible par les systèmes ATS ?</h3>
+        <p>Oui. Le PDF est généré par le moteur d'impression du navigateur, donc le texte est sélectionnable et analysable par les logiciels de tri des candidatures.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Puis-je avoir plusieurs CV ?</h3>
+        <p>Oui — créez autant de CV que vous voulez (par exemple un pour le commercial, un pour l'événementiel). Le sélecteur en haut de la page vous permet de basculer entre eux.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Comment l'assistant IA fonctionne-t-il ?</h3>
+        <p>Vous collez votre propre clé API Anthropic dans les réglages IA. Les requêtes vont directement à l'API, sans serveur intermédiaire. Pour un usage en équipe, il faudra ajouter un proxy serveur.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Source ouvert sur GitHub. Pas de cookies, pas de pisteurs.
+  </footer>
+
+  <script>
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js').catch(() => {});
+
+    document.querySelectorAll('[data-track]').forEach((el) => {
+      el.addEventListener('click', () => Analytics.track('cta_click', { id: el.dataset.track }));
+    });
+  </script>
+</body>
+
+</html>

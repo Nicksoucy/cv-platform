@@ -3,10 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Choisir un modèle de CV</title>
+  <title>Choisir un modèle de CV — CV Platform</title>
+  <meta name="description" content="Quatre modèles de CV professionnels adaptés au marché québécois de la sécurité privée. Choisissez le vôtre et commencez à le remplir en quelques minutes." />
+  <link rel="canonical" href="./cv-selector.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Choisir un modèle de CV — CV Platform" />
+  <meta property="og:description" content="Quatre modèles de CV adaptés au marché québécois de la sécurité privée." />
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <meta name="theme-color" content="#2563eb">
+  <script src="js/storage.js"></script>
+  <script src="js/analytics.js"></script>
   <style>
     * {
       margin: 0;
@@ -293,7 +300,17 @@
 
     function selectTemplate(template) {
       localStorage.setItem('selectedTemplate', template);
+      try { Analytics.track('template_picked', { template }); } catch (_) {}
       window.location.href = 'cv-builder.html';
+    }
+
+    // ?sample=1 → load the sample CV directly into the builder.
+    if (new URLSearchParams(location.search).get('sample') === '1') {
+      try {
+        const cv = CVStore.loadSample();
+        Analytics.track('sample_loaded');
+        window.location.href = 'cv-builder.html';
+      } catch (_) {}
     }
   </script>
 </body>
