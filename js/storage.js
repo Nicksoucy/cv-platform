@@ -31,6 +31,23 @@
     securite: 'Sécurité',
   };
 
+  const FONT_CHOICES = [
+    { value: 'default', label: 'Par défaut (modèle)' },
+    { value: 'inter', label: 'Inter (sans-serif)', stack: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" },
+    { value: 'georgia', label: 'Georgia (serif)', stack: "Georgia, 'Times New Roman', serif" },
+    { value: 'roboto', label: 'Roboto (sans-serif)', stack: "'Roboto', Arial, sans-serif" },
+    { value: 'arial', label: 'Arial (sans-serif)', stack: "Arial, Helvetica, sans-serif" },
+  ];
+
+  const DEFAULT_SECTIONS = [
+    { id: 'resume', visible: true },
+    { id: 'experience', visible: true },
+    { id: 'education', visible: true },
+    { id: 'certifications', visible: true },
+    { id: 'competences', visible: true },
+    { id: 'langues', visible: true },
+  ];
+
   function uid(prefix) {
     return (prefix || 'id') + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   }
@@ -42,6 +59,7 @@
       telephone: '',
       adresse: '',
       disponibilite: '',
+      photo: '',
       resume: '',
       experiences: [],
       educations: [],
@@ -54,6 +72,12 @@
       colorClassique: '#f3f4f6',
       colorSecurite: '#1e3a8a',
       colorMinimal: '#333333',
+      accentModerne: '#1f2937',
+      accentClassique: '#1f2937',
+      accentSecurite: '#facc15',
+      accentMinimal: '#6b7280',
+      font: 'default',
+      sections: DEFAULT_SECTIONS.map((s) => Object.assign({}, s)),
     };
   }
 
@@ -93,10 +117,30 @@
     localStorage.setItem(KEYS.LIST, JSON.stringify(list));
   }
 
+  function ensureFields(cv) {
+    if (!cv || !cv.data) return cv;
+    const fresh = emptyData();
+    for (const key of Object.keys(fresh)) {
+      if (cv.data[key] === undefined) cv.data[key] = fresh[key];
+    }
+    // Ensure section list contains all known sections (back-fill new ones).
+    if (Array.isArray(cv.data.sections)) {
+      const have = new Set(cv.data.sections.map((s) => s.id));
+      DEFAULT_SECTIONS.forEach((d) => {
+        if (!have.has(d.id)) cv.data.sections.push(Object.assign({}, d));
+      });
+    } else {
+      cv.data.sections = DEFAULT_SECTIONS.map((s) => Object.assign({}, s));
+    }
+    return cv;
+  }
+
   function loadList() {
     migrateLegacy();
     const list = readJSON(KEYS.LIST, []);
-    return Array.isArray(list) ? list : [];
+    const arr = Array.isArray(list) ? list : [];
+    arr.forEach(ensureFields);
+    return arr;
   }
 
   function saveList(list) {
@@ -113,6 +157,7 @@
       list.push(cv);
       saveList(list);
     }
+    ensureFields(cv);
     localStorage.setItem(KEYS.ACTIVE, cv.id);
     return { cv, list };
   }
@@ -232,9 +277,32 @@
     return cv;
   }
 
+  const AI_KEY = 'anthropic-api-key';
+
+  function getApiKey() {
+    return localStorage.getItem(AI_KEY) || '';
+  }
+
+  function setApiKey(value) {
+    if (value) localStorage.setItem(AI_KEY, value);
+    else localStorage.removeItem(AI_KEY);
+  }
+
+  const SECTION_LABELS = {
+    resume: 'Résumé professionnel',
+    experience: 'Expérience professionnelle',
+    education: 'Éducation',
+    certifications: 'Certifications',
+    competences: 'Compétences',
+    langues: 'Langues',
+  };
+
   root.CVStore = {
     KEYS: KEYS,
     TEMPLATE_LABELS: TEMPLATE_LABELS,
+    FONT_CHOICES: FONT_CHOICES,
+    DEFAULT_SECTIONS: DEFAULT_SECTIONS,
+    SECTION_LABELS: SECTION_LABELS,
     uid: uid,
     emptyCV: emptyCV,
     emptyData: emptyData,
@@ -248,5 +316,7 @@
     deleteCV: deleteCV,
     renameCV: renameCV,
     loadSample: loadSample,
+    getApiKey: getApiKey,
+    setApiKey: setApiKey,
   };
 })(window);

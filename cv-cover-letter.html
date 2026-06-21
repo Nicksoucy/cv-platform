@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lettre de motivation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/templates.css">
+  <script src="js/storage.js"></script>
+  <script src="js/cv-render.js"></script>
+  <script src="js/ai.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; padding: 20px; }
+    .toolbar { max-width: 1800px; margin: 0 auto 16px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; background: white; padding: 14px 18px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,.08); }
+    .toolbar h1 { font-size: 18px; color: #111827; flex: 1; }
+    .btn { padding: 10px 18px; border: none; border-radius: 5px; font-size: 14px; cursor: pointer; font-family: inherit; }
+    .btn-primary { background: #2563eb; color: white; }
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-secondary { background: #6b7280; color: white; }
+    .btn-secondary:hover { background: #4b5563; }
+    .btn-ghost { background: white; color: #374151; border: 1px solid #d1d5db; }
+    .btn-ghost:hover { background: #f3f4f6; }
+
+    .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 1800px; margin: 0 auto; align-items: start; }
+    @media (max-width: 1099px) { .layout { grid-template-columns: 1fr; } }
+
+    .form-pane { background: white; border-radius: 10px; padding: 24px; box-shadow: 0 2px 10px rgba(0,0,0,.08); }
+    .form-pane h2 { font-size: 16px; color: #111827; margin-bottom: 12px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 14px; color: #374151; margin-bottom: 6px; font-weight: 500; }
+    .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 5px; font-size: 15px; font-family: inherit; }
+    .form-group textarea { min-height: 100px; resize: vertical; }
+    .status { font-size: 13px; color: #6b7280; margin-top: 8px; }
+
+    .preview-pane { background: #d1d5db; border-radius: 10px; padding: 16px; }
+
+    .letter {
+      max-width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto;
+      background: white;
+      padding: 1in;
+      font-family: 'Inter', sans-serif;
+      color: #1f2937;
+      box-shadow: 0 2px 20px rgba(0,0,0,.1);
+      line-height: 1.6;
+    }
+
+    .letter-band {
+      height: 8px;
+      background: #2563eb;
+      margin: -1in -1in 30px -1in;
+    }
+
+    .letter-header { margin-bottom: 28px; }
+    .letter-header .name { font-size: 24px; font-weight: 700; color: #111827; }
+    .letter-header .contact { font-size: 13px; color: #4b5563; margin-top: 6px; }
+
+    .letter-date { margin-bottom: 20px; font-size: 14px; }
+    .letter-recipient { margin-bottom: 20px; font-size: 14px; line-height: 1.4; }
+    .letter-salutation { margin-bottom: 16px; font-size: 15px; }
+    .letter-body p { margin-bottom: 14px; font-size: 14px; }
+    .letter-closing { margin-top: 20px; font-size: 15px; }
+    .letter-signature { margin-top: 32px; font-weight: 600; }
+
+    @page { size: letter; margin: 0; }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .toolbar, .form-pane, .preview-pane { display: none !important; }
+      .layout { display: block !important; grid-template-columns: 1fr !important; }
+      .preview-pane-print-only { display: block !important; padding: 0 !important; background: white !important; }
+      .letter { box-shadow: none !important; margin: 0 !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="toolbar">
+    <h1>✉️ Lettre de motivation</h1>
+    <button type="button" class="btn btn-ghost" onclick="window.location.href='cv-builder.html'">← Retour au CV</button>
+    <button type="button" class="btn btn-primary" id="downloadBtn">📄 Télécharger en PDF</button>
+  </div>
+
+  <div class="layout">
+    <div class="form-pane">
+      <h2>Cible</h2>
+      <div class="form-group">
+        <label for="company">Entreprise</label>
+        <input type="text" id="company" placeholder="Ex: Sécurité ABC inc." />
+      </div>
+      <div class="form-group">
+        <label for="role">Poste visé</label>
+        <input type="text" id="role" placeholder="Ex: Agent de sécurité - Centre commercial" />
+      </div>
+      <div class="form-group">
+        <label for="recipientLine">Destinataire (optionnel)</label>
+        <input type="text" id="recipientLine" placeholder="Ex: Service des ressources humaines" />
+      </div>
+      <div class="form-group">
+        <label for="highlights">Points à mettre en avant (optionnel)</label>
+        <textarea id="highlights" placeholder="Ex: ma maîtrise du français et de l'anglais, mes 4 ans d'expérience en milieu commercial…"></textarea>
+      </div>
+
+      <button type="button" class="btn btn-primary" id="generateBtn">🤖 Générer le corps de la lettre</button>
+      <p class="status" id="generateStatus"></p>
+
+      <h2 style="margin-top:24px;">Texte de la lettre</h2>
+      <div class="form-group">
+        <label for="salutation">Salutation</label>
+        <input type="text" id="salutation" value="Madame, Monsieur," />
+      </div>
+      <div class="form-group">
+        <label for="body">Corps de la lettre</label>
+        <textarea id="body" rows="10" placeholder="Cliquez sur Générer ou écrivez ici…"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="closing">Formule de politesse</label>
+        <input type="text" id="closing" value="Veuillez agréer mes salutations distinguées." />
+      </div>
+    </div>
+
+    <div class="preview-pane preview-pane-print-only">
+      <div class="letter" id="letterPreview"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const { cv } = CVStore.getActive();
+      const data = (cv && cv.data) || {};
+
+      // Theme letter band based on CV template's primary colour.
+      const colorByTemplate = {
+        moderne: data.colorModerne,
+        classique: data.colorClassique || '#374151',
+        minimal: data.colorMinimal || '#374151',
+        securite: data.colorSecurite || '#1e3a8a',
+      };
+      const themeColor = colorByTemplate[cv.template] || '#2563eb';
+
+      const els = {
+        company: document.getElementById('company'),
+        role: document.getElementById('role'),
+        recipientLine: document.getElementById('recipientLine'),
+        highlights: document.getElementById('highlights'),
+        salutation: document.getElementById('salutation'),
+        body: document.getElementById('body'),
+        closing: document.getElementById('closing'),
+        preview: document.getElementById('letterPreview'),
+        generateBtn: document.getElementById('generateBtn'),
+        generateStatus: document.getElementById('generateStatus'),
+        downloadBtn: document.getElementById('downloadBtn'),
+      };
+
+      function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+      }
+
+      function todayFR() {
+        try {
+          return new Date().toLocaleDateString('fr-CA', { year: 'numeric', month: 'long', day: 'numeric' });
+        } catch (_) {
+          return new Date().toDateString();
+        }
+      }
+
+      function renderPreview() {
+        const bodyHtml = (els.body.value || '').split(/\n\s*\n/).map((p) => `<p>${esc(p).replace(/\n/g, '<br>')}</p>`).join('');
+        els.preview.innerHTML = `
+          <div class="letter-band" style="background:${esc(themeColor)};"></div>
+          <div class="letter-header">
+            <div class="name" style="color:${esc(themeColor)};">${esc(data.nom || 'Votre Nom')}</div>
+            <div class="contact">
+              ${esc(data.email || '')}${data.telephone ? ' &nbsp;•&nbsp; ' + esc(data.telephone) : ''}${data.adresse ? ' &nbsp;•&nbsp; ' + esc(data.adresse) : ''}
+            </div>
+          </div>
+          <div class="letter-date">${esc(todayFR())}</div>
+          <div class="letter-recipient">
+            ${els.recipientLine.value ? esc(els.recipientLine.value) + '<br>' : ''}
+            ${esc(els.company.value || '')}${els.role.value ? '<br>Objet : ' + esc(els.role.value) : ''}
+          </div>
+          <div class="letter-salutation">${esc(els.salutation.value || 'Madame, Monsieur,')}</div>
+          <div class="letter-body">${bodyHtml || '<p style="color:#9ca3af;">Le corps de la lettre apparaîtra ici.</p>'}</div>
+          <div class="letter-closing">${esc(els.closing.value || '')}</div>
+          <div class="letter-signature">${esc(data.nom || '')}</div>
+        `;
+      }
+
+      // Live updates.
+      ['company', 'role', 'recipientLine', 'salutation', 'body', 'closing'].forEach((id) => {
+        document.getElementById(id).addEventListener('input', renderPreview);
+      });
+
+      els.generateBtn.addEventListener('click', async () => {
+        if (!data.nom) {
+          alert('Aucun CV trouvé. Veuillez d\'abord créer un CV.');
+          return;
+        }
+        if (!CVStore.getApiKey()) {
+          alert('Aucune clé API IA configurée. Ouvrez les réglages IA dans le formulaire du CV (bouton 🤖 IA).');
+          return;
+        }
+        const prev = els.generateBtn.textContent;
+        els.generateBtn.disabled = true;
+        els.generateBtn.textContent = '… génération en cours';
+        els.generateStatus.textContent = '';
+        try {
+          const text = await window.AI.generateCoverLetterBody(cv, {
+            company: els.company.value,
+            role: els.role.value,
+            highlights: els.highlights.value,
+          });
+          els.body.value = text;
+          renderPreview();
+          els.generateStatus.textContent = '✓ Lettre générée. Relisez et ajustez avant l\'envoi.';
+        } catch (err) {
+          console.error(err);
+          els.generateStatus.textContent = 'Erreur : ' + (err.message || 'inconnue');
+        } finally {
+          els.generateBtn.disabled = false;
+          els.generateBtn.textContent = prev;
+        }
+      });
+
+      els.downloadBtn.addEventListener('click', () => {
+        document.title = 'Lettre_' + String(data.nom || 'candidat').trim().replace(/\s+/g, '_');
+        window.print();
+      });
+
+      renderPreview();
+    })();
+  </script>
+</body>
+
+</html>

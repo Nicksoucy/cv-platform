@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="css/templates.css">
   <script src="js/storage.js"></script>
   <script src="js/cv-render.js"></script>
+  <script src="js/ai.js"></script>
   <style>
     * {
       margin: 0;
@@ -429,6 +430,158 @@
       flex: 1;
     }
 
+    /* Photo uploader */
+    .photo-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .photo-preview {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #f3f4f6;
+      border: 1px dashed #d1d5db;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9ca3af;
+      font-size: 28px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .photo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* AI polish */
+    .polish-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 6px;
+    }
+
+    .polish-btn {
+      background: #f5f3ff;
+      color: #6d28d9;
+      border: 1px solid #ddd6fe;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .polish-btn:hover {
+      background: #ede9fe;
+    }
+
+    .polish-btn:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    /* Sections panel */
+    .sections-panel {
+      display: none;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 0 auto 15px;
+      max-width: 1800px;
+    }
+
+    .sections-panel.is-open {
+      display: block;
+    }
+
+    .sections-panel h3 {
+      font-size: 15px;
+      margin-bottom: 10px;
+      color: #111827;
+    }
+
+    .section-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .section-row:last-child {
+      border-bottom: none;
+    }
+
+    .section-row .label {
+      flex: 1;
+    }
+
+    /* AI settings modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(17, 24, 39, 0.5);
+      z-index: 9998;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-backdrop.is-open {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 10px;
+      width: min(520px, 92vw);
+      padding: 24px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .modal h3 {
+      margin-bottom: 8px;
+      color: #111827;
+    }
+
+    .modal p {
+      color: #4b5563;
+      font-size: 14px;
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
+
+    .modal-warning {
+      background: #fef3c7;
+      color: #92400e;
+      border-left: 4px solid #f59e0b;
+      padding: 10px 12px;
+      border-radius: 5px;
+      font-size: 13px;
+      margin-top: 12px;
+    }
+
     .add-item-btn {
       background: #eff6ff;
       color: #1d4ed8;
@@ -561,6 +714,9 @@
       <button type="button" class="btn btn-ghost btn-sm" id="duplicateCvBtn">📋 Dupliquer</button>
       <button type="button" class="btn btn-danger btn-sm" id="deleteCvBtn">🗑 Supprimer</button>
       <button type="button" class="btn btn-ghost btn-sm" id="loadSampleBtn">✨ Charger un exemple</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="sectionsBtn">📑 Sections</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="coverLetterBtn">✉️ Lettre de motivation</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="aiSettingsBtn">🤖 IA</button>
 
       <label for="templatePicker" style="margin-bottom: 0; margin-left: 12px;">Modèle :</label>
       <select id="templatePicker" aria-label="Modèle de CV">
@@ -571,6 +727,31 @@
       </select>
     </div>
     <div class="save-status" id="saveStatus" aria-live="polite"><span class="dot"></span><span id="saveStatusText">Enregistré</span></div>
+  </div>
+
+  <div class="sections-panel" id="sectionsPanel" role="region" aria-label="Sections du CV">
+    <h3>Sections affichées sur le CV</h3>
+    <p style="font-size:13px;color:#6b7280;margin-bottom:10px;">Cochez pour afficher, utilisez ↑↓ pour réordonner.</p>
+    <div id="sectionsList"></div>
+  </div>
+
+  <div class="modal-backdrop" id="aiModal" role="dialog" aria-modal="true" aria-labelledby="aiModalTitle">
+    <div class="modal">
+      <h3 id="aiModalTitle">Assistant d'écriture (IA)</h3>
+      <p>Collez votre clé API Anthropic pour activer les boutons « Améliorer » à côté du résumé et des responsabilités. Vous obtenez une clé sur <strong>console.anthropic.com</strong>.</p>
+      <div class="form-group">
+        <label for="aiKey">Clé API Anthropic</label>
+        <input type="text" id="aiKey" placeholder="sk-ant-…" autocomplete="off" />
+      </div>
+      <div class="modal-warning">
+        ⚠️ Votre clé reste dans ce navigateur (localStorage). Pour un usage en production, placez plutôt un petit proxy serveur entre le navigateur et l'API.
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost btn-sm" id="aiClearBtn">Supprimer la clé</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="aiCancelBtn">Fermer</button>
+        <button type="button" class="btn btn-primary btn-sm" id="aiSaveBtn">Enregistrer</button>
+      </div>
+    </div>
   </div>
 
   <div class="pane-tabs" role="tablist">
@@ -587,6 +768,15 @@
           <!-- Informations personnelles -->
           <div class="form-section">
             <h2>Informations personnelles</h2>
+
+            <div class="photo-row">
+              <div class="photo-preview" id="photoPreview" aria-label="Aperçu de la photo"><span>👤</span></div>
+              <div class="photo-controls">
+                <label for="photoInput" class="btn btn-ghost btn-sm" style="cursor:pointer;">📷 Ajouter une photo</label>
+                <input type="file" id="photoInput" accept="image/*" style="display:none;" />
+                <button type="button" class="btn btn-danger btn-sm" id="photoRemoveBtn" style="display:none;">Retirer</button>
+              </div>
+            </div>
 
             <div class="form-group">
               <label for="nom">Nom complet *</label>
@@ -651,6 +841,11 @@
             <div class="form-group">
               <label for="resume">Décrivez-vous en quelques lignes</label>
               <textarea id="resume" name="resume" placeholder="Agent de sécurité expérimenté…"></textarea>
+              <div class="polish-row">
+                <button type="button" class="polish-btn" id="polishResumeBtn">🤖 Améliorer ce résumé</button>
+                <button type="button" class="polish-btn" id="translateResumeBtn">🌐 Traduire en anglais</button>
+                <span id="resumePolishStatus" style="font-size:13px;color:#6b7280;"></span>
+              </div>
             </div>
           </div>
 
@@ -810,26 +1005,50 @@
             </div>
           </div>
 
-          <!-- Personnalisation des couleurs -->
+          <!-- Personnalisation -->
           <div class="form-section">
             <h2>🎨 Personnalisation</h2>
-            <p style="color:#666;margin-bottom:20px;">La couleur s'applique au modèle actif (<span id="activeTemplateLabel">Moderne</span>).</p>
+            <p style="color:#666;margin-bottom:20px;">Couleurs et police s'appliquent au modèle actif (<span id="activeTemplateLabel">Moderne</span>).</p>
+
+            <div class="form-group">
+              <label for="font">Police</label>
+              <select id="font" name="font"></select>
+            </div>
 
             <div class="color-picker-group" data-color-template="moderne">
               <label for="colorModerne"><strong>Moderne :</strong> Couleur du header</label>
               <input type="color" id="colorModerne" name="colorModerne" value="#2563eb" />
             </div>
+            <div class="color-picker-group" data-color-template="moderne">
+              <label for="accentModerne"><strong>Moderne :</strong> Accent (titres en gras)</label>
+              <input type="color" id="accentModerne" name="accentModerne" value="#1f2937" />
+            </div>
+
             <div class="color-picker-group" data-color-template="classique">
               <label for="colorClassique"><strong>Classique :</strong> Couleur de la sidebar</label>
               <input type="color" id="colorClassique" name="colorClassique" value="#f3f4f6" />
             </div>
+            <div class="color-picker-group" data-color-template="classique">
+              <label for="accentClassique"><strong>Classique :</strong> Accent (titre, sections)</label>
+              <input type="color" id="accentClassique" name="accentClassique" value="#1f2937" />
+            </div>
+
             <div class="color-picker-group" data-color-template="securite">
               <label for="colorSecurite"><strong>Sécurité :</strong> Couleur de la sidebar</label>
               <input type="color" id="colorSecurite" name="colorSecurite" value="#1e3a8a" />
             </div>
+            <div class="color-picker-group" data-color-template="securite">
+              <label for="accentSecurite"><strong>Sécurité :</strong> Accent</label>
+              <input type="color" id="accentSecurite" name="accentSecurite" value="#facc15" />
+            </div>
+
             <div class="color-picker-group" data-color-template="minimal">
               <label for="colorMinimal"><strong>Minimal :</strong> Couleur d'accent</label>
               <input type="color" id="colorMinimal" name="colorMinimal" value="#333333" />
+            </div>
+            <div class="color-picker-group" data-color-template="minimal">
+              <label for="accentMinimal"><strong>Minimal :</strong> Couleur secondaire (contact)</label>
+              <input type="color" id="accentMinimal" name="accentMinimal" value="#6b7280" />
             </div>
           </div>
 
@@ -882,13 +1101,12 @@
         backBtn: document.getElementById('backBtn'),
       };
 
-      const FIELD_IDS = ['nom', 'email', 'telephone', 'adresse', 'resume', 'certifications', 'competences', 'langues', 'colorModerne', 'colorClassique', 'colorSecurite', 'colorMinimal'];
+      const FIELD_IDS = ['nom', 'email', 'telephone', 'adresse', 'resume', 'certifications', 'competences', 'langues', 'colorModerne', 'colorClassique', 'colorSecurite', 'colorMinimal', 'accentModerne', 'accentClassique', 'accentSecurite', 'accentMinimal', 'font'];
+
+      const NEW_EL_IDS = ['photoInput', 'photoPreview', 'photoRemoveBtn', 'sectionsBtn', 'sectionsPanel', 'sectionsList', 'coverLetterBtn', 'aiSettingsBtn', 'aiModal', 'aiKey', 'aiSaveBtn', 'aiCancelBtn', 'aiClearBtn', 'polishResumeBtn', 'translateResumeBtn', 'resumePolishStatus'];
 
       // -- Boot --------------------------------------------------------------
       function boot() {
-        // CVStore.loadList() runs the legacy → multi-CV migration the first time
-        // it is called; do that before honouring any "selectedTemplate" hint
-        // dropped by cv-selector.html.
         const list = CVStore.loadList();
         const pendingTemplate = localStorage.getItem('selectedTemplate');
         if (pendingTemplate) {
@@ -901,17 +1119,28 @@
         }
         active = CVStore.getActive().cv;
 
+        populateFontPicker();
         renderPickerOptions();
         bindFormFields();
         bindOptionButtons();
         bindSessionBar();
         bindCardLists();
         bindTabs();
+        bindPhoto();
+        bindSectionsPanel();
+        bindAIModal();
+        bindAIButtons();
         loadActiveIntoForm();
         updatePreview();
 
         window.addEventListener('resize', scalePreview);
         scalePreview();
+      }
+
+      function populateFontPicker() {
+        const sel = document.getElementById('font');
+        if (!sel) return;
+        sel.innerHTML = (CVStore.FONT_CHOICES || []).map((f) => `<option value="${f.value}">${escapeHTML(f.label)}</option>`).join('');
       }
 
       // -- CV picker / session bar ------------------------------------------
@@ -988,6 +1217,12 @@
         els.backBtn.addEventListener('click', () => {
           window.location.href = 'cv-selector.html';
         });
+
+        const coverBtn = document.getElementById('coverLetterBtn');
+        if (coverBtn) coverBtn.addEventListener('click', () => {
+          flushSave();
+          window.location.href = 'cv-cover-letter.html';
+        });
       }
 
       function updateColorPickerVisibility() {
@@ -1042,8 +1277,230 @@
         els.templatePicker.value = active.template;
         els.activeTemplateLabel.textContent = CVStore.TEMPLATE_LABELS[active.template] || active.template;
         updateColorPickerVisibility();
+        renderPhotoPreview();
+        renderSectionsList();
         renderExpCards();
         renderEduCards();
+      }
+
+      // -- Photo upload -----------------------------------------------------
+      function bindPhoto() {
+        const input = document.getElementById('photoInput');
+        const removeBtn = document.getElementById('photoRemoveBtn');
+        if (!input) return;
+        input.addEventListener('change', (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (!file) return;
+          resizeImageToBase64(file, 300, 300).then((dataUrl) => {
+            active.data.photo = dataUrl;
+            renderPhotoPreview();
+            scheduleSave();
+            updatePreview();
+          }).catch((err) => {
+            console.error(err);
+            alert("Impossible de charger cette image.");
+          });
+          input.value = '';
+        });
+        if (removeBtn) {
+          removeBtn.addEventListener('click', () => {
+            active.data.photo = '';
+            renderPhotoPreview();
+            scheduleSave();
+            updatePreview();
+          });
+        }
+      }
+
+      function renderPhotoPreview() {
+        const preview = document.getElementById('photoPreview');
+        const remove = document.getElementById('photoRemoveBtn');
+        if (!preview) return;
+        if (active.data.photo) {
+          preview.innerHTML = `<img src="${active.data.photo}" alt="Photo" />`;
+          if (remove) remove.style.display = '';
+        } else {
+          preview.innerHTML = '<span>👤</span>';
+          if (remove) remove.style.display = 'none';
+        }
+      }
+
+      function resizeImageToBase64(file, targetW, targetH) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            const img = new Image();
+            img.onload = () => {
+              const canvas = document.createElement('canvas');
+              canvas.width = targetW;
+              canvas.height = targetH;
+              const ctx = canvas.getContext('2d');
+              const srcRatio = img.width / img.height;
+              const dstRatio = targetW / targetH;
+              let sx = 0, sy = 0, sw = img.width, sh = img.height;
+              if (srcRatio > dstRatio) {
+                // source is wider — crop sides
+                sw = img.height * dstRatio;
+                sx = (img.width - sw) / 2;
+              } else {
+                // source is taller — crop top/bottom
+                sh = img.width / dstRatio;
+                sy = (img.height - sh) / 2;
+              }
+              ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetW, targetH);
+              resolve(canvas.toDataURL('image/jpeg', 0.85));
+            };
+            img.onerror = reject;
+            img.src = reader.result;
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      }
+
+      // -- Sections panel ---------------------------------------------------
+      function bindSectionsPanel() {
+        const btn = document.getElementById('sectionsBtn');
+        const panel = document.getElementById('sectionsPanel');
+        if (!btn || !panel) return;
+        btn.addEventListener('click', () => panel.classList.toggle('is-open'));
+      }
+
+      function renderSectionsList() {
+        const root = document.getElementById('sectionsList');
+        if (!root) return;
+        const sections = active.data.sections || [];
+        root.innerHTML = sections
+          .map((s, i) => {
+            const label = CVStore.SECTION_LABELS[s.id] || s.id;
+            return `
+              <div class="section-row" data-id="${s.id}">
+                <label class="label"><input type="checkbox" data-section-toggle="${s.id}" ${s.visible !== false ? 'checked' : ''}/> ${escapeHTML(label)}</label>
+                <button type="button" class="btn btn-ghost btn-sm" data-section-up="${s.id}" ${i === 0 ? 'disabled' : ''}>↑</button>
+                <button type="button" class="btn btn-ghost btn-sm" data-section-down="${s.id}" ${i === sections.length - 1 ? 'disabled' : ''}>↓</button>
+              </div>
+            `;
+          })
+          .join('');
+        root.querySelectorAll('[data-section-toggle]').forEach((cb) => {
+          cb.addEventListener('change', () => {
+            const id = cb.dataset.sectionToggle;
+            const item = active.data.sections.find((s) => s.id === id);
+            if (item) item.visible = cb.checked;
+            scheduleSave();
+            updatePreview();
+            renderSectionsList();
+          });
+        });
+        root.querySelectorAll('[data-section-up]').forEach((b) => b.addEventListener('click', () => moveSection(b.dataset.sectionUp, -1)));
+        root.querySelectorAll('[data-section-down]').forEach((b) => b.addEventListener('click', () => moveSection(b.dataset.sectionDown, 1)));
+      }
+
+      function moveSection(id, dir) {
+        const arr = active.data.sections;
+        const i = arr.findIndex((s) => s.id === id);
+        const j = i + dir;
+        if (i < 0 || j < 0 || j >= arr.length) return;
+        const tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+        scheduleSave();
+        updatePreview();
+        renderSectionsList();
+      }
+
+      // -- AI settings modal ------------------------------------------------
+      function bindAIModal() {
+        const btn = document.getElementById('aiSettingsBtn');
+        const modal = document.getElementById('aiModal');
+        const keyInp = document.getElementById('aiKey');
+        const saveBtn = document.getElementById('aiSaveBtn');
+        const cancelBtn = document.getElementById('aiCancelBtn');
+        const clearBtn = document.getElementById('aiClearBtn');
+        if (!btn || !modal) return;
+        function open() {
+          keyInp.value = CVStore.getApiKey() || '';
+          modal.classList.add('is-open');
+        }
+        function close() { modal.classList.remove('is-open'); }
+        btn.addEventListener('click', open);
+        cancelBtn.addEventListener('click', close);
+        saveBtn.addEventListener('click', () => {
+          CVStore.setApiKey((keyInp.value || '').trim());
+          close();
+        });
+        clearBtn.addEventListener('click', () => {
+          CVStore.setApiKey('');
+          keyInp.value = '';
+        });
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) close();
+        });
+      }
+
+      // -- AI polish buttons ------------------------------------------------
+      function bindAIButtons() {
+        const polishBtn = document.getElementById('polishResumeBtn');
+        const translateBtn = document.getElementById('translateResumeBtn');
+        const status = document.getElementById('resumePolishStatus');
+        if (polishBtn) polishBtn.addEventListener('click', () => runResumeAction(window.AI.improveResume, polishBtn, status, 'Améliorer ce résumé'));
+        if (translateBtn) translateBtn.addEventListener('click', () => runResumeAction(window.AI.translateToEnglish, translateBtn, status, 'Traduire en anglais'));
+      }
+
+      async function runResumeAction(fn, btn, status, label) {
+        const textarea = document.getElementById('resume');
+        const text = (textarea.value || '').trim();
+        if (!text) {
+          status.textContent = 'Écrivez d\'abord un résumé.';
+          setTimeout(() => (status.textContent = ''), 3000);
+          return;
+        }
+        if (!CVStore.getApiKey()) {
+          if (confirm('Aucune clé API n\'est configurée. Ouvrir les réglages IA ?')) {
+            document.getElementById('aiSettingsBtn').click();
+          }
+          return;
+        }
+        const prev = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = '… en cours';
+        status.textContent = '';
+        try {
+          const improved = await fn(text);
+          textarea.value = improved;
+          active.data.resume = improved;
+          scheduleSave();
+          updatePreview();
+          status.textContent = '✓ Mis à jour';
+          setTimeout(() => (status.textContent = ''), 3000);
+        } catch (err) {
+          console.error(err);
+          status.textContent = 'Erreur : ' + (err.message || 'inconnue');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = prev;
+        }
+      }
+
+      async function polishBullet(expId, idx) {
+        const item = (active.data.experiences || []).find((e) => e.id === expId);
+        if (!item || !item.bullets || !item.bullets[idx]) return;
+        if (!CVStore.getApiKey()) {
+          if (confirm('Aucune clé API n\'est configurée. Ouvrir les réglages IA ?')) {
+            document.getElementById('aiSettingsBtn').click();
+          }
+          return;
+        }
+        const original = item.bullets[idx];
+        try {
+          const improved = await window.AI.improveBullet(original);
+          item.bullets[idx] = improved;
+          scheduleSave();
+          renderExpCards();
+          updatePreview();
+        } catch (err) {
+          alert('Erreur IA : ' + (err.message || 'inconnue'));
+        }
       }
 
       // -- Quick option buttons ---------------------------------------------
@@ -1176,7 +1633,7 @@
       function expCardHTML(item) {
         const head = [item.type, item.employer].filter(Boolean).map(escapeHTML).join(' — ') || 'Nouveau poste';
         const sub = item.period ? escapeHTML(item.period) : '';
-        const bulletsHTML = (item.bullets || []).map((b, i) => `<li>${escapeHTML(b)} <button type="button" class="btn btn-danger btn-sm" data-bullet-del data-id="${item.id}" data-idx="${i}" aria-label="Supprimer">×</button></li>`).join('');
+        const bulletsHTML = (item.bullets || []).map((b, i) => `<li>${escapeHTML(b)} <button type="button" class="polish-btn" data-bullet-polish data-id="${item.id}" data-idx="${i}" aria-label="Améliorer">✨</button> <button type="button" class="btn btn-danger btn-sm" data-bullet-del data-id="${item.id}" data-idx="${i}" aria-label="Supprimer">×</button></li>`).join('');
 
         if (item._editing) {
           return `
@@ -1228,6 +1685,9 @@
           scheduleSave();
           renderExpCards();
           updatePreview();
+        }));
+        els.expList.querySelectorAll('[data-bullet-polish]').forEach((b) => b.addEventListener('click', () => {
+          polishBullet(b.dataset.id, parseInt(b.dataset.idx, 10));
         }));
         els.expList.querySelectorAll('[data-bullet-add]').forEach((b) => b.addEventListener('click', () => {
           const card = b.closest('.item-card');
