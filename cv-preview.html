@@ -5,12 +5,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Prévisualisation du CV</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#2563eb">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/templates.css">
   <script src="js/storage.js"></script>
   <script src="js/cv-render.js"></script>
+  <script src="js/docx-export.js"></script>
   <style>
     * {
       margin: 0;
@@ -112,6 +116,9 @@
     <button class="btn btn-primary" onclick="downloadPDF()">
       📄 Télécharger en PDF
     </button>
+    <button class="btn btn-secondary" onclick="downloadDOC()">
+      📝 Télécharger en Word
+    </button>
   </div>
 
   <p class="pdf-hint">
@@ -147,6 +154,16 @@
     function downloadPDF() {
       window.print();
     }
+
+    function downloadDOC() {
+      if (!activeCV || !activeCV.data || !activeCV.data.nom) {
+        alert('Aucun CV à exporter. Remplissez d\'abord le formulaire.');
+        return;
+      }
+      DocxExport.downloadDoc(activeCV);
+    }
+
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js').catch(() => {});
   </script>
 </body>
 
