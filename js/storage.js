@@ -312,16 +312,9 @@
     return copy;
   }
 
-  const AI_KEY = 'anthropic-api-key';
-
-  function getApiKey() {
-    return localStorage.getItem(AI_KEY) || '';
-  }
-
-  function setApiKey(value) {
-    if (value) localStorage.setItem(AI_KEY, value);
-    else localStorage.removeItem(AI_KEY);
-  }
+  // Legacy cleanup: API keys are no longer stored in the browser.
+  // AI requests now go through the platform's server-side proxy.
+  try { localStorage.removeItem('anthropic-api-key'); } catch (_) {}
 
   const SECTION_LABELS = {
     resume: 'Résumé professionnel',
@@ -351,8 +344,6 @@
     deleteCV: deleteCV,
     renameCV: renameCV,
     loadSample: loadSample,
-    getApiKey: getApiKey,
-    setApiKey: setApiKey,
     exportCV: exportCV,
     importCV: importCV,
   };

@@ -36,6 +36,8 @@ template creates a new CV and opens the builder.
 ├── cv-cover-letter.html                # AI-assisted cover letter that mirrors the CV
 ├── cv-ats-check.html                   # Paste a job description, get a keyword score
 ├── cv-agent-securite-quebec.html       # SEO landing page (long-tail keyword)
+├── api/
+│   └── ai.js                           # Vercel serverless AI proxy (needs ANTHROPIC_API_KEY)
 ├── manifest.json                       # PWA manifest (installable + offline)
 ├── icon.svg                            # App icon
 ├── service-worker.js                   # Cache-first SW for offline use
@@ -161,9 +163,24 @@ key needed:
 - **✨ next to each experience bullet** — polishes that single bullet
   into a stronger action-verb statement.
 
-All AI calls go through the platform's server-side proxy (`js/ai.js`
-calls the proxy, never the Anthropic API directly), so no API key is
-ever stored in the browser.
+All AI calls go through the platform's server-side proxy, so no API key
+is ever stored in the browser. The frontend (`js/ai.js`) POSTs
+`{ prompt, maxTokens }` to `/api/ai` and expects `{ text }` back. The
+endpoint can be overridden with `window.CV_PLATFORM_AI_PROXY`.
+
+#### AI proxy setup (Vercel)
+
+`api/ai.js` is a ready-to-deploy Vercel Serverless Function:
+
+1. Push this repo to Vercel.
+2. Set the `ANTHROPIC_API_KEY` environment variable in the project settings.
+3. Deploy — `POST /api/ai` is live, no code changes needed.
+
+For any other host, implement `POST /api/ai` (or set
+`window.CV_PLATFORM_AI_PROXY`) with the same `{ prompt, maxTokens }` →
+`{ text }` contract. Until the proxy exists, the AI buttons show
+"L'assistant IA n'est pas disponible pour le moment." instead of failing
+silently.
 
 ### DOCX (Word) export
 

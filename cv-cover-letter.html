@@ -208,10 +208,6 @@
           alert('Aucun CV trouvé. Veuillez d\'abord créer un CV.');
           return;
         }
-        if (!CVStore.getApiKey()) {
-          alert('Aucune clé API IA configurée. Ouvrez les réglages IA dans le formulaire du CV (bouton 🤖 IA).');
-          return;
-        }
         const prev = els.generateBtn.textContent;
         els.generateBtn.disabled = true;
         els.generateBtn.textContent = '… génération en cours';
@@ -228,7 +224,7 @@
           try { Analytics.track('cover_letter_generated'); } catch (_) {}
         } catch (err) {
           console.error(err);
-          els.generateStatus.textContent = 'Erreur : ' + (err.message || 'inconnue');
+          els.generateStatus.textContent = window.AI.describeError(err);
         } finally {
           els.generateBtn.disabled = false;
           els.generateBtn.textContent = prev;

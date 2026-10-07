@@ -1,42 +1,51 @@
 /**
- * Anthropic API helper for inline writing assistance.
+ * AI writing assistance for CV Platform.
  *
- * Keys are stored locally (CVStore.getApiKey) and the request is made
- * directly from the browser using anthropic-dangerous-direct-browser-access.
- * For production use you should put a tiny proxy in front of this call so
- * the key isn't exposed to other scripts running on the same origin.
+ * The browser never holds an API key and never talks to api.anthropic.com
+ * directly. All requests go to the platform's server-side proxy
+ * (see /api/ai.js for the Vercel reference implementation), which adds
+ * the Anthropic key from its own environment.
+ *
+ * Override the endpoint with window.CV_PLATFORM_AI_PROXY before this
+ * script loads, e.g.:
+ *   <script>window.CV_PLATFORM_AI_PROXY = 'https://example.com/api/ai';</script>
  */
 (function (root) {
-  const MODEL = 'claude-haiku-4-5-20251001';
-  const API_URL = 'https://api.anthropic.com/v1/messages';
+  var PROXY_URL = root.CV_PLATFORM_AI_PROXY || '/api/ai';
 
   async function callClaude(prompt, opts) {
-    const apiKey = (root.CVStore && root.CVStore.getApiKey()) || '';
-    if (!apiKey) {
-      throw new Error('NO_API_KEY');
+    var r;
+    try {
+      r = await fetch(PROXY_URL, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          prompt: prompt,
+          maxTokens: (opts && opts.maxTokens) || 600,
+        }),
+      });
+    } catch (e) {
+      throw new Error('PROXY_UNREACHABLE');
     }
-    const r = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true',
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        max_tokens: (opts && opts.maxTokens) || 600,
-        messages: [{ role: 'user', content: prompt }],
-      }),
-    });
+    if (r.status === 404) throw new Error('PROXY_NOT_CONFIGURED');
     if (!r.ok) {
-      const txt = await r.text().catch(() => '');
+      var txt = await r.text().catch(function () { return ''; });
       throw new Error('API_ERROR_' + r.status + ': ' + txt.slice(0, 200));
     }
-    const data = await r.json();
-    const block = data && data.content && data.content[0];
-    if (!block || !block.text) throw new Error('NO_TEXT');
-    return block.text.trim();
+    var data = await r.json();
+    if (!data || typeof data.text !== 'string' || !data.text.trim()) {
+      throw new Error('NO_TEXT');
+    }
+    return data.text.trim();
+  }
+
+  /** User-facing French message for an AI failure. */
+  function describeError(err) {
+    var m = (err && err.message) || '';
+    if (m === 'PROXY_NOT_CONFIGURED' || m === 'PROXY_UNREACHABLE') {
+      return "L'assistant IA n'est pas disponible pour le moment. Réessayez plus tard.";
+    }
+    return 'Erreur IA : ' + m;
   }
 
   function improveResume(text) {
@@ -98,6 +107,7 @@
 
   root.AI = {
     callClaude,
+    describeError,
     improveResume,
     improveBullet,
     translateToEnglish,

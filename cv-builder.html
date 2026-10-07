@@ -746,18 +746,9 @@
   <div class="modal-backdrop" id="aiModal" role="dialog" aria-modal="true" aria-labelledby="aiModalTitle">
     <div class="modal">
       <h3 id="aiModalTitle">Assistant d'écriture (IA)</h3>
-      <p>Collez votre clé API Anthropic pour activer les boutons « Améliorer » à côté du résumé et des responsabilités. Vous obtenez une clé sur <strong>console.anthropic.com</strong>.</p>
-      <div class="form-group">
-        <label for="aiKey">Clé API Anthropic</label>
-        <input type="text" id="aiKey" placeholder="sk-ant-…" autocomplete="off" />
-      </div>
-      <div class="modal-warning">
-        ⚠️ Votre clé reste dans ce navigateur (localStorage). Pour un usage en production, placez plutôt un petit proxy serveur entre le navigateur et l'API.
-      </div>
+      <p>L'assistant d'écriture est intégré à la plateforme : les boutons « Améliorer » à côté du résumé et des responsabilités fonctionnent automatiquement, sans aucune clé à configurer.</p>
       <div class="modal-actions">
-        <button type="button" class="btn btn-ghost btn-sm" id="aiClearBtn">Supprimer la clé</button>
         <button type="button" class="btn btn-secondary btn-sm" id="aiCancelBtn">Fermer</button>
-        <button type="button" class="btn btn-primary btn-sm" id="aiSaveBtn">Enregistrer</button>
       </div>
     </div>
   </div>
@@ -1113,7 +1104,7 @@
 
       const FIELD_IDS = ['nom', 'email', 'telephone', 'adresse', 'resume', 'certifications', 'competences', 'langues', 'colorModerne', 'colorClassique', 'colorSecurite', 'colorMinimal', 'accentModerne', 'accentClassique', 'accentSecurite', 'accentMinimal', 'font'];
 
-      const NEW_EL_IDS = ['photoInput', 'photoPreview', 'photoRemoveBtn', 'sectionsBtn', 'sectionsPanel', 'sectionsList', 'coverLetterBtn', 'aiSettingsBtn', 'aiModal', 'aiKey', 'aiSaveBtn', 'aiCancelBtn', 'aiClearBtn', 'polishResumeBtn', 'translateResumeBtn', 'resumePolishStatus'];
+      const NEW_EL_IDS = ['photoInput', 'photoPreview', 'photoRemoveBtn', 'sectionsBtn', 'sectionsPanel', 'sectionsList', 'coverLetterBtn', 'aiSettingsBtn', 'aiModal', 'aiCancelBtn', 'polishResumeBtn', 'translateResumeBtn', 'resumePolishStatus'];
 
       // -- Boot --------------------------------------------------------------
       function boot() {
@@ -1466,26 +1457,12 @@
       function bindAIModal() {
         const btn = document.getElementById('aiSettingsBtn');
         const modal = document.getElementById('aiModal');
-        const keyInp = document.getElementById('aiKey');
-        const saveBtn = document.getElementById('aiSaveBtn');
         const cancelBtn = document.getElementById('aiCancelBtn');
-        const clearBtn = document.getElementById('aiClearBtn');
         if (!btn || !modal) return;
-        function open() {
-          keyInp.value = CVStore.getApiKey() || '';
-          modal.classList.add('is-open');
-        }
+        function open() { modal.classList.add('is-open'); }
         function close() { modal.classList.remove('is-open'); }
         btn.addEventListener('click', open);
         cancelBtn.addEventListener('click', close);
-        saveBtn.addEventListener('click', () => {
-          CVStore.setApiKey((keyInp.value || '').trim());
-          close();
-        });
-        clearBtn.addEventListener('click', () => {
-          CVStore.setApiKey('');
-          keyInp.value = '';
-        });
         modal.addEventListener('click', (e) => {
           if (e.target === modal) close();
         });
@@ -1508,12 +1485,6 @@
           setTimeout(() => (status.textContent = ''), 3000);
           return;
         }
-        if (!CVStore.getApiKey()) {
-          if (confirm('Aucune clé API n\'est configurée. Ouvrir les réglages IA ?')) {
-            document.getElementById('aiSettingsBtn').click();
-          }
-          return;
-        }
         const prev = btn.textContent;
         btn.disabled = true;
         btn.textContent = '… en cours';
@@ -1528,7 +1499,7 @@
           setTimeout(() => (status.textContent = ''), 3000);
         } catch (err) {
           console.error(err);
-          status.textContent = 'Erreur : ' + (err.message || 'inconnue');
+          status.textContent = window.AI.describeError(err);
         } finally {
           btn.disabled = false;
           btn.textContent = prev;
@@ -1538,12 +1509,6 @@
       async function polishBullet(expId, idx) {
         const item = (active.data.experiences || []).find((e) => e.id === expId);
         if (!item || !item.bullets || !item.bullets[idx]) return;
-        if (!CVStore.getApiKey()) {
-          if (confirm('Aucune clé API n\'est configurée. Ouvrir les réglages IA ?')) {
-            document.getElementById('aiSettingsBtn').click();
-          }
-          return;
-        }
         const original = item.bullets[idx];
         try {
           const improved = await window.AI.improveBullet(original);
@@ -1552,7 +1517,7 @@
           renderExpCards();
           updatePreview();
         } catch (err) {
-          alert('Erreur IA : ' + (err.message || 'inconnue'));
+          alert(window.AI.describeError(err));
         }
       }
 
