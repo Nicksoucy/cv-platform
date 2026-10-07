@@ -42,9 +42,9 @@ template creates a new CV and opens the builder.
 ├── css/
 │   └── templates.css                   # Shared template styles + print rules
 ├── js/
-│   ├── storage.js                      # Multi-CV storage + import/export + API-key store
+│   ├── storage.js                      # Multi-CV storage + import/export
 │   ├── cv-render.js                    # Template renderer
-│   ├── ai.js                           # Anthropic API helper
+│   ├── ai.js                           # AI writing assistance (via the platform AI proxy)
 │   ├── docx-export.js                  # Word-friendly .doc generator (no dependencies)
 │   ├── ats.js                          # Job-description keyword scoring
 │   └── analytics.js                    # Lightweight BYO-endpoint event logger
@@ -149,10 +149,10 @@ can hide any section (Résumé, Expérience, Éducation, Certifications,
 Compétences, Langues) or reorder the main-content sections with the
 ↑ / ↓ buttons. Order and visibility persist on the CV.
 
-### AI writing assistance (BYO key)
+### AI writing assistance
 
-Click **🤖 IA** in the session bar to paste an Anthropic API key (stored
-in `localStorage`). With a key set, you get:
+Click **🤖 IA** in the session bar to access the writing tools — no API
+key needed:
 
 - **🤖 Améliorer ce résumé** — rewrites the résumé paragraph in clearer
   professional French while preserving the facts.
@@ -161,10 +161,9 @@ in `localStorage`). With a key set, you get:
 - **✨ next to each experience bullet** — polishes that single bullet
   into a stronger action-verb statement.
 
-All calls use `claude-haiku-4-5` directly from the browser with the
-`anthropic-dangerous-direct-browser-access` header. **For production
-use, put a small proxy server between the browser and the API** so the
-key is not exposed.
+All AI calls go through the platform's server-side proxy (`js/ai.js`
+calls the proxy, never the Anthropic API directly), so no API key is
+ever stored in the browser.
 
 ### DOCX (Word) export
 
@@ -207,7 +206,7 @@ and have no PII beyond a per-browser visitor id.
 
 The site is installable and works offline. A service worker
 (`service-worker.js`) caches the app shell on first load and serves it
-from cache thereafter; cross-origin requests (e.g. to the Anthropic API)
+from cache thereafter; cross-origin requests (e.g. to the AI proxy)
 are never intercepted. Bump the `CACHE` constant in
 `service-worker.js` to invalidate after a deploy.
 
@@ -289,15 +288,9 @@ to the legacy string fields, so previously saved CVs continue to display.
 - CV data stays on the user's device — there is no server, no analytics,
   no third-party scripts loaded at runtime (Google Fonts is the only
   external link, used for the Inter font).
-- **Anthropic API key warning**: the AI features ship in "bring your own
-  key" mode. The key is stored in `localStorage` and sent directly from
-  the browser to `api.anthropic.com` with the
-  `anthropic-dangerous-direct-browser-access` header. This is fine for a
-  personal workspace but **not safe for a production multi-user
-  deployment** — extension scripts, third-party libs, or future XSS bugs
-  could exfiltrate the key. For production use, replace the direct
-  fetch in `js/ai.js` with a call to a small server-side proxy you
-  control.
+- AI requests are proxied through the platform's backend: the browser
+  never holds an API key and never talks to `api.anthropic.com` directly
+  (see `js/ai.js`).
 
 ---
 
